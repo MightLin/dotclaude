@@ -5,7 +5,7 @@ Claude Code 全域設定，包含 commands、skills 與行為規則，適用於�
 ## 目錄結構
 
 ```
-~/.claude/ (AppData/Roaming/Claude/)
+~/.claude/  (Windows: C:\Users\<username>\.claude\)
 ├── CLAUDE.md                  # 全域行為規則
 ├── .gitignore
 ├── .claude/
