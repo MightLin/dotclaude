@@ -28,6 +28,7 @@ CLAUDE.md 每次 session 都會被讀入，直接消耗 token。
 - 技術棧：.claude/rules/tech-stack.md
 - API 規範：.claude/rules/api-conventions.md
 - Design Guide：.claude/rules/design-guide.md
+- 業務邏輯：.claude/rules/business-logic.md
 - TODO：.claude/rules/todo-and-plans.md
 
 ## 核心原則

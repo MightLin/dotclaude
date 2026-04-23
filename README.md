@@ -12,13 +12,15 @@ Claude Code 全域設定，包含 commands、skills 與行為規則，適用於�
 │   ├── commands/              # 自訂 slash commands
 │   │   ├── init-project.md    # 首次導入新專案
 │   │   ├── understand.md      # 全面理解當前專案
-│   │   └── new-feature.md     # 開發新功能前準備流程
+│   │   ├── new-feature.md     # 開發新功能前準備流程
+│   │   └── sync.md            # 同步 repo 到 ~/.claude/
 │   └── skills/                # 可呼叫的 skill 模組
 │       ├── architecture/      # 撰寫 architecture.md
 │       ├── tech-stack/        # 撰寫 tech-stack.md
 │       ├── api-conventions/   # 撰寫 api-conventions.md
 │       ├── design-guide/      # 撰寫 design-guide.md
 │       ├── todo-and-plans/    # 撰寫 todo-and-plans.md
+│       ├── business-logic/    # 撰寫 business-logic.md
 │       ├── project-structure/ # 建立標準專案結構
 │       └── claude-md-writing/ # 撰寫精簡 CLAUDE.md
 ```
@@ -30,6 +32,7 @@ Claude Code 全域設定，包含 commands、skills 與行為規則，適用於�
 | `/init-project` | 首次導入新專案，建立 `.claude/` 結構與 `CLAUDE.md` |
 | `/understand` | 讀取專案 rules，全面理解當前專案 |
 | `/new-feature` | 開發新功能前的標準確認流程 |
+| `/sync` | 將 repo 同步到 `~/.claude/`（repo 為唯一來源） |
 
 ## Skills
 

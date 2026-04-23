@@ -31,6 +31,7 @@ view ~/.claude/skills/claude-md-writing/SKILL.md
 - .claude/rules/design-guide.md（有 UI 規範時）（參考 ~/.claude/skills/design-guide/SKILL.md）
 - .claude/rules/api-conventions.md（有 API 規範時）（參考 ~/.claude/skills/api-conventions/SKILL.md）
 - .claude/rules/todo-and-plans.md（參考 ~/.claude/skills/todo-and-plans/SKILL.md）
+- .claude/rules/business-logic.md（參考 ~/.claude/skills/business-logic/SKILL.md）
 - .claude/commands/understand-project.md
 
 ## Step 5：建立 CLAUDE.md
