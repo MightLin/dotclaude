@@ -3,21 +3,37 @@
 ## 目的
 讓 Claude 快速理解系統的組成、各模組的職責邊界、資料流向。
 
+## 適用範圍
+- 必要：所有專案類型（frontend / backend / fullstack / mobile）
+- 不需要：單檔 script、experiment 倉
+
 ## 必要內容
 
 ### 1. 系統概述（3 句以內）
 專案是什麼、服務誰、核心價值。
 
 ### 2. 模組清單
-每個模組一行，格式：
-`- ModuleName：職責說明（相關檔案路徑或命名空間）`
+每個模組一行：
+`- ModuleName：職責說明（相關目錄或命名空間）`
 
-### 3. 資料流（可用文字描述或 ASCII 圖）
-主要業務流程的資料怎麼流動：
-`使用者操作 → Component → Service → API → Backend Handler → DB`
+### 3. 資料流（文字或 ASCII）
+主要業務流程的資料怎麼流動。依專案類型常見走向：
+- 前端：使用者操作 → Component → Store/Service → HTTP Client → 後端 API
+- 後端：Handler → Service → Repository → DB / 外部 API
+- 全端：合併以上
+- 手機：UI → ViewModel/Controller → Repository → Local DB / Remote API
 
 ### 4. 重要邊界規則
-哪些模組不應該直接互相依賴、哪些是共用核心。
+哪些模組不應直接互相依賴、哪些是共用核心。
+
+## 禁止放入
+- 完整檔案清單（看程式碼即可）
+- 套件版本（屬 tech-stack.md）
+- TODO 與計畫（屬 todo-and-plans.md）
+- 任何超過 5 行的描述段落
+
+## 大小上限
+產出檔案不超過 60 行。
 
 ## 範例
 ```markdown
@@ -28,14 +44,14 @@
 {一句話說明系統目的與服務對象}
 
 ## 模組清單
-- ModuleA：職責說明（/features/module-a/）
-- ModuleB：職責說明（/features/module-b/）
-- SharedService：共用服務（/services/）
+- {ModuleA}：{職責}（{路徑}）
+- {ModuleB}：{職責}（{路徑}）
+- {Shared}：{共用核心}（{路徑}）
 
 ## 資料流
-使用者操作 → Component → Service → API Handler → EF Core → SQL Server
+{使用者操作} → {Component} → {Service} → {API} → {DB / 外部}
 
 ## 邊界規則
-- Feature 模組不直接呼叫其他 Feature 模組，透過 Service 層溝通
-- 外部 API 呼叫只允許在 /services/ 層發起
+- {ModuleA 不直接呼叫 ModuleB，透過 Shared}
+- {外部 API 只允許在 {層名} 發起}
 ```
