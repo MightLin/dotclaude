@@ -15,3 +15,4 @@
 
 - /init-project：首次導入新專案，建立標準 .claude/ 結構
 - /sync：將 dotclaude repo 同步到 ~/.claude/
+- /stitch-design：呼叫 Stitch MCP 產生 UI 設計，subagent 自評通過後輸出 design-guide.md
