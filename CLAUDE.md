@@ -15,3 +15,4 @@
 - /understand：讀取當前專案所有 rules，全面理解專案
 - /update-rules：更新特定 rule 檔內容
 - /new-feature：開發新功能前的標準準備流程
+- /stitch-design：呼叫 Stitch MCP 產生 UI 設計，subagent 自評通過後輸出 design-guide.md
