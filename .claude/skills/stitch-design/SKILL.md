@@ -7,9 +7,9 @@
 
 ### 1. 收集輸入
 依序執行：
-1. view `.claude/rules/architecture.md`（若存在）→ 取系統目的、模組
-2. view `.claude/rules/business-logic.md`（若存在）→ 取主要功能
-3. view `.claude/rules/design-guide.md`（若存在）→ 作為視覺一致性比對基準
+1. view `.agents/rules/architecture.md`（若存在）→ 取系統目的、模組
+2. view `.agents/rules/business-logic.md`（若存在）→ 取主要功能
+3. view `.agents/rules/design-guide.md`（若存在）→ 作為視覺一致性比對基準
 4. 缺項才向使用者詢問：
    - 系統目的（一句話）
    - 主要功能列表
@@ -46,7 +46,7 @@ while attempt <= 3:
 ```
 
 ### 3. 終止
-- **PASS**：呈現設計摘要與 `design-guide.md` 草稿給使用者，詢問是否寫入 `.claude/rules/design-guide.md`。
+- **PASS**：呈現設計摘要與 `design-guide.md` 草稿給使用者，詢問是否寫入 `.agents/rules/design-guide.md`。
 - **FAIL × 3**：呈現所有輪次的分數歷史與最後一版設計，請使用者選擇：
   - 接受最後一版
   - 調整 brief 重跑

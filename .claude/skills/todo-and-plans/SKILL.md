@@ -5,7 +5,7 @@
 
 ## 適用範圍
 - 必要：所有有持續開發的專案
-- 不需要：以 issue tracker（GitHub Issues / Linear / Jira）為唯一事實來源的專案。此時改在 CLAUDE.md 留 reference 指向 tracker。
+- 不需要：以 issue tracker（GitHub Issues / Linear / Jira）為唯一事實來源的專案。此時改在入口檔留 reference 指向 tracker。
 
 ## 必要內容
 

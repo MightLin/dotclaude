@@ -1,11 +1,11 @@
-# Skill：建立標準專案結構
+# Skill：建立標準專案知識結構
 
-## 標準 .claude/ 目錄配置
+## 標準 `.agents/rules/` 目錄配置
 
-依專案類型條件式建立。`commands/` 預設不建（行為內化在 CLAUDE.md），有需要再建。
+依專案類型條件式建立。入口行為內化在 `CLAUDE.md` / `AGENTS.md`，專案內預設不建立 commands。
 
 ```
-.claude/
+.agents/
 └── rules/
     ├── architecture.md          ← 必建
     ├── tech-stack.md            ← 必建

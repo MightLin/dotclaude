@@ -3,12 +3,13 @@
 ## Step 1：讀取操作知識
 
 view ~/.claude/skills/project-structure/SKILL.md
-view ~/.claude/skills/claude-md-writing/SKILL.md
+view ~/.claude/skills/entrypoint-writing/SKILL.md
 
 ## Step 2：掃描專案現況
 
 - view 專案根目錄結構
-- 確認是否已有 CLAUDE.md 或 .claude/ 目錄
+- 確認是否已有 CLAUDE.md、AGENTS.md 或 .agents/rules/ 目錄
+- 若已有舊版 `.claude/rules/`，改用 `migrate-rules` skill，不重跑完整 init
 - 若已有，先讀現有內容
 
 ## Step 3：偵測專案類型
@@ -34,7 +35,7 @@ view ~/.claude/skills/claude-md-writing/SKILL.md
 
 ## Step 5：條件式建立 rules 檔
 
-依專案類型決定建哪些（參考 ~/.claude/skills/project-structure/SKILL.md）：
+rules 一律建立在 `.agents/rules/`。依專案類型決定建哪些（參考 ~/.claude/skills/project-structure/SKILL.md）：
 
 | Rule 檔 | frontend | backend | fullstack | mobile |
 |---|---|---|---|---|
@@ -60,9 +61,12 @@ view ~/.claude/skills/claude-md-writing/SKILL.md
 - ~/.claude/skills/design-guide/SKILL.md
 - ~/.claude/skills/data-model/SKILL.md
 
-## Step 6：建立 CLAUDE.md
+## Step 6：建立入口檔
 
-依 ~/.claude/skills/claude-md-writing/SKILL.md 規範建立精簡 CLAUDE.md。
+依 ~/.claude/skills/entrypoint-writing/SKILL.md 規範建立精簡入口檔。
+- Claude 專案建立 `CLAUDE.md`
+- Codex 專案建立 `AGENTS.md`
+- 若使用者明確要雙工具共用，兩個都建
 - 文件索引段只列實際建出來的 rules
 - 必含 3 條核心原則（取代過去的 /understand、/new-feature 行為）
 
