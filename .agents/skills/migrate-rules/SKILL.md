@@ -7,7 +7,7 @@ description: Migrate existing projects from the old `.claude/rules/` layout to t
 
 ## 目的
 將已使用舊版 dotclaude 的專案遷移到 Claude / Codex 共用格式。
-避免重新執行 `/init-project`，保留既有 rules 內容與專案知識。
+避免重新執行 init-project，保留既有 rules 內容與專案知識。
 
 ## 遷移目標
 
@@ -86,7 +86,7 @@ description: Migrate existing projects from the old `.claude/rules/` layout to t
 - `.claude/rules/`
 - `.claude\rules\`
 
-若出現，做路徑替換。不要改其他 `.claude/` 字串，因為它可能指 Claude commands 或 skills。
+若出現，做路徑替換。不要改其他 `.claude/` 字串，因為它可能指 Claude 專用設定。
 
 ### 5. 保留或清理舊 rules
 
@@ -95,7 +95,7 @@ description: Migrate existing projects from the old `.claude/rules/` layout to t
 - 使用者同意：刪除 `.claude/rules/`
 - 使用者未同意：保留，並在摘要中註明舊目錄仍存在
 
-不要刪除 `.claude/commands/`、`.claude/skills/`、`.claude/settings.local.json`。
+不要刪除 `.claude/agents/`、`.claude/settings.local.json`。
 
 ## 驗證
 

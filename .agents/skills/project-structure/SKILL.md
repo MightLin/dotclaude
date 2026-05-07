@@ -1,8 +1,13 @@
+---
+name: project-structure
+description: Create the standard shared project knowledge structure. Use when deciding which `.agents/rules/` files to create for frontend, backend, fullstack, or mobile projects, and when avoiding empty rule files or tool-specific project folders.
+---
+
 # Skill：建立標準專案知識結構
 
 ## 標準 `.agents/rules/` 目錄配置
 
-依專案類型條件式建立。入口行為內化在 `CLAUDE.md` / `AGENTS.md`，專案內預設不建立 commands。
+依專案類型條件式建立。入口行為內化在 `CLAUDE.md` / `AGENTS.md`，專案內不建立工具專用命令。
 
 ```
 .agents/

@@ -1,3 +1,8 @@
+---
+name: stitch-design
+description: Generate and evaluate UI design guidance with Stitch MCP. Use when a user asks to create UI design, produce or refresh `.agents/rules/design-guide.md`, run Stitch design generation, or evaluate generated UI designs with a rubric and retry loop.
+---
+
 # Skill：呼叫 Stitch MCP 產生 UI 設計
 
 ## 目的

@@ -1,3 +1,8 @@
+---
+name: entrypoint-writing
+description: Write concise agent entrypoint files for projects. Use when creating or updating Claude `CLAUDE.md` or Codex `AGENTS.md` files that point to `.agents/rules/`, include core working principles, and avoid duplicating detailed architecture, tech stack, TODO, or business docs.
+---
+
 # Skill：撰寫精簡入口檔
 
 ## 目的

@@ -1,3 +1,8 @@
+---
+name: todo-and-plans
+description: Write or update project TODO and planning rules. Use when initializing or maintaining `.agents/rules/todo-and-plans.md` for in-progress work, planned items, considering items, known issues, or when deciding whether an issue tracker replaces local planning rules.
+---
+
 # Skill：撰寫 todo-and-plans.md
 
 ## 目的

@@ -1,3 +1,8 @@
+---
+name: tech-stack
+description: Write or update technology stack rules. Use when initializing or maintaining `.agents/rules/tech-stack.md` for languages, versions, package managers, frameworks, UI libraries, state management, databases, infrastructure, external services, or banned alternatives.
+---
+
 # Skill：撰寫 tech-stack.md
 
 ## 目的

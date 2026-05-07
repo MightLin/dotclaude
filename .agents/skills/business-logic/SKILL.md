@@ -1,3 +1,8 @@
+---
+name: business-logic
+description: Write or update business/domain logic rules. Use when initializing or maintaining `.agents/rules/business-logic.md` for domain terminology, state flows, business constraints, permissions, workflows, billing, calculations, or other non-obvious product rules.
+---
+
 # Skill：撰寫 business-logic.md
 
 ## 目的
