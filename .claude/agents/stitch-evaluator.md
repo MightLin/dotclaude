@@ -27,7 +27,7 @@ model: sonnet
 
 ## 步驟
 
-1. Read `.claude/skills/stitch-design/rubric.md` 確認維度、權重、門檻。
+1. Read `skills/stitch-design/rubric.md` 確認維度、權重、門檻。
 2. 對每個維度逐一打分（0–100），並記下扣分理由。
 3. 計算加權總分：`Σ(score_i × weight_i)`。
 4. 判定 PASS / FAIL：總分 ≥ 80 且任一維度 ≥ 70 才 PASS。

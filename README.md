@@ -9,24 +9,27 @@ repo root
 ├── CLAUDE.md                    # Claude 使用的 repo 入口規則
 ├── AGENTS.md                    # Codex 使用的 repo 入口規則
 ├── .mcp.json                    # MCP server 設定
+├── skills/                      # 要同步到全域的 Claude / Codex skills 來源
+│   ├── architecture/            # architecture.md
+│   ├── tech-stack/              # tech-stack.md
+│   ├── api-conventions/         # api-conventions.md
+│   ├── design-guide/            # design-guide.md
+│   ├── business-logic/          # business-logic.md
+│   ├── data-model/              # data-model.md
+│   ├── testing-strategy/        # testing-strategy.md
+│   ├── deployment/              # deployment.md
+│   ├── todo-and-plans/          # todo-and-plans.md
+│   ├── init-project/            # 專案導入流程
+│   ├── migrate-rules/           # 舊專案 rules 遷移
+│   ├── project-structure/       # 標準 .agents/rules 結構
+│   └── entrypoint-writing/      # 精簡 CLAUDE.md / AGENTS.md
 ├── .agents/
-│   └── skills/                  # Claude / Codex 共用 skills 來源
-│       ├── architecture/        # architecture.md
-│       ├── tech-stack/          # tech-stack.md
-│       ├── api-conventions/     # api-conventions.md
-│       ├── design-guide/        # design-guide.md
-│       ├── business-logic/      # business-logic.md
-│       ├── data-model/          # data-model.md
-│       ├── testing-strategy/    # testing-strategy.md
-│       ├── deployment/          # deployment.md
-│       ├── todo-and-plans/      # todo-and-plans.md
-│       ├── init-project/        # 專案導入流程
-│       ├── sync-config/         # 全域設定同步流程
-│       ├── migrate-rules/       # 舊專案 rules 遷移
-│       ├── project-structure/   # 標準 .agents/rules 結構
-│       └── entrypoint-writing/  # 精簡 CLAUDE.md / AGENTS.md
+│   └── skills/
+│       └── sync-config/         # Codex repo-local 同步流程
 └── .claude/
-    └── agents/                  # Claude 專用 subagents
+    ├── agents/                  # Claude 專用 subagents
+    └── skills/
+        └── sync-config/         # Claude Code repo-local wrapper
 ```
 
 ## 入口方式
@@ -41,13 +44,15 @@ repo root
 
 ## 來源分層
 
-- `.agents/skills/`：Claude / Codex 共用 skills 來源，所有工具都可同步使用。
+- `skills/`：要同步到 `~/.claude/skills/` 與 `~/.codex/skills/` 的全域 skills 來源。
+- `.agents/skills/`：Codex repo-local skills；目前只放 `sync-config`。
+- `.claude/skills/`：Claude Code repo-local skills；目前只放 `sync-config` wrapper。
 - `.agents/rules/`：各專案產出的共用知識檔位置，不放在 `.claude/` 底下。
 - `.claude/agents/`：Claude Code 專用 subagents，目前用於 Stitch 設計流程。
 
 ## Skills
 
-Skills 放在 `.agents/skills/`，作為 Claude / Codex 共用來源；同步時分別複製到 `~/.claude/skills/` 與 `~/.codex/skills/`。
+全域 skills 放在 root `skills/`，作為 Claude / Codex 共用來源；同步時分別複製到 `~/.claude/skills/` 與 `~/.codex/skills/`。
 它們提供各 rule 檔的撰寫規範（適用範圍、必要內容、禁止項、大小上限、範例）。
 
 | Skill | 對應 rule 檔 | 適用 |
@@ -62,7 +67,7 @@ Skills 放在 `.agents/skills/`，作為 Claude / Codex 共用來源；同步時
 | design-guide | design-guide.md | 前端 / 全端 / 手機（含 web/mobile 條件分支） |
 | data-model | data-model.md | 後端 / 全端必要；手機有 local DB 才建 |
 | init-project | （導入流程） | 新專案首次建立 `.agents/rules/` 與入口檔 |
-| sync-config | （同步流程） | 此 repo 同步到 Claude / Codex 全域設定位置 |
+| sync-config | （同步流程） | 僅在此 repo 內使用，將其他設定同步到 Claude / Codex 全域設定位置 |
 | migrate-rules | （遷移流程） | 已用舊版 `.claude/rules/` 的專案 |
 | project-structure | （無 rule 檔） | `init-project` skill 內部使用 |
 | entrypoint-writing | CLAUDE.md / AGENTS.md | `init-project` skill 內部使用 |

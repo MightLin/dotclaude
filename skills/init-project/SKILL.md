@@ -9,8 +9,8 @@ description: Initialize a project for shared Claude/Codex agent guidance. Use wh
 
 ## Step 1：讀取操作知識
 
-view `.agents/skills/project-structure/SKILL.md`
-view `.agents/skills/entrypoint-writing/SKILL.md`
+view `skills/project-structure/SKILL.md`
+view `skills/entrypoint-writing/SKILL.md`
 
 ## Step 2：掃描專案現況
 

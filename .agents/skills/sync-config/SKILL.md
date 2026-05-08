@@ -27,10 +27,10 @@ diff AGENTS.md ~/.codex/AGENTS.md
 # CLAUDE.md
 Copy-Item "CLAUDE.md" "$HOME\.claude\CLAUDE.md" -Force
 
-# skills（共用來源）
+# skills（全域來源）
 Remove-Item "$HOME\.claude\skills" -Recurse -Force -ErrorAction SilentlyContinue
 New-Item "$HOME\.claude\skills" -ItemType Directory -Force | Out-Null
-Copy-Item ".agents\skills\*" "$HOME\.claude\skills\" -Recurse -Force
+Copy-Item "skills\*" "$HOME\.claude\skills\" -Recurse -Force
 ```
 
 ## Step 3：同步 Codex
@@ -43,7 +43,7 @@ Copy-Item "AGENTS.md" "$HOME\.codex\AGENTS.md" -Force
 
 # skills（先清後覆蓋；保留 .system）
 Get-ChildItem "$HOME\.codex\skills" -Force | Where-Object { $_.Name -ne ".system" } | Remove-Item -Recurse -Force
-Copy-Item ".agents\skills\*" "$HOME\.codex\skills\" -Recurse -Force
+Copy-Item "skills\*" "$HOME\.codex\skills\" -Recurse -Force
 ```
 
 ## 不同步
@@ -52,6 +52,8 @@ Copy-Item ".agents\skills\*" "$HOME\.codex\skills\" -Recurse -Force
 - `README.md`
 - `.gitignore`
 - `.claude/agents/`（目前是 repo 內 Stitch 工作流用，尚未定義跨工具同步格式）
+- `.agents/skills/sync-config/`（Codex repo-local skill，只在此 repo 內使用）
+- `.claude/skills/sync-config/`（Claude Code repo-local wrapper，只在此 repo 內使用）
 
 ## Step 4：確認
 
