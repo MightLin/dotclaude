@@ -60,8 +60,8 @@ description: Write or update project MCP design rules. Use when initializing or 
 - 在哪一層記錄 tool 呼叫
 - 敏感參數遮罩規則
 
-### 附錄：兼任 MCP host 整合方時補寫
-僅當同一專案既 build server 又自己整合其他 MCP server 時加入：
+### 附錄：MCP host/client 整合方時補寫
+當專案負責 MCP host/client 整合，且有自家工具選用、授權、後處理慣例時加入：
 - 預設啟用 vs 需授權的工具分類
 - 失敗 / 逾時 / retry 策略
 - Tool 結果後處理層歸屬
@@ -82,9 +82,9 @@ description: Write or update project MCP design rules. Use when initializing or 
 最後更新：YYYY-MM-DD
 
 ## Primitive 選擇
-- 有副作用或計算 → Tool
-- URI 可定址的唯讀內容 → Resource
-- 可重用提示模板 → Prompt
+- model 需要主動觸發的操作 / 查詢 / 計算 → Tool
+- host/client 可納入上下文的 URI 定址資料 → Resource
+- user/host 可選用的可重用提示模板 → Prompt
 
 ## 命名
 - tool：snake_case，動詞-名詞（list_orders、create_invoice）
