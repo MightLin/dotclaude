@@ -20,7 +20,8 @@ description: Create the standard shared project knowledge structure. Use when de
     ├── deployment.md            ← 必建
     ├── api-conventions.md       ← 後端 / 全端必建；前端 / 手機若有自家規範可建
     ├── design-guide.md          ← 前端 / 全端 / 手機才建
-    └── data-model.md            ← 後端 / 全端必建；手機有 local DB 才建
+    ├── data-model.md            ← 後端 / 全端必建；手機有 local DB 才建
+    └── mcp-conventions.md       ← MCP server 必建；host/client 有自家整合慣例才建；純消費不建
 ```
 
 ## 對應 skill 文件
@@ -36,6 +37,7 @@ description: Create the standard shared project knowledge structure. Use when de
 | api-conventions.md | api-conventions |
 | design-guide.md | design-guide |
 | data-model.md | data-model |
+| mcp-conventions.md | mcp-conventions |
 
 ## 原則
 - 不確定是否需要某個 rule 檔時，先問使用者

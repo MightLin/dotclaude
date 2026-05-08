@@ -39,6 +39,7 @@ view `skills/entrypoint-writing/SKILL.md`
 - 主要功能模組
 - 業務領域是否有特殊術語 / 流程
 - TODO 來源（issue tracker？或要建 todo-and-plans.md？）
+- 是否會 build / 維護 MCP server，或整合多個 MCP server 並維護自家授權、工具選用、後處理慣例（線索：`@modelcontextprotocol/sdk`、`mcp` 套件、`mcp-server*` 檔名、server entry 內含 MCP SDK import、MCP client/host 設定、tool allowlist、server registry）
 
 ## Step 5：條件式建立 rules 檔
 
@@ -55,6 +56,9 @@ rules 一律建立在 `.agents/rules/`。依專案類型決定建哪些：
 | api-conventions.md | 視有無自家規範 | yes | yes | 視有無自家規範 |
 | design-guide.md | yes | no | yes | yes |
 | data-model.md | no | yes | yes | 有 local DB 才建 |
+| mcp-conventions.md | 視專案 | 視專案 | 視專案 | 視專案 |
+
+`mcp-conventions.md` 不依 frontend/backend 軸判斷。獨立詢問：build / 維護 MCP server，或當 host/client 但有自家授權、工具選用、後處理慣例 → 必建；純消費（只用別人的 MCP server，無自家整合慣例）→ 不建。
 
 撰寫每個檔案時，view 對應 skill 取得格式與大小上限：
 
@@ -67,6 +71,7 @@ rules 一律建立在 `.agents/rules/`。依專案類型決定建哪些：
 - api-conventions
 - design-guide
 - data-model
+- mcp-conventions
 
 ## Step 6：建立入口檔
 

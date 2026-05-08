@@ -34,6 +34,7 @@ description: Write concise agent entrypoint files for projects. Use when creatin
 ## 文件索引規則
 - 只列實際存在的 rules 檔（依專案類型而定）
 - 不列尚未建立的檔案
+- 若建了 `mcp-conventions.md`，列入索引
 - Claude / Codex 入口檔內容可幾乎相同，只調整標題與工具名稱
 
 ## 禁止放入入口檔
