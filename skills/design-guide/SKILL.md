@@ -19,6 +19,7 @@ description: Write or update UI design rules. Use when initializing or maintaini
 - 主色 / 警告色 / 字型階層（若有規範）
 - 暗色模式策略
 - i18n / RTL 處理（若有）
+- 互動狀態規範：loading / empty / error 三種至少各一句（例：loading 用 Skeleton；empty 顯示說明文字與 CTA；error 用 inline 錯誤訊息）
 
 ### Web 段（frontend / fullstack）
 - 佈局：grid、spacing、container 寬度、響應式斷點
@@ -36,12 +37,17 @@ description: Write or update UI design rules. Use when initializing or maintaini
 - 安全區域（notch / home indicator）
 
 ## 禁止放入
-- 完整色票表（屬 design tokens 檔，不屬 rules）
+- 完整色票表（屬 design tokens 檔，不屬 rules）；允許最小 token 集（主色 / 警告色 / 成功色 / 文字主次 disabled）
 - 元件 API 文件（屬套件文件）
 - 截圖（rules 是純文字）
 
+## 設計來源索引
+若有 `.agents/design/<slug>/index.md`，在 design-guide.md 頂部以一行指向它：
+`設計來源：.agents/design/<slug>/index.md`
+每頁結構樹、跨頁元件清單等超出 80 行限制的細節，一律拆到 `.agents/design/<slug>/` 子目錄。
+
 ## 大小上限
-產出檔案不超過 80 行。
+產出檔案不超過 80 行。超出細節（每頁結構樹、跨頁元件清單）一律拆到 `.agents/design/<slug>/`。
 
 ## 範例
 

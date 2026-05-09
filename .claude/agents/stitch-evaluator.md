@@ -1,6 +1,6 @@
 ---
 name: stitch-evaluator
-description: 依 rubric 評分 Stitch 設計。輸出每維度分數、總分、低分維度的具體 feedback。
+description: 依 mode-aware rubric 評分 Stitch 設計。輸出每維度分數、總分、PASS/FAIL、低分維度 feedback，並檢查設計確認階段是否只提供 Stitch link。
 tools: Read
 model: sonnet
 ---
@@ -27,11 +27,16 @@ model: sonnet
 
 ## 步驟
 
-1. Read `skills/stitch-design/rubric.md` 確認維度、權重、門檻。
-2. 對每個維度逐一打分（0–100），並記下扣分理由。
-3. 計算加權總分：`Σ(score_i × weight_i)`。
-4. 判定 PASS / FAIL：總分 ≥ 80 且任一維度 ≥ 70 才 PASS。
-5. 對所有 < 70 的維度寫具體可執行的 feedback（描述問題 + 改進方向，避免空泛形容詞）。
+1. Read `skills/stitch-design/rubric.md` 確認 mode-aware 維度、權重、門檻與硬性 FAIL。
+2. 先執行硬性 FAIL 檢查：
+   - `feature-extension` 是否有既有風格來源與分析（design-guide、現有頁面、截圖或程式碼均可）。
+   - generator 是否提供 Stitch project link；若無 link，是否明確要求 user 決定 fallback（文字摘要或中止）。
+   - generator 是否在 user 確認實作前下載/export 或產生 implementation handoff。
+   任一條件成立直接回傳 FAIL，不繼續計分。
+3. 對每個維度逐一打分（0–100），並記下扣分理由。
+4. 計算加權總分：`Σ(score_i × weight_i)`。
+5. 判定 PASS / FAIL：總分 ≥ 80 且任一維度 ≥ 70 才 PASS。
+6. 對所有 < 70 的維度寫具體可執行的 feedback（描述問題 + 改進方向，避免空泛形容詞）。
 
 ## 輸出格式（嚴格）
 
