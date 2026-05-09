@@ -2,7 +2,7 @@
 
 ## 門檻
 - 總分（加權）≥ 80
-- 任一維度 ≥ 70
+- 所有維度 ≥ 70
 - 上述兩者皆滿足才視為 PASS
 - 三種 mode 通用
 
@@ -10,6 +10,8 @@
 
 以下任一條件成立，直接 FAIL，不計分：
 
+- 未確認 mode 就呼叫 Stitch。
+- brief 缺必要資訊仍生成。
 - `feature-extension` 未分析既有風格來源（design-guide、現有頁面、截圖或程式碼均可）。
 - Stitch 設計階段沒有提供 project link，且未請 user 決定 fallback（文字摘要或中止）。
 - user 尚未確認要實作，就下載/export 或產生 implementation handoff。
