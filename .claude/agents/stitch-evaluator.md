@@ -37,10 +37,10 @@ greenfield | feature-extension | design-guide-refresh
    - `feature-extension` 是否有既有風格來源與分析（design-guide、現有頁面、截圖或程式碼均可）。
    - generator 是否提供 Stitch project link；若無 link，是否明確要求 user 決定 fallback（文字摘要或中止）。
    - generator 是否在 user 確認實作前下載/export 或產生 implementation handoff。
-   任一條件成立直接回傳 FAIL，不繼續計分。
+   任一條件成立直接回傳 FAIL，不繼續計分；但仍輸出完整格式，`## 分數` 各維度寫 N/A、總分 N/A，讓主流程可正常解析。
 3. 依 mode 對每個維度逐一打分（0–100），並記下扣分理由。
 4. 計算加權總分：`Σ(score_i × weight_i)`。
-5. 判定 PASS / FAIL：總分 ≥ 80 且任一維度 ≥ 70 才 PASS。
+5. 判定 PASS / FAIL：總分 ≥ 80 且所有維度 ≥ 70 才 PASS。
 6. 對所有 < 70 的維度寫具體可執行的 feedback（描述問題 + 改進方向，避免空泛形容詞）。
 
 ## 輸出格式（嚴格）

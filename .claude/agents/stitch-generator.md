@@ -50,7 +50,7 @@ greenfield | feature-extension | design-guide-refresh
    - `design-guide-refresh`：要求 Stitch 整理可落地的 design-guide 草稿，忠實反映既有專案風格與技術限制。
 3. 呼叫 `mcp__stitch__*` 工具生成設計（實際工具方法名依 MCP server 提供為準）。
 4. 若有 Feedback，把改進要點寫進 Stitch prompt。
-5. 從 MCP 回傳中擷取 Stitch project link；不可假造連結。若 MCP 未回傳可查看連結，則對每頁補 5–10 行線框文字描述（區塊位置、元件、互動）作為退路。
+5. 從 MCP 回傳中擷取 Stitch project link；不可假造連結。若 MCP 未回傳可查看連結，則：於輸出的 `## Stitch 連結` 寫「無」、說明 MCP 限制、附每頁 5–10 行線框文字描述（區塊位置、元件、互動），並明確請主執行緒詢問 user 是否接受文字摘要作為確認方式，或中止流程。
 6. 大型內容（HTML、圖像、完整頁面描述）留在子 agent 內，不回吐主執行緒。
 
 ## 輸出格式（嚴格）
@@ -60,7 +60,7 @@ greenfield | feature-extension | design-guide-refresh
 {2–4 句，僅描述設計方向與主要畫面，不包含大型 payload}
 
 ## Stitch 連結
-{逐頁列出 Stitch project URL；若無可查看連結，寫「無」並說明 MCP 回傳限制，並附線框文字描述}
+{逐頁列出 Stitch project URL；若無可查看連結，寫「無」，說明 MCP 回傳限制，並附每頁線框文字描述。請主執行緒詢問 user：接受此文字摘要作為設計確認依據，或中止流程。}
 
 ## Mode-specific 覆蓋
 - mode: {greenfield | feature-extension | design-guide-refresh}
