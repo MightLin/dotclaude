@@ -12,15 +12,16 @@ description: Generate, evaluate, and hand off UI designs with Stitch MCP. Use wh
 
 ### 1. 取得 Design Brief
 
-Mode 判定與資訊收集由 `/design-brief` 負責，stitch-design 不重複執行。
-
-執行 `/design-brief` 取得：
-- `mode`（greenfield / feature-extension / design-guide-refresh）
-- 結構化 Brief（產品概覽、功能範圍、視覺方向、技術限制）
-- `existing_context`：brief 的「既有設計脈絡」區塊（design-guide 摘要、頁面/截圖觀察、architecture / tech-stack 摘要）
-- 足夠性檢查結果（YES / NO）
-
-若使用者已事先執行過 `/design-brief` 並提供 `.agents/design/{slug}/brief.md`，直接讀取該檔案，不重複收集。
+先確認 `.agents/design/{slug}/brief.md` 是否已存在：
+- **存在**：直接讀取，跳過執行 `/design-brief`。
+- **不存在**：執行 `/design-brief`，取得：
+  - **mode**：greenfield / feature-extension / design-guide-refresh
+  - **brief**（結構化）：產品概覽、功能範圍、視覺方向、技術限制
+  - **existing_context**（既有設計脈絡）：
+    - design-guide 摘要
+    - 既有頁面/截圖觀察
+    - architecture / tech-stack 摘要
+  - **足夠性**：YES / NO
 
 若足夠性為 NO，不得繼續，等待 brief 補齊後再進行。
 
@@ -31,7 +32,6 @@ attempt = 1
 feedback = none
 
 while attempt <= 3:
-    # brief / mode / existing context 來自 design-brief 的輸出
     gen_output = Agent(subagent_type="stitch-generator",
                        prompt=mode + brief + existing_context + (feedback if feedback else ""))
 

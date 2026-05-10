@@ -35,12 +35,14 @@ description: 收集 UI 設計需求、判定 mode、產出 tool-agnostic 設計 
 
 ### Step 2 — 讀取專案文件
 
-使用者確認 mode 後，依序讀取（存在才讀，不存在直接略過）：
+使用者確認 mode 後，並行讀取以下檔案（存在才讀，不存在直接略過）：
 
 1. `.agents/rules/architecture.md` — 系統目的、模組
 2. `.agents/rules/business-logic.md` — 主要功能與流程
 3. `.agents/rules/design-guide.md` — 視覺與元件基準
 4. `.agents/rules/tech-stack.md` — UI 套件與技術限制
+
+四個讀取請求同時發起，全部返回後再進入 Step 3。
 
 ### Step 3 — 補充必要資訊
 
@@ -135,5 +137,5 @@ Mode：{greenfield | feature-extension | design-guide-refresh}
 - `feature-extension` 若缺既有風格來源，足夠性標記 NO，不可假設風格。
 - 「給 AI 設計工具的 Prompt」使用中性格式，不預設任何特定工具的語法。
 - slug 由使用者提供或從功能描述自動產生（kebab-case，英文或拼音）。
-- 若 `.agents/design/{slug}/` 目錄已存在但無 `brief.md`，直接寫入，不詢問。
-- 若目錄與 `brief.md` 皆已存在，詢問使用者：覆蓋或另存為 `brief-{YYYY-MM-DD}.md`。
+- **brief.md 不存在**（含目錄不存在）：直接寫入。
+- **brief.md 已存在**：詢問使用者覆蓋或另存為 `brief-{YYYY-MM-DD}.md`。
