@@ -25,83 +25,35 @@ version: 0.1.0
 
 ## 必要 Gate
 
-### 1. Mode 判定後先確認意圖
-在呼叫 Stitch 或 subagent 前，主執行緒必須先回覆並等待使用者確認：
+### 1. 取得 Design Brief
 
-```text
-## Mode 判定
-- mode: greenfield | feature-extension | design-guide-refresh
-- 判定理由:
-- 我理解的目標:
-- 預計設計範圍:
-- 會讀取/使用的既有資料:
-- 需要你確認:
-```
+執行 `/design-brief` 收集設計需求，取得：
+- Mode（greenfield / feature-extension / design-guide-refresh）
+- 結構化 Brief（產品概覽、功能範圍、視覺方向、技術限制、既有設計脈絡）
+- 給 AI 設計工具的 Prompt
+- 足夠性檢查結果（YES / NO）
 
-使用者確認後才進入下一步。不可在未確認 mode 的情況下呼叫 Stitch。
+若使用者已事先執行過 `/design-brief` 並提供 `.agents/design/{slug}/brief.md`，直接讀取該檔案，不重複收集。
 
-### 2. 收集與檢查資訊
-依 mode 收集資料。先讀可取得的專案文件，缺必要資訊才問使用者。
+若足夠性為 NO，不得繼續，等待 brief 補齊後再進行。
 
-共同優先讀取：
-1. `.agents/rules/architecture.md`（若存在）→ 系統目的、模組
-2. `.agents/rules/business-logic.md`（若存在）→ 主要功能與流程
-3. `.agents/rules/design-guide.md`（若存在）→ 視覺與元件基準
-4. `.agents/rules/tech-stack.md`（若存在）→ UI 套件與技術限制
-
-`greenfield` 必要資訊：
-- 產品目的
-- 目標使用者
-- 平台（Web / mobile / both）
-- 核心功能或主要工作流
-- 主要畫面或資訊架構
-- 視覺調性（極簡/商務/活潑/嚴肅 + 1–2 形容詞）
-- 色彩偏好（主色 hex 或「無偏好」）
-- scope：要產出哪些頁面、每頁主要操作
-
-`feature-extension` 必要資訊：
-- 新功能要解決的問題
-- 新功能入口位置
-- 影響的頁面、流程或元件
-- 主要使用者操作流程（≥ 3 步驟：觸發 → 操作 → 結果）
-- 既有風格來源（design-guide、現有頁面、截圖、可跑的 localhost 或程式碼）
-- 互動狀態需求（loading/empty/error 是否需要設計）
-- 技術限制與不可違反的專案規則
-
-`design-guide-refresh` 必要資訊：
-- 現有 UI/元件來源
-- 需要刷新或補齊的設計規範範圍
-- 專案 UI 套件與禁止事項
-
-呼叫 Stitch 前必須輸出資訊足夠性檢查：
-
-```text
-## 設計前檢查
-- 已知資訊:
-- 缺少的必要資訊:
-- 可安全假設:
-- 高風險假設:
-- 是否可呼叫 Stitch: YES | NO
-```
-
-若 `是否可呼叫 Stitch` 為 `NO`，先問使用者補資訊，不可用大量假設生成。
-
-### 3. Orchestration Loop（最多 3 次）
+### 2. Orchestration Loop（最多 3 次）
 
 ```
 attempt = 1
 feedback = none
 
 while attempt <= 3:
+    # brief / mode / existing context 來自 design-brief 的輸出
     gen_output = Agent(subagent_type="stitch-generator",
-                       prompt=mode + brief + existing context + (feedback if feedback else ""))
+                       prompt=mode + brief + existing_context + (feedback if feedback else ""))
 
     if gen_output starts with "ERROR:":
         中止，回報錯誤給使用者
         break
 
     eval_output = Agent(subagent_type="stitch-evaluator",
-                        prompt=mode + brief + gen_output + existing context)
+                        prompt=mode + brief + gen_output + existing_context)
 
     解析 eval_output 取得分數、PASS/FAIL、feedback
     記錄此輪結果到歷史
