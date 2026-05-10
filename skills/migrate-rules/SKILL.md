@@ -1,7 +1,14 @@
 ---
 name: migrate-rules
 description: Migrate existing projects from the old `.claude/rules/` layout to the shared `.agents/rules/` layout without rerunning init-project. Use when a project already has Claude rules, CLAUDE.md, or old dotclaude output and the user wants Codex compatibility, AGENTS.md creation, or low-token migration instead of regenerating project rules.
+updated: 2026-05-10
+version: 0.1.0
 ---
+
+## Changelog
+
+### 0.1.0 - 2026-05-10
+- 建立初始 skill 規範。
 
 # Skill：遷移舊版 rules
 

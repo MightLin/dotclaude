@@ -55,6 +55,15 @@ repo root
 全域 skills 放在 root `skills/`，作為 Claude / Codex 共用來源；同步時分別複製到 `~/.claude/skills/` 與 `~/.codex/skills/`。
 它們提供各 rule 檔的撰寫規範（適用範圍、必要內容、禁止項、大小上限、範例）。
 
+每個 `skills/*/SKILL.md` 都要在 front matter 維護版本資訊：
+
+- `updated`：UTC `YYYY-MM-DD`，表示最近修訂日期。
+- `version`：skill 版本，重大流程變更時調整。
+- `## Changelog`：只保留最新一版，作為同步前的人工判斷參考。
+
+版本資訊不作為自動同步邏輯；使用 `sync-config` 前先閱讀日期、版本與 changelog，再決定是否覆蓋到全域設定。
+同步時只覆蓋 repo `skills/` 提供的同名內容，不清空全域 `skills/` 目錄，避免刪除其他來源安裝的 skills。
+
 | Skill | 對應 rule 檔 | 適用 |
 |---|---|---|
 | architecture | architecture.md | 所有類型 |
@@ -78,4 +87,5 @@ repo root
 2. 直接說「使用 init-project skill 初始化這個專案」
 3. 專案知識檔統一放在 `.agents/rules/`，由 `CLAUDE.md` 與 `AGENTS.md` 指向
 4. 已用舊版 `.claude/rules/` 的專案，使用 `migrate-rules` skill 遷移，不需重跑 init
-5. 修改完此 repo 後，直接說「使用 sync-config skill 同步」
+5. 修改完此 repo 後，先查看 skill 的 `updated`、`version`、`Changelog`
+6. 確認要更新全域設定時，直接說「使用 sync-config skill 同步」

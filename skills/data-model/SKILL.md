@@ -1,7 +1,14 @@
 ---
 name: data-model
 description: Write or update data model rules. Use when initializing or maintaining `.agents/rules/data-model.md` for database type, naming conventions, primary keys, timestamps, soft delete, indexes, migrations, sensitive fields, or local mobile database rules.
+updated: 2026-05-10
+version: 0.1.0
 ---
+
+## Changelog
+
+### 0.1.0 - 2026-05-10
+- 建立初始 skill 規範。
 
 # Skill：撰寫 data-model.md
 

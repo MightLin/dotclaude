@@ -1,7 +1,14 @@
 ---
 name: init-project
 description: Initialize a project for shared Claude/Codex agent guidance. Use when onboarding a new project without existing `.agents/rules/`, generating rule files, creating `CLAUDE.md` or `AGENTS.md`, detecting frontend/backend/fullstack/mobile project type, or replacing old dotclaude initialization workflows.
+updated: 2026-05-10
+version: 0.1.0
 ---
+
+## Changelog
+
+### 0.1.0 - 2026-05-10
+- 建立初始 skill 規範。
 
 # Skill：專案導入
 
