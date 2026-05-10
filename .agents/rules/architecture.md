@@ -18,12 +18,20 @@
 
 dotclaude repo → sync-config skill → `~/.claude/CLAUDE.md`、`~/.claude/skills/*`、`~/.codex/AGENTS.md`、`~/.codex/skills/*`
 
+## Skill metadata 規範
+
+- 所有 root `skills/*/SKILL.md` 都必須在 front matter 包含 `updated: <UTC YYYY-MM-DD>` 與 `version: <semver>`
+- 所有 root `skills/*/SKILL.md` 都必須包含 `## Changelog`，且只保留最新一版作為同步前參考
+- 修改 root skill 內容時必須同步更新 `updated`；重大流程或行為變更時同步調整 `version`
+- Review skills 變更時，必須檢查 metadata 與 changelog 是否存在且符合本規範
+
 ## 新增 Skill 的流程
 
 1. 在 `skills/<skill-name>/SKILL.md` 建立 skill 定義
-2. 若需要 Codex repo-local 版本，同時建立 `.agents/skills/<skill-name>/SKILL.md`
-3. 若需要 Claude Code repo-local wrapper，建立 `.claude/skills/<skill-name>/SKILL.md`
-4. 執行 sync-config skill 將變更同步到全域位置
+2. 依照「Skill metadata 規範」補齊 `updated`、`version` 與 `## Changelog`
+3. 若需要 Codex repo-local 版本，同時建立 `.agents/skills/<skill-name>/SKILL.md`
+4. 若需要 Claude Code repo-local wrapper，建立 `.claude/skills/<skill-name>/SKILL.md`
+5. 執行 sync-config skill 將變更同步到全域位置
 
 ## 邊界規則
 
