@@ -8,22 +8,16 @@ description: Generate, evaluate, and hand off UI designs with Stitch MCP. Use wh
 ## 目的
 依使用者需求與專案現況，透過 Stitch MCP 產生 UI 設計。支援從零建立 UI、依既有網站風格新增功能、刷新 design guide。流程必須先確認 mode 與資訊足夠性，Stitch 設計完成後只提供 Stitch 連結給使用者確認；只有使用者明確表示要實作該方案後，才下載/export 或整理 handoff。
 
-## Modes
-
-- `greenfield`：完全沒有既有 UI，或使用者明確要求從零建立產品 UI。
-- `feature-extension`：已有網站/app，要依目前風格新增功能、頁面或流程。
-- `design-guide-refresh`：目標只是建立、整理或更新 `.agents/rules/design-guide.md`。
-
-若使用者需求同時符合多個 mode，先選影響最大的 mode，並在確認階段說明原因。
-
 ## 必要 Gate
 
 ### 1. 取得 Design Brief
 
-執行 `/design-brief` 收集設計需求，取得：
-- Mode（greenfield / feature-extension / design-guide-refresh）
-- 結構化 Brief（產品概覽、功能範圍、視覺方向、技術限制、既有設計脈絡）
-- 給 AI 設計工具的 Prompt
+Mode 判定與資訊收集由 `/design-brief` 負責，stitch-design 不重複執行。
+
+執行 `/design-brief` 取得：
+- `mode`（greenfield / feature-extension / design-guide-refresh）
+- 結構化 Brief（產品概覽、功能範圍、視覺方向、技術限制）
+- `existing_context`：brief 的「既有設計脈絡」區塊（design-guide 摘要、頁面/截圖觀察、architecture / tech-stack 摘要）
 - 足夠性檢查結果（YES / NO）
 
 若使用者已事先執行過 `/design-brief` 並提供 `.agents/design/{slug}/brief.md`，直接讀取該檔案，不重複收集。
@@ -60,7 +54,7 @@ while attempt <= 3:
 
 主執行緒不要重新評分，信任 evaluator 結果。
 
-### 4. 設計方案確認
+### 3. 設計方案確認
 Stitch 生成完成後，確認設計方案時只提供 Stitch 連結，不下載、不複製、不產生 implementation handoff：
 
 ```text
@@ -75,7 +69,7 @@ Stitch 生成完成後，確認設計方案時只提供 Stitch 連結，不下�
 
 若 Stitch 沒有提供可查看的 project link，必須回報限制，並請使用者決定是否改用文字摘要作為確認方式。不可假造連結。
 
-### 5. 實作確認後才 handoff
+### 4. 實作確認後才 handoff
 只有當使用者明確表示要實作此方案（例如「就照這個實作」、「下載來 handoff」、「開始做」）後，才下載/export Stitch 產物或依 Stitch 連結整理實作交接資料。
 
 **若 3 次全 FAIL 且使用者接受最後一版**：只允許建立 `.agents/design/<slug>/`（標記「未通過評分」），禁止觸碰 `.agents/rules/design-guide.md`。

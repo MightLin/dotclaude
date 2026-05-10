@@ -7,7 +7,7 @@ description: 收集 UI 設計需求、判定 mode、產出 tool-agnostic 設計 
 
 ## 目的
 
-與使用者互動收集 UI 設計需求，判定設計 mode，產出一份結構化的 design brief。輸出格式為 tool-agnostic，可直接用於 Stitch、Claude Design、v0 或任何 AI 設計工具，也可作為 `/stitch-design` 的前置輸入。
+與使用者互動收集 UI 設計需求，判定設計 mode，產出一份結構化的 design brief。輸出格式為 tool-agnostic，可直接用於 Stitch、Claude Design、v0 或任何 AI 設計工具，也可作為後續設計或實作 skill 的前置輸入。
 
 ## Modes
 
@@ -127,9 +127,7 @@ Mode：{greenfield | feature-extension | design-guide-refresh}
 
 **(b) 寫入檔案**
 
-路徑：`.agents/design/{slug}/brief.md`
-
-若路徑已存在 `brief.md`，詢問使用者：覆蓋現有檔案，或另存為 `brief-{YYYY-MM-DD}.md`。
+路徑：`.agents/design/{slug}/brief.md`（衝突處理規則見注意區塊）。
 
 ## 注意
 
@@ -137,3 +135,5 @@ Mode：{greenfield | feature-extension | design-guide-refresh}
 - `feature-extension` 若缺既有風格來源，足夠性標記 NO，不可假設風格。
 - 「給 AI 設計工具的 Prompt」使用中性格式，不預設任何特定工具的語法。
 - slug 由使用者提供或從功能描述自動產生（kebab-case，英文或拼音）。
+- 若 `.agents/design/{slug}/` 目錄已存在但無 `brief.md`，直接寫入，不詢問。
+- 若目錄與 `brief.md` 皆已存在，詢問使用者：覆蓋或另存為 `brief-{YYYY-MM-DD}.md`。
