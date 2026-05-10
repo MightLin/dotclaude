@@ -7,7 +7,7 @@ description: 收集 UI 設計需求、判定 mode、產出 tool-agnostic 設計 
 
 ## 目的
 
-與使用者互動收集 UI 設計需求，判定設計 mode，產出一份結構化的 design brief。輸出格式為 tool-agnostic，可直接用於 Stitch、Claude Design、v0 或任何 AI 設計工具，也可作為 `/stitch-design` 的前置輸入。
+與使用者互動收集 UI 設計需求，判定設計 mode，產出一份結構化的 design brief。輸出格式為 tool-agnostic，可直接用於 Stitch、Claude Design、v0 或任何 AI 設計工具，也可作為後續設計或實作 skill 的前置輸入。
 
 ## Modes
 
@@ -35,12 +35,14 @@ description: 收集 UI 設計需求、判定 mode、產出 tool-agnostic 設計 
 
 ### Step 2 — 讀取專案文件
 
-使用者確認 mode 後，依序讀取（存在才讀，不存在直接略過）：
+使用者確認 mode 後，並行讀取以下檔案（存在才讀，不存在直接略過）：
 
 1. `.agents/rules/architecture.md` — 系統目的、模組
 2. `.agents/rules/business-logic.md` — 主要功能與流程
 3. `.agents/rules/design-guide.md` — 視覺與元件基準
 4. `.agents/rules/tech-stack.md` — UI 套件與技術限制
+
+四個讀取請求同時發起，全部返回後再進入 Step 3。
 
 ### Step 3 — 補充必要資訊
 
@@ -127,9 +129,7 @@ Mode：{greenfield | feature-extension | design-guide-refresh}
 
 **(b) 寫入檔案**
 
-路徑：`.agents/design/{slug}/brief.md`
-
-若路徑已存在 `brief.md`，詢問使用者：覆蓋現有檔案，或另存為 `brief-{YYYY-MM-DD}.md`。
+路徑：`.agents/design/{slug}/brief.md`（衝突處理規則見注意區塊）。
 
 ## 注意
 
@@ -137,3 +137,5 @@ Mode：{greenfield | feature-extension | design-guide-refresh}
 - `feature-extension` 若缺既有風格來源，足夠性標記 NO，不可假設風格。
 - 「給 AI 設計工具的 Prompt」使用中性格式，不預設任何特定工具的語法。
 - slug 由使用者提供或從功能描述自動產生（kebab-case，英文或拼音）。
+- **brief.md 不存在**（含目錄不存在）：直接寫入。
+- **brief.md 已存在**：詢問使用者覆蓋或另存為 `brief-{YYYY-MM-DD}.md`。
