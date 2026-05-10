@@ -1,6 +1,8 @@
 ---
 name: design-brief
 description: 收集 UI 設計需求、判定 mode、產出 tool-agnostic 設計 brief。可單獨執行，輸出可用於 Stitch、Claude Design、v0 或任何 AI 設計工具。
+updated: 2026-05-11
+version: 0.1.0
 ---
 
 # Skill：Design Brief 收集
@@ -139,3 +141,8 @@ Mode：{greenfield | feature-extension | design-guide-refresh}
 - slug 由使用者提供或從功能描述自動產生（kebab-case，英文或拼音）。
 - **brief.md 不存在**（含目錄不存在）：直接寫入。
 - **brief.md 已存在**：詢問使用者覆蓋或另存為 `brief-{YYYY-MM-DD}.md`。
+
+## Changelog
+
+### 0.1.0 — 2026-05-11
+- 初始版本：design brief 收集、mode 判定、brief 輸出流程
