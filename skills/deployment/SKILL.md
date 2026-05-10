@@ -1,7 +1,14 @@
 ---
 name: deployment
 description: Write or update deployment rules. Use when initializing or maintaining `.agents/rules/deployment.md` for environments, secrets sources, CI/CD triggers, deployment targets, rollback, migrations, mobile store release flows, monitoring, logging, and alerting.
+updated: 2026-05-10
+version: 0.1.0
 ---
+
+## Changelog
+
+### 0.1.0 - 2026-05-10
+- 建立初始 skill 規範。
 
 # Skill：撰寫 deployment.md
 

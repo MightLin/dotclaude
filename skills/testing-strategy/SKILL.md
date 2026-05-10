@@ -1,7 +1,14 @@
 ---
 name: testing-strategy
 description: Write or update testing strategy rules. Use when initializing or maintaining `.agents/rules/testing-strategy.md` for test frameworks, test pyramid, coverage, CI test execution, mock boundaries, integration tests, E2E tests, mobile UI tests, or visual regression.
+updated: 2026-05-10
+version: 0.1.0
 ---
+
+## Changelog
+
+### 0.1.0 - 2026-05-10
+- 建立初始 skill 規範。
 
 # Skill：撰寫 testing-strategy.md
 

@@ -1,7 +1,14 @@
 ---
 name: stitch-design
 description: Generate, evaluate, and hand off UI designs with Stitch MCP. Use when Codex needs to design UI from scratch, extend an existing website or app with a new feature in the current visual style, refresh `.agents/rules/design-guide.md`, run Stitch design generation, evaluate generated UI designs with a mode-aware rubric, or prepare an implementation handoff after the user approves a Stitch design.
+updated: 2026-05-10
+version: 0.1.0
 ---
+
+## Changelog
+
+### 0.1.0 - 2026-05-10
+- 建立初始 skill 規範。
 
 # Skill：Stitch UI 設計工作流
 

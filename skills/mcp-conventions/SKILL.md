@@ -1,7 +1,14 @@
 ---
 name: mcp-conventions
 description: Write or update project MCP design rules. Use when initializing or maintaining `.agents/rules/mcp-conventions.md` for MCP server design, tool naming, tool description, input schema, Resource/Tool/Prompt selection, side-effect tiering, MCP host integration, or projects using @modelcontextprotocol/sdk / FastMCP.
+updated: 2026-05-10
+version: 0.1.0
 ---
+
+## Changelog
+
+### 0.1.0 - 2026-05-10
+- 建立初始 skill 規範。
 
 # Skill：撰寫 mcp-conventions.md
 

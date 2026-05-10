@@ -1,7 +1,14 @@
 ---
 name: project-structure
 description: Create the standard shared project knowledge structure. Use when deciding which `.agents/rules/` files to create for frontend, backend, fullstack, or mobile projects, and when avoiding empty rule files or tool-specific project folders.
+updated: 2026-05-10
+version: 0.1.0
 ---
+
+## Changelog
+
+### 0.1.0 - 2026-05-10
+- 建立初始 skill 規範。
 
 # Skill：建立標準專案知識結構
 

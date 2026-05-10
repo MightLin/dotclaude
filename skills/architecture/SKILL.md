@@ -1,7 +1,14 @@
 ---
 name: architecture
 description: Write or update concise project architecture rules. Use when initializing or maintaining `.agents/rules/architecture.md` with system overview, module responsibilities, data flow, and dependency boundary guidance for frontend, backend, fullstack, or mobile projects.
+updated: 2026-05-10
+version: 0.1.0
 ---
+
+## Changelog
+
+### 0.1.0 - 2026-05-10
+- 建立初始 skill 規範。
 
 # Skill：撰寫 architecture.md
 
