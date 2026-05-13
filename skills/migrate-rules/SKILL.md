@@ -1,11 +1,14 @@
 ---
 name: migrate-rules
 description: Migrate existing projects from the old `.claude/rules/` layout to the shared `.agents/rules/` layout without rerunning init-project. Use when a project already has Claude rules, CLAUDE.md, or old dotclaude output and the user wants Codex compatibility, AGENTS.md creation, or low-token migration instead of regenerating project rules.
-updated: 2026-05-10
-version: 0.1.0
+updated: 2026-05-14
+version: 0.2.0
 ---
 
 ## Changelog
+
+### 0.2.0 - 2026-05-14
+- 新增 Step 6：清理全域遺留的舊 commands（sync.md、init-project.md）。
 
 ### 0.1.0 - 2026-05-10
 - 建立初始 skill 規範。
@@ -103,6 +106,22 @@ version: 0.1.0
 - 使用者未同意：保留，並在摘要中註明舊目錄仍存在
 
 不要刪除 `.claude/agents/`、`.claude/settings.local.json`。
+
+### 6. 清理全域遺留的舊 commands
+
+檢查 `~/.claude/commands/` 是否有舊版 dotclaude 遺留的 commands：
+
+- `sync.md`：舊版 sync，已被 `sync-config` skill 取代
+- `init-project.md`：舊版 init-project，參照舊路徑（`~/.claude/skills/claude-md-writing/`），已被 `init-project` skill 取代
+
+若存在，提示使用者可以刪除，並提供指令讓使用者自行執行：
+
+```powershell
+Remove-Item "$HOME\.claude\commands\sync.md" -Force
+Remove-Item "$HOME\.claude\commands\init-project.md" -Force
+```
+
+不要自動刪除，讓使用者確認後自行執行。
 
 ## 驗證
 

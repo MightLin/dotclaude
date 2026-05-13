@@ -88,7 +88,7 @@ rules 一律建立在 `.agents/rules/`。依專案類型決定建哪些：
 - Codex 專案建立 `AGENTS.md`
 - 若使用者明確要雙工具共用，兩個都建
 - 文件索引段只列實際建出來的 rules
-- 必含 3 條核心原則（取代過去的 /understand、/new-feature 行為）
+- 必含 3 條核心原則（dotclaude 流程特有，取代過去的 /understand、/new-feature 行為；這些原則不在全域設定，只在有導入此流程的專案入口）
 
 ## Step 7：確認
 

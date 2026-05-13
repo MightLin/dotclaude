@@ -32,7 +32,7 @@ version: 0.1.0
 
 ## 必含的 3 條核心原則
 
-以下 3 條取代過去 `/understand`、`/new-feature` command 的功能，必須寫進每個入口檔：
+以下 3 條取代過去 `/understand`、`/new-feature` command 的功能，是 dotclaude 流程特有的，必須寫進每個導入此流程的專案入口檔（全域 CLAUDE.md / AGENTS.md 不含這些）：
 
 1. 接到任務前，view `.agents/rules/` 下相關檔案以理解專案現況
 2. 開新功能前，先讀 `todo-and-plans.md` 確認與計畫無衝突
