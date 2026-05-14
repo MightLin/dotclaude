@@ -1,11 +1,14 @@
 ---
 name: init-project
 description: Initialize a project for shared Claude/Codex agent guidance. Use when onboarding a new project without existing `.agents/rules/`, generating rule files, creating `CLAUDE.md` or `AGENTS.md`, detecting frontend/backend/fullstack/mobile project type, or replacing old dotclaude initialization workflows.
-updated: 2026-05-10
-version: 0.1.0
+updated: 2026-05-14
+version: 0.1.1
 ---
 
 ## Changelog
+
+### 0.1.1 - 2026-05-14
+- 建立入口檔前需詢問使用者要建立 `CLAUDE.md`、`AGENTS.md` 或兩者。
 
 ### 0.1.0 - 2026-05-10
 - 建立初始 skill 規範。
@@ -84,9 +87,8 @@ rules 一律建立在 `.agents/rules/`。依專案類型決定建哪些：
 
 依 entrypoint-writing skill 規範建立精簡入口檔。
 
-- Claude 專案建立 `CLAUDE.md`
-- Codex 專案建立 `AGENTS.md`
-- 若使用者明確要雙工具共用，兩個都建
+- 建立前先詢問使用者要建立 `CLAUDE.md`、`AGENTS.md` 或兩者
+- 若使用者未指定，依本次對話使用的工具給預設建議，但仍需等使用者確認
 - 文件索引段只列實際建出來的 rules
 - 必含 3 條核心原則（dotclaude 流程特有，取代過去的 /understand、/new-feature 行為；這些原則不在全域設定，只在有導入此流程的專案入口）
 
