@@ -1,11 +1,16 @@
 ---
 name: check-rules
 description: Check if code conforms to project rules. Use when validating manually written code against `.agents/rules/`, finding rule violations, or getting correction suggestions for specific files, directories, or a PR/diff.
-updated: 2026-05-11
-version: 0.2.0
+updated: 2026-05-14
+version: 0.3.0
 ---
 
 ## Changelog
+
+### 0.3.0 - 2026-05-14
+- 報告開頭加入 GREEN/YELLOW/RED 整體裁定
+- Finding 格式改為 surgical redline：Rule 行引用規則原文，「問題」→「現況」，「建議修正」→「建議」
+- 摘要行加入整體裁定結果
 
 ### 0.2.0 - 2026-05-11
 - PR/diff 意圖時提示使用者確認後改讀 git diff 而非完整檔案
@@ -86,30 +91,37 @@ version: 0.2.0
 對照 Step 2 提取的規範項目逐一比對，記錄每個違規：
 
 - **檔案路徑與行號**（必須能引用具體位置，無法確認位置者不列為 finding）
-- **違反的規範**：來自哪個 rules 檔、哪條規則
-- **問題描述**：具體說明違反了什麼
-- **建議修正**：給出可直接套用的修改方式
 - **嚴重程度**：
   - `[High]`：可能造成 correctness、security、data 或 user-facing regression
   - `[Medium]`：有意義的架構、測試或 workflow 違規
   - `[Low]`：命名、style 或輕微 convention drift
+- **Rule**：來自哪個 rules 檔，並直接引用該規則的原文（讓使用者不用自己去查）
+- **現況**：程式碼目前是什麼（事實描述，不評判）
+- **建議**：應該改成什麼（給出可直接套用的修改）
 
 無法從現有檔案驗證的規範（例如 rule 要求某 artifact 存在但找不到），列入 Unchecked Areas，不列為違規。
 
 ## Step 5：輸出報告
+
+整體裁定規則（在輸出前先計算）：
+- 🟢 **GREEN**：無 High、無 Medium → 可直接合併/上線
+- 🟡 **YELLOW**：無 High 但有 Medium → 需人工確認後再決定
+- 🔴 **RED**：任何 High → 必須修正才能合併
 
 ```
 ## check-rules 報告
 對照規則：{選定的 rules 檔清單}
 掃描範圍：{目錄、檔案或 git diff}
 
+### 整體裁定：🔴 RED / 🟡 YELLOW / 🟢 GREEN
+
 ### Findings
 
 - [High] {簡短問題標題}
   Evidence: `path/to/file.ext:line`
-  Rule: `.agents/rules/example.md`
-  問題：{具體說明}
-  建議修正：{可直接套用的修改}
+  Rule: `.agents/rules/example.md` — "{引用的具體規則文字}"
+  現況：{程式碼目前是什麼}
+  建議：{應該改成什麼}
 
 - [Medium] ...
 
@@ -122,8 +134,8 @@ version: 0.2.0
 
 ### 摘要
 
-掃描 {n} 個檔案，發現 {high} High / {medium} Medium / {low} Low 共 {total} 個 finding。
-{若無 finding：「符合所有選定規範。」}
+掃描 {n} 個檔案，發現 {high} High / {medium} Medium / {low} Low 共 {total} 個 finding，整體裁定：{RED/YELLOW/GREEN}。
+{若無 finding：「符合所有選定規範，整體裁定：🟢 GREEN。」}
 ```
 
 ## 行為限制
