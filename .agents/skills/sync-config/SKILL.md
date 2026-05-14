@@ -1,6 +1,6 @@
 ---
 name: sync-config
-description: Sync this dotclaude repository into local Claude and Codex configuration locations. Use only inside the dotclaude repo when the user asks to sync, install, update, copy shared skills, update global Claude/Codex config, or replace old dotclaude sync workflows.
+description: "Codex only. Manually sync this dotclaude repository into Codex (and Claude) global configuration locations. Use only inside the dotclaude repo when the user asks to sync, install, or update global Codex/Claude skills. Not needed for Claude Code plugin users — plugin installation handles distribution."
 updated: 2026-05-10
 version: 0.2.0
 ---

@@ -1,3 +1,12 @@
+# 待規劃 Skills
+
+## 考慮中
+
+- **git-workflow（commit hook 形式）**：不做成靜態 rule 檔，而是 PostToolUse hook，commit 時自動看 diff 判斷是否需要更新 `.agents/rules/` 裡的對應規範。
+- **security-conventions**：生成 `.agents/rules/security-conventions.md`，涵蓋認證、secrets 管理、輸入驗證、PII 處理等，定位為後端 / 全端專案的條件式 rule 檔。
+
+---
+
 # Stitch / Claude Design -> Codex / Claude Code
 
 先朝最簡單的流程前進：

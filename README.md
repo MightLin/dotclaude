@@ -21,15 +21,12 @@ repo root
 │   ├── todo-and-plans/          # todo-and-plans.md
 │   ├── init-project/            # 專案導入流程
 │   ├── migrate-rules/           # 舊專案 rules 遷移
-│   ├── project-structure/       # 標準 .agents/rules 結構
 │   └── entrypoint-writing/      # 精簡 CLAUDE.md / AGENTS.md
 ├── .agents/
 │   └── skills/
 │       └── sync-config/         # Codex repo-local 同步流程
 └── .claude/
-    ├── agents/                  # Claude 專用 subagents
-    └── skills/
-        └── sync-config/         # Claude Code repo-local wrapper
+    └── agents/                  # Claude 專用 subagents
 ```
 
 ## 入口方式
@@ -37,7 +34,7 @@ repo root
 | 入口 | 說明 |
 |---|---|
 | `init-project` skill | 首次導入新專案，建立 `.agents/rules/` 與入口檔 |
-| `sync-config` skill | 將 repo 同步到 Claude / Codex 的全域設定位置 |
+| `sync-config` skill | **Codex 專用**：手動同步 repo 到 `~/.codex/skills/`（Claude Code plugin 使用者不需要） |
 | `migrate-rules` skill | 舊專案從 `.claude/rules/` 遷移到 `.agents/rules/` |
 
 過去的 `/understand`、`/new-feature` 已內化為入口檔的核心原則，每 session 自動生效，不再需要手動觸發。
@@ -46,7 +43,6 @@ repo root
 
 - `skills/`：要同步到 `~/.claude/skills/` 與 `~/.codex/skills/` 的全域 skills 來源。
 - `.agents/skills/`：Codex repo-local skills；目前只放 `sync-config`。
-- `.claude/skills/`：Claude Code repo-local skills；目前只放 `sync-config` wrapper。
 - `.agents/rules/`：各專案產出的共用知識檔位置，不放在 `.claude/` 底下。
 - `.claude/agents/`：Claude Code 專用 subagents，目前用於 Stitch 設計流程。
 
@@ -76,16 +72,34 @@ repo root
 | design-guide | design-guide.md | 前端 / 全端 / 手機（含 web/mobile 條件分支） |
 | data-model | data-model.md | 後端 / 全端必要；手機有 local DB 才建 |
 | init-project | （導入流程） | 新專案首次建立 `.agents/rules/` 與入口檔 |
-| sync-config | （同步流程） | 僅在此 repo 內使用，將其他設定同步到 Claude / Codex 全域設定位置 |
+| sync-config | （同步流程） | **Codex 專用**，手動同步 repo 到全域設定；Claude Code plugin 使用者不需要 |
 | migrate-rules | （遷移流程） | 已用舊版 `.claude/rules/` 的專案 |
-| project-structure | （無 rule 檔） | `init-project` skill 內部使用 |
 | entrypoint-writing | CLAUDE.md / AGENTS.md | `init-project` skill 內部使用 |
+
+## 安裝
+
+### Claude Code Plugin（推薦）
+
+```bash
+# 從此 repo 本地載入
+claude --plugin-dir ./dotclaude
+
+# 或未來透過 marketplace
+/plugin marketplace add https://github.com/MightLin/dotclaude
+/plugin install dotclaude
+```
+
+安裝後 skills 以 `dotclaude:` 前綴呼叫，例如 `/dotclaude:init-project`。
+
+### Codex（手動同步）
+
+1. clone 此 repo
+2. 直接說「使用 sync-config skill 同步」
+3. Skills 會複製到 `~/.codex/skills/`
 
 ## 使用方式
 
 1. 進入任意專案目錄，用 Claude Code 或 Codex 開啟
-2. 直接說「使用 init-project skill 初始化這個專案」
+2. 直接說「使用 `dotclaude:init-project` skill 初始化這個專案」
 3. 專案知識檔統一放在 `.agents/rules/`，由 `CLAUDE.md` 與 `AGENTS.md` 指向
-4. 已用舊版 `.claude/rules/` 的專案，使用 `migrate-rules` skill 遷移，不需重跑 init
-5. 修改完此 repo 後，先查看 skill 的 `updated`、`version`、`Changelog`
-6. 確認要更新全域設定時，直接說「使用 sync-config skill 同步」
+4. 已用舊版 `.claude/rules/` 的專案，使用 `dotclaude:migrate-rules` skill 遷移，不需重跑 init
