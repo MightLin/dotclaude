@@ -1,8 +1,8 @@
 ---
 name: design-brief
 description: 收集 UI 設計需求、判定 mode、產出 tool-agnostic 設計 brief。可單獨執行，輸出可用於 Stitch、Claude Design、v0 或任何 AI 設計工具。
-updated: 2026-05-11
-version: 0.1.0
+updated: 2026-05-16
+version: 0.2.0
 ---
 
 # Skill：Design Brief 收集
@@ -15,7 +15,6 @@ version: 0.1.0
 
 - `greenfield`：完全沒有既有 UI，或明確要求從零建立產品 UI。
 - `feature-extension`：已有網站/app，要依目前風格新增功能、頁面或流程。
-- `design-guide-refresh`：目標只是建立、整理或更新 `.agents/rules/design-guide.md`。
 
 若需求同時符合多個 mode，選影響最大的，並在確認階段說明理由。
 
@@ -27,7 +26,7 @@ version: 0.1.0
 
 ```text
 ## Mode 判定
-- mode: greenfield | feature-extension | design-guide-refresh
+- mode: greenfield | feature-extension
 - 判定理由:
 - 我理解的目標:
 - 預計設計範圍:
@@ -69,11 +68,6 @@ version: 0.1.0
 - 互動狀態需求（loading / empty / error 是否需要設計）
 - 技術限制與不可違反的專案規則
 
-**design-guide-refresh 必要資訊**
-- 現有 UI/元件來源
-- 需要刷新或補齊的設計規範範圍
-- 專案 UI 套件與禁止事項
-
 資訊收集完成後，輸出足夠性檢查：
 
 ```text
@@ -96,7 +90,7 @@ version: 0.1.0
 ````markdown
 # Design Brief: {slug}
 產生時間：{YYYY-MM-DD}
-Mode：{greenfield | feature-extension | design-guide-refresh}
+Mode：{greenfield | feature-extension}
 
 ## 產品概覽
 - 目的:
@@ -118,7 +112,7 @@ Mode：{greenfield | feature-extension | design-guide-refresh}
 - UI 套件 / 框架:
 - 不可違反的專案規則:
 
-## 既有設計脈絡（feature-extension / design-guide-refresh）
+## 既有設計脈絡（feature-extension）
 - 既有 design-guide 摘要:
 - 既有頁面 / 截圖 / 程式碼觀察:
 - architecture / business-logic / tech-stack 摘要:
@@ -143,6 +137,9 @@ Mode：{greenfield | feature-extension | design-guide-refresh}
 - **brief.md 已存在**：詢問使用者覆蓋或另存為 `brief-{YYYY-MM-DD}.md`。
 
 ## Changelog
+
+### 0.2.0 — 2026-05-16
+- 移除 `design-guide-refresh` mode，改由 `/design-guide` skill 自行釐清
 
 ### 0.1.0 — 2026-05-11
 - 初始版本：design brief 收集、mode 判定、brief 輸出流程
