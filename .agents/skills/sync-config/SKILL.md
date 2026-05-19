@@ -1,8 +1,8 @@
 ---
 name: sync-config
-description: "Codex only. Manually sync this dotclaude repository into Codex (and Claude) global configuration locations. Use only inside the dotclaude repo when the user asks to sync, install, or update global Codex/Claude skills. Not needed for Claude Code plugin users — plugin installation handles distribution."
-updated: 2026-05-10
-version: 0.2.0
+description: Sync this dotclaude repository into local Claude and Codex configuration locations. Use only inside the dotclaude repo when the user asks to sync, install, update, copy shared skills, update global Claude/Codex config, or replace old dotclaude sync workflows.
+updated: 2026-05-16
+version: 0.3.0
 ---
 
 # Skill：同步全域設定
@@ -11,9 +11,8 @@ version: 0.2.0
 
 ## Changelog
 
-### 0.2.0 - 2026-05-10
-- 同步前先列出來源與目標差異。
-- 若入口檔與 repo 管理的 skills 前後無差異，建議不執行同步。
+### 0.3.0 - 2026-05-16
+- Step 1 同時列出來源與目標（Claude / Codex）版本，方便比對。
 
 ## Step 1：檢查版本資訊
 
@@ -23,7 +22,60 @@ version: 0.2.0
 - `version`：skill 版本，重大流程變更時調整
 - `Changelog`：只保留最新一版，提供同步前判斷依據
 
-版本資訊是人工判斷依據，不是自動同步邏輯。閱讀後摘要列出本次可同步的 skill 版本，詢問使用者是否繼續。
+同步前必須同時呈現「來源」與「目標」版本，逐一讀取以下三處的 front matter：
+
+- 來源：`skills\<name>\SKILL.md`
+- Claude 目標：`$HOME\.claude\skills\<name>\SKILL.md`
+- Codex 目標：`$HOME\.codex\skills\<name>\SKILL.md`
+
+對每個 repo 管理的 skill 輸出表格，欄位：
+
+- `skill`：skill 名稱
+- `source`：repo 的 `version`（附 `updated`）
+- `claude`：Claude 目標端的 `version`；檔案不存在則填 `missing`
+- `codex`：Codex 目標端的 `version`；檔案不存在則填 `missing`
+- `status`：`new`（任一端 missing）/ `same`（兩端與來源都相同）/ `upgrade`（來源較新）/ `downgrade`（來源較舊）/ `mixed`（Claude 與 Codex 版本不一致）
+
+`CLAUDE.md` / `AGENTS.md` 入口檔目前沒有 front matter，版本欄位略過，差異留給 Step 2 的 hash diff 呈現。
+
+PowerShell 範例腳本（用 regex 抓 front matter，不引入 YAML 套件）：
+
+```powershell
+function Get-SkillVersion {
+  param([string]$Path)
+  if (-not (Test-Path $Path)) { return $null }
+  $lines = Get-Content $Path -Encoding utf8 -TotalCount 20
+  $version = ($lines | Select-String '^version:\s*(.+)$').Matches.Groups[1].Value
+  $updated = ($lines | Select-String '^updated:\s*(.+)$').Matches.Groups[1].Value
+  [pscustomobject]@{ Version = $version; Updated = $updated }
+}
+
+function Get-Status {
+  param($src, $claude, $codex)
+  if (-not $claude -or -not $codex) { return "new" }
+  if ($claude.Version -ne $codex.Version) { return "mixed" }
+  if ($claude.Version -eq $src.Version)   { return "same" }
+  # 簡單字串比較，必要時可改用 [version] 解析
+  if ([version]$src.Version -gt [version]$claude.Version) { return "upgrade" }
+  return "downgrade"
+}
+
+Get-ChildItem skills -Directory | ForEach-Object {
+  $name   = $_.Name
+  $src    = Get-SkillVersion "skills\$name\SKILL.md"
+  $claude = Get-SkillVersion "$HOME\.claude\skills\$name\SKILL.md"
+  $codex  = Get-SkillVersion "$HOME\.codex\skills\$name\SKILL.md"
+  [pscustomobject]@{
+    skill  = $name
+    source = "$($src.Version) ($($src.Updated))"
+    claude = if ($claude) { $claude.Version } else { "missing" }
+    codex  = if ($codex)  { $codex.Version }  else { "missing" }
+    status = Get-Status $src $claude $codex
+  }
+} | Format-Table -AutoSize
+```
+
+腳本是人工判斷依據，不是自動同步邏輯。輸出對照表後，詢問使用者是否繼續。
 
 ## Step 2：列出同步差異
 

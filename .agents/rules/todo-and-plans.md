@@ -5,6 +5,21 @@
 - **git-workflow（commit hook 形式）**：不做成靜態 rule 檔，而是 PostToolUse hook，commit 時自動看 diff 判斷是否需要更新 `.agents/rules/` 裡的對應規範。
 - **security-conventions**：生成 `.agents/rules/security-conventions.md`，涵蓋認證、secrets 管理、輸入驗證、PII 處理等，定位為後端 / 全端專案的條件式 rule 檔。
 
+## 規劃中 / 草稿 Skills
+
+### stitch-design（暫退出 skills/，放在 `_planning/stitch-design/`）
+
+**現況**：流程架構已定（orchestration loop、generator、evaluator、rubric），但尚未穩定可用。
+
+**待解決問題**：
+- stitch-evaluator 讀取 rubric 的路徑依賴 dotclaude repo 結構，部署到其他專案後會失敗
+- design-guide-refresh mode PASS 後的 handoff 政策未定義（是否允許更新 design-guide.md、需要哪種確認）
+- 3 次 FAIL 後使用者選擇「重跑」的計數器重置語義不明確
+- slug 命名在 design-brief 與 stitch-design 之間不一致
+- handoff 目錄結構缺 design-guide-refresh 的專屬產物（draft-design-guide.md）
+
+**重新啟用前需完成**：修正上述問題後，將 `_planning/stitch-design/` 移回 `skills/stitch-design/`，更新 version 與 updated，執行 sync-config。
+
 ---
 
 # Stitch / Claude Design -> Codex / Claude Code
