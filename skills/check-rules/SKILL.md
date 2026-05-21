@@ -137,7 +137,7 @@ version: 0.4.0
 
 ### Rules Gap
 
-- {觀察到的反覆模式}（出現於 N 處）
+- {觀察到的反覆模式}（出現於 N 個檔案、共 M 處）
   建議：執行 `{對應 write skill 名稱}` skill 更新 `.agents/rules/{file}.md`
 （若無，標示「無」）
 
