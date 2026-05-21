@@ -1,11 +1,15 @@
 ---
 name: migrate-rules
-description: Migrate existing projects from the old `.claude/rules/` layout to the shared `.agents/rules/` layout without rerunning init-project. Use when a project already has Claude rules, CLAUDE.md, or old dotclaude output and the user wants Codex compatibility, AGENTS.md creation, or low-token migration instead of regenerating project rules.
-updated: 2026-05-14
-version: 0.2.0
+description: Migrate existing projects from the old `.claude/rules/` layout to the shared `.agents/rules/` layout, or upgrade an existing entrypoint file (CLAUDE.md / AGENTS.md) to the current `entrypoint-writing` template (e.g. fill in missing core principles). Use when a project already has Claude rules, CLAUDE.md, or old dotclaude output and the user wants Codex compatibility, AGENTS.md creation, low-token migration instead of regenerating project rules, or just bringing an outdated entrypoint up to the current template without redoing init-project.
+updated: 2026-05-22
+version: 0.3.0
 ---
 
 ## Changelog
+
+### 0.3.0 - 2026-05-22
+- 新增 Step 3.5：升級入口檔核心原則到當前 `entrypoint-writing` 範本
+- description 擴充涵蓋已遷移專案的入口檔升級場景
 
 ### 0.2.0 - 2026-05-14
 - 新增 Step 6：清理全域遺留的舊 commands（sync.md、init-project.md）。
@@ -89,6 +93,17 @@ version: 0.2.0
 
 只列實際存在的 rules。
 
+### 3.5 升級入口檔核心原則
+
+對既有的 `CLAUDE.md` / `AGENTS.md`，view `skills/entrypoint-writing/SKILL.md` 取得當前「必含的核心原則」清單，與入口檔內「## 核心原則」段比對：
+
+1. 列出**缺少的條目**（以條目語意比對，不只比字串；例如「完成修改後主動建議跑 /check-rules」這條，無論語句長短只要語意涵蓋即視為已存在）
+2. 在「## 核心原則」段內**只插入缺少的條目**，編號順延後面的專案特有規則
+3. 不動文件索引、不動禁止事項、不動其他客製內容
+4. 若入口檔找不到「## 核心原則」段或結構與範本差異過大，停下來列出差異讓使用者決定是否人工合併
+
+此步驟對「從舊 `.claude/rules/` 遷移過來」與「已是 `.agents/rules/` 但想升級入口檔」兩種情境都適用 — 前者由 Step 2/3 帶進來，後者使用者直接呼叫此 skill 即會走到這步（Step 2 會偵測無 `.claude/rules/` 而跳過搬移）。
+
 ### 4. 更新 rules 內部路徑
 
 搜尋 `.agents/rules/` 下的舊路徑字串：
@@ -138,6 +153,7 @@ Remove-Item "$HOME\.claude\commands\init-project.md" -Force
 ## 遷移摘要
 - rules：{複製數} copied, {跳過數} unchanged, {衝突數} conflicts
 - 入口檔：CLAUDE.md {updated/unchanged/missing}；AGENTS.md {created/updated/unchanged}
+- 入口檔核心原則：{已是最新/插入 N 條}
 - 舊目錄：{保留/已刪除/不存在}
 
 ## 需要注意
