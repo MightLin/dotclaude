@@ -90,6 +90,17 @@ version: 0.2.0
 ## UI 套件
 - {套件}：{版本}
 
+## Tokens
+```yaml
+primary:     "{hex}"
+danger:      "{hex}"
+success:     "{hex}"
+text:        "{hex}"
+text-muted:  "{hex}"
+spacing:     [4, 8, 12, 16, 24, 32]
+breakpoints: { sm: 640, md: 768, lg: 1024 }
+```
+
 ## 佈局
 - 主內容區最大寬度：{px}
 - 間距：{spacing scale}
