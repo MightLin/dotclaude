@@ -1,0 +1,12 @@
+{
+  "plugins": [
+    {
+      "name": "dotclaude",
+      "description": "Project knowledge initialization and rule management skills for Claude Code. Helps teams define and maintain shared conventions (architecture, API, data model, testing, deployment, etc.) across projects.",
+      "source": ".",
+      "version": "1.0.0",
+      "category": "Development",
+      "tags": ["rules", "architecture", "conventions", "init", "agents"]
+    }
+  ]
+}

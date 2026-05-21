@@ -1,3 +1,10 @@
+# 待規劃 Skills
+
+## 考慮中
+
+- **git-workflow（commit hook 形式）**：不做成靜態 rule 檔，而是 PostToolUse hook，commit 時自動看 diff 判斷是否需要更新 `.agents/rules/` 裡的對應規範。
+- **security-conventions**：生成 `.agents/rules/security-conventions.md`，涵蓋認證、secrets 管理、輸入驗證、PII 處理等，定位為後端 / 全端專案的條件式 rule 檔。
+
 ## Google Stitch Skills 整合決策
 
 > 背景：2026-05-21 與 Google 發布的 [stitch-skills](https://github.com/google-labs-code/stitch-skills) 及 [design.md](https://github.com/google-labs-code/design.md) 比對後，做出以下四條決策。
