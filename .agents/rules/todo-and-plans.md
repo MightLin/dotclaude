@@ -5,31 +5,22 @@
 ### design-brief skill — 保留
 **理由**：Google 的 `enhance-prompt` 只做「把模糊 prompt 強化成 Stitch 最佳化 prompt」，不包含 mode 判定（greenfield / feature-extension / design-guide-refresh）與結構化需求蒐集。`design-brief` 是我們流程的入口，負責把使用者模糊意圖轉化為 brief，再交給後續工具，Google 沒有對應品。**保留原計畫。**
 
-### stitch-generator — 移除
-**理由**：Google 的 `stitch::generate-design` 直接實作相同功能（呼叫 Stitch MCP 產生設計、支援 edit 與 variants），且有更完整的工具鏈（extract-static-html、upload-to-stitch、code-to-design 等輔助技能）。我們的 `stitch-generator` 沒有超出 Google 技能的差異化價值，自己維護反而增加負擔。**刪除 `_planning/stitch-design/agents/stitch-generator.md`，改用 `stitch-skills` 提供的現成技能。**
+### stitch-generator — ✅ 已刪除（2026-05-21）
+**理由**：Google 的 `stitch::generate-design` 直接實作相同功能（呼叫 Stitch MCP 產生設計、支援 edit 與 variants），且有更完整的工具鏈（extract-static-html、upload-to-stitch、code-to-design 等輔助技能）。我們的 `stitch-generator` 沒有超出 Google 技能的差異化價值，自己維護反而增加負擔。`_planning/stitch-design/agents/stitch-generator.md` 已刪除，後續改用 `stitch-skills` 提供的現成技能。
 
-### stitch-evaluator — 暫定保留，待評估
-**理由**：Google 完全沒有 Stitch 設計品質的自動化評分機制。`stitch-evaluator` 的 mode-aware rubric（總分 ≥ 80、所有維度 ≥ 70、硬性 FAIL 檢查）在 `stitch-loop` 等全自動流程裡有明確價值。但實際使用前無法確認 rubric 對不同專案是否泛用、評分開銷是否划算。**保留現有草稿；在 stitch-design 技能啟用並實際跑過數次後，評估是否正式納入 skills/。**
+### stitch-evaluator — ✅ 已刪除（2026-05-21）
+**理由**：隨 `stitch-design` 整體刪除。有需要時重新規劃。
 
-### design-guide 整合 Google design.md — 待討論
-**理由**：Google 的 `design.md` 格式規格（YAML frontmatter tokens + Markdown prose）有三個優勢：1) 機器可讀 tokens 讓 Stitch、Codex 可直接解析顏色、字體、間距等數值；2) `npx @google/design.md lint/diff` 提供格式驗證與版本對比；3) `export` 支援 Tailwind v3/v4、W3C DTCG，降低 design → code 的翻譯成本。我們目前的 `design-guide.md` 是自定義純文字格式，功能重疊但缺少上述工具支援。**整合方式（直接採用 Google 格式 vs 參考後自定義 subset）待另行討論後決定。**
+### design-guide 整合 Google design.md — ✅ 評估後不整合（2026-05-21）
+**結論**：維持純 Markdown 格式。Google `design.md` 仍是 alpha、工具鏈對目前規模不必要、定位與我們的「簡潔可讀規則」衝突。改以 yaml code fence 加入關鍵 token（primary / danger / spacing / breakpoints），兼顧人讀與 AI parse，無需外部工具鏈。已更新 `design-guide` skill 範本。
 
 ---
 
 ## 規劃中 / 草稿 Skills
 
-### stitch-design（暫退出 skills/，放在 `_planning/stitch-design/`）
+### stitch-design — ✅ 已刪除（2026-05-21）
 
-**現況**：流程架構已定（orchestration loop、generator、evaluator、rubric），但尚未穩定可用。
-
-**待解決問題**：
-- stitch-evaluator 讀取 rubric 的路徑依賴 dotclaude repo 結構，部署到其他專案後會失敗
-- design-guide-refresh mode PASS 後的 handoff 政策未定義（是否允許更新 design-guide.md、需要哪種確認）
-- 3 次 FAIL 後使用者選擇「重跑」的計數器重置語義不明確
-- slug 命名在 design-brief 與 stitch-design 之間不一致
-- handoff 目錄結構缺 design-guide-refresh 的專屬產物（draft-design-guide.md）
-
-**重新啟用前需完成**：修正上述問題後，將 `_planning/stitch-design/` 移回 `skills/stitch-design/`，更新 version 與 updated，執行 sync-config。
+整個 `_planning/stitch-design/`（SKILL.md、stitch-evaluator.md、rubric.md）已刪除。有需要時重新規劃。
 
 ---
 
