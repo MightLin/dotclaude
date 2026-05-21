@@ -5,20 +5,29 @@
 - **git-workflow（commit hook 形式）**：不做成靜態 rule 檔，而是 PostToolUse hook，commit 時自動看 diff 判斷是否需要更新 `.agents/rules/` 裡的對應規範。
 - **security-conventions**：生成 `.agents/rules/security-conventions.md`，涵蓋認證、secrets 管理、輸入驗證、PII 處理等，定位為後端 / 全端專案的條件式 rule 檔。
 
+## Google Stitch Skills 整合決策
+
+> 背景：2026-05-21 與 Google 發布的 [stitch-skills](https://github.com/google-labs-code/stitch-skills) 及 [design.md](https://github.com/google-labs-code/design.md) 比對後，做出以下四條決策。
+
+### design-brief skill — 保留
+**理由**：Google 的 `enhance-prompt` 只做「把模糊 prompt 強化成 Stitch 最佳化 prompt」，不包含 mode 判定（greenfield / feature-extension / design-guide-refresh）與結構化需求蒐集。`design-brief` 是我們流程的入口，負責把使用者模糊意圖轉化為 brief，再交給後續工具，Google 沒有對應品。**保留原計畫。**
+
+### stitch-generator — ✅ 已刪除（2026-05-21）
+**理由**：Google 的 `stitch::generate-design` 直接實作相同功能（呼叫 Stitch MCP 產生設計、支援 edit 與 variants），且有更完整的工具鏈（extract-static-html、upload-to-stitch、code-to-design 等輔助技能）。我們的 `stitch-generator` 沒有超出 Google 技能的差異化價值，自己維護反而增加負擔。`_planning/stitch-design/agents/stitch-generator.md` 已刪除，後續改用 `stitch-skills` 提供的現成技能。
+
+### stitch-evaluator — ✅ 已刪除（2026-05-21）
+**理由**：隨 `stitch-design` 整體刪除。有需要時重新規劃。
+
+### design-guide 整合 Google design.md — ✅ 評估後不整合（2026-05-21）
+**結論**：維持純 Markdown 格式。Google `design.md` 仍是 alpha、工具鏈對目前規模不必要、定位與我們的「簡潔可讀規則」衝突。改以 yaml code fence 加入關鍵 token（primary / danger / spacing / breakpoints），兼顧人讀與 AI parse，無需外部工具鏈。已更新 `design-guide` skill 範本。
+
+---
+
 ## 規劃中 / 草稿 Skills
 
-### stitch-design（暫退出 skills/，放在 `_planning/stitch-design/`）
+### stitch-design — ✅ 已刪除（2026-05-21）
 
-**現況**：流程架構已定（orchestration loop、generator、evaluator、rubric），但尚未穩定可用。
-
-**待解決問題**：
-- stitch-evaluator 讀取 rubric 的路徑依賴 dotclaude repo 結構，部署到其他專案後會失敗
-- design-guide-refresh mode PASS 後的 handoff 政策未定義（是否允許更新 design-guide.md、需要哪種確認）
-- 3 次 FAIL 後使用者選擇「重跑」的計數器重置語義不明確
-- slug 命名在 design-brief 與 stitch-design 之間不一致
-- handoff 目錄結構缺 design-guide-refresh 的專屬產物（draft-design-guide.md）
-
-**重新啟用前需完成**：修正上述問題後，將 `_planning/stitch-design/` 移回 `skills/stitch-design/`，更新 version 與 updated，執行 sync-config。
+整個 `_planning/stitch-design/`（SKILL.md、stitch-evaluator.md、rubric.md）已刪除。有需要時重新規劃。
 
 ---
 

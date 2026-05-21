@@ -1,11 +1,14 @@
 ---
 name: check-rules
 description: Check if code conforms to project rules. Use when validating manually written code against `.agents/rules/`, finding rule violations, or getting correction suggestions for specific files, directories, or a PR/diff.
-updated: 2026-05-14
-version: 0.3.0
+updated: 2026-05-22
+version: 0.4.0
 ---
 
 ## Changelog
+
+### 0.4.0 - 2026-05-22
+- 加入 Rules Gap 區塊，偵測程式碼反覆模式但 rules 未涵蓋的情況
 
 ### 0.3.0 - 2026-05-14
 - 報告開頭加入 GREEN/YELLOW/RED 整體裁定
@@ -132,11 +135,29 @@ version: 0.3.0
 - {無法從現有檔案驗證的 rule，並說明原因}
 （若全數可驗證，此區塊標示「無」）
 
+### Rules Gap
+
+- {觀察到的反覆模式}（出現於 N 個檔案、共 M 處）
+  建議：執行 `{對應 write skill 名稱}` skill 更新 `.agents/rules/{file}.md`
+（若無，標示「無」）
+
 ### 摘要
 
 掃描 {n} 個檔案，發現 {high} High / {medium} Medium / {low} Low 共 {total} 個 finding，整體裁定：{RED/YELLOW/GREEN}。
 {若無 finding：「符合所有選定規範，整體裁定：🟢 GREEN。」}
 ```
+
+## 反向提示：rules 過時偵測
+
+若掃描過程發現程式碼存在反覆出現、但 `.agents/rules/` 完全未涵蓋的模式，在報告末尾的 `### Rules Gap` 區塊列出該模式，並建議使用者執行對應的 write skill 更新 rules。
+
+**判定標準（三條皆需成立）**：
+
+1. 同類模式出現在 **≥3 個檔案**
+2. `.agents/rules/` **完全未提及**（是空白，非違反現有規則）
+3. 屬於可成文主題：能對應到 Step 1 列出的 rules 檔主題的反覆模式。判斷方式為自問「這個模式若要寫成規則，會寫進哪一個 rules 檔？」答得出來才列為 Gap，答不出來（例如純演算法寫法）就略過。
+
+此區塊不影響整體裁定（GREEN/YELLOW/RED 只看違規），單純作為改善建議。
 
 ## 行為限制
 
