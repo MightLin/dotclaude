@@ -80,16 +80,23 @@ repo root
 
 ### Claude Code Plugin（推薦）
 
-```bash
-# 從此 repo 本地載入
-claude --plugin-dir ./dotclaude
+在 Claude Code 內執行：
 
-# 或未來透過 marketplace
-/plugin marketplace add https://github.com/MightLin/dotclaude
-/plugin install dotclaude
+```
+/plugin marketplace add MightLin/dotclaude
+/plugin install dotclaude@dotclaude
 ```
 
-安裝後 skills 以 `dotclaude:` 前綴呼叫，例如 `/dotclaude:init-project`。
+安裝後：
+
+- Skills 以 `dotclaude:` 前綴呼叫，例如 `/dotclaude:init-project`
+- 發新版用 `/dotclaude:release`（自動 bump 版號、commit、打 tag、push）
+
+更新到最新版：
+
+```
+/plugin update dotclaude@dotclaude
+```
 
 ### Codex（手動同步）
 
