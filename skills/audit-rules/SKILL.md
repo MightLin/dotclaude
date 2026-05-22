@@ -1,11 +1,18 @@
 ---
 name: audit-rules
-description: Audit project rules for coverage gaps, rule quality, and template compliance. Use when reviewing whether `.agents/rules/` misses repeated code patterns, contains vague or unverifiable rules, exceeds size limits, is missing required sections, has stale content relative to code activity, or needs maintenance suggestions.
+description: Audit `.agents/rules/` for coverage gaps, rule quality issues, and template compliance. Use when rules may be stale, incomplete, redundant, or violating write-skill specs. Suggestions only — never modifies rules.
 updated: 2026-05-23
-version: 0.2.0
+version: 0.3.0
 ---
 
 ## Changelog
+
+### 0.3.0 - 2026-05-23
+- 失效引用詢問移至 Step 2，僅在審查範圍含 Template Compliance 時才詢問
+- 新鮮度白名單補全七個標準 rule 檔的對應目錄
+- 非標準 rules 檔（無對應 write skill）在 Template Compliance 中明確標示「無範本基準」
+- Step 1 移除「可能的維護問題」（判斷留給後續 Step）
+- 摘要行加入 Template Compliance 問題計數
 
 ### 0.2.0 - 2026-05-23
 - 新增 Template Compliance 審查面向（行數使用率、可補章節、缺檔偵測、新鮮度、失效引用）
@@ -34,7 +41,7 @@ version: 0.2.0
 
 列出 `.agents/rules/` 下所有 `.md` 檔。若該目錄不存在，中止並提示：「尚未初始化規則，請先執行 init-project skill。」
 
-並行讀取所有 rules 檔，整理每個檔案的主題、可查核規則、描述性段落與可能的維護問題。
+並行讀取所有 rules 檔，整理每個檔案的主題、可查核規則與描述性段落。
 
 ## Step 2：確認審查範圍
 
@@ -50,6 +57,9 @@ version: 0.2.0
 ```
 
 若使用者未指定，執行全部三個面向。
+
+若審查範圍含 Template Compliance（選項 1 或 4），額外詢問：
+「本次是否也要做失效引用檢查？（需 grep 全專案，成本較高，預設否）」
 
 ## Step 3：Coverage Gap 審查
 
@@ -88,9 +98,10 @@ Rule Quality finding 必須引用具體 rules 檔路徑與行號；不需要引�
 
 Template Compliance 以**客觀範本與 git 對照**為主，補足 Rule Quality 語意審查的不足。
 
-### 5.1 前置（自動執行，不問使用者）
+### 5.1 前置（自動執行）
 
 - 並行讀取每個現有 rules 檔對應的 write skill（`skills/{rule-name}/SKILL.md`），提取「大小上限」「必要內容」「禁止放入」三段
+  - 若某 rules 檔找不到對應的 write skill（自訂 rule 檔），**略過**行數使用率、冗餘片段、可補章節三項，在報告中標示「無範本基準，跳過」
 - 讀取 `skills/init-project/SKILL.md` 取得專案類型 × rule 對照表
 - 依 `init-project` Step 3 線索自動偵測專案類型：
   - frontend：`package.json` + 前端框架且無後端框架
@@ -98,7 +109,7 @@ Template Compliance 以**客觀範本與 git 對照**為主，補足 Rule Qualit
   - fullstack：同時有前端與後端框架，或 server/client 雙資料夾
   - mobile：`build.gradle` + `AndroidManifest.xml`、`*.xcodeproj`、`pubspec.yaml`、Expo / React Native
   - 無法判斷 → 跳過缺檔比對，並在報告中標示「類型未明」
-- 詢問使用者一個問題：「本次是否也要做失效引用檢查？（需 grep 全專案，成本較高，預設否）」
+- 失效引用是否執行：依 Step 2 使用者回答決定；未回答則預設不執行
 
 ### 5.2 分項檢查
 
@@ -107,7 +118,20 @@ Template Compliance 以**客觀範本與 git 對照**為主，補足 Rule Qualit
 - **可補章節**：對照「必要內容」清單，若 rules 檔內找不到對應的 `##` 標題，列為缺漏
 - **新鮮度（相對 git 活躍度，避免絕對日期失真）**：
   - 取 rules 檔的最後 commit 日期 `R`（`git log -1 --format=%cI -- <file>`）
-  - 取**同主題程式碼目錄**從 `R` 之後的 commit 數 `C`（白名單對應：`architecture.md` → `src/`；`tech-stack.md` → `package.json` / `go.mod` / `requirements.txt`；`data-model.md` → migration 目錄等；無明確對應者跳過）
+  - 取**同主題程式碼**從 `R` 之後的 commit 數 `C`，依以下白名單對應：
+    | rule 檔 | 對應程式碼目錄 / 檔案 |
+    |---|---|
+    | `architecture.md` | `src/` |
+    | `tech-stack.md` | `package.json` / `go.mod` / `requirements.txt` / `*.csproj` / `Gemfile` |
+    | `data-model.md` | migration 目錄（`migrations/` / `db/migrate/`） |
+    | `api-conventions.md` | routes / controllers / handlers 目錄 |
+    | `business-logic.md` | services / domain / usecases 目錄 |
+    | `design-guide.md` | components / styles / themes 目錄 |
+    | `testing-strategy.md` | `tests/` / `__tests__/` / `spec/` |
+    | `deployment.md` | `.github/workflows/` / `Dockerfile` / `docker-compose.yml` |
+    | `mcp-conventions.md` | mcp / server / tools 目錄 |
+    | `todo-and-plans.md` | （無對應程式碼目錄，跳過新鮮度檢查） |
+  - 若對應目錄不存在於 repo，跳過該檔的新鮮度檢查
   - `C ≥ 30` 標 🟠、`C ≥ 100` 標 🔴；`C = 0`（repo 本身沒動）不誤報
 - **缺檔偵測**：依自動偵測的專案類型，比對 `init-project` 表格找出尚未建立的 rule 檔；**只列出缺失，不執行建檔**，建議使用者執行 `init-project` 或對應 write skill
 - **失效引用**（可選，需使用者確認才執行）：對 rules 中出現的相對路徑、檔名做 `git ls-files` 比對，列出已不存在的引用
@@ -174,7 +198,7 @@ Rules 檔：{實際讀取的 rules 檔清單}
 
 ### 摘要
 
-發現 {gap_count} 個 coverage gap、{quality_count} 個 rule quality finding；Template Compliance：{🔴 N 個 / 🟠 N 個 / 🟢 全數通過}。
+發現 {gap_count} 個 coverage gap、{quality_count} 個 rule quality finding、{tc_count} 個 template compliance finding（🔴 {red} / 🟠 {orange} / 🟢 {green} 通過）。
 ```
 
 ## 行為限制
