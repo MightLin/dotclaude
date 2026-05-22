@@ -65,6 +65,8 @@ Coverage Gap 必須同時符合：
 
 ## Step 4：Rule Quality 審查
 
+Rule Quality 審查只讀 `.agents/rules/` 檔本身，不掃程式碼。
+
 審查 rules 檔本身，記錄具體問題：
 
 - 模糊：規則無法指導實作，例如「保持乾淨」但沒有可觀察標準
