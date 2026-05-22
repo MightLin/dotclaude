@@ -3,3 +3,6 @@
 
 # Local settings
 .claude/settings.local.json
+
+# Local worktrees
+.claude/worktrees/
