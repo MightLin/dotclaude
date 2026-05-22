@@ -1,11 +1,16 @@
 ---
 name: audit-rules
-description: Audit project rules for coverage gaps and rule quality. Use when reviewing whether `.agents/rules/` misses repeated code patterns, contains vague or unverifiable rules, overlaps across rule files, or needs maintenance suggestions.
+description: Audit project rules for coverage gaps, rule quality, and template compliance. Use when reviewing whether `.agents/rules/` misses repeated code patterns, contains vague or unverifiable rules, exceeds size limits, is missing required sections, has stale content relative to code activity, or needs maintenance suggestions.
 updated: 2026-05-23
-version: 0.1.0
+version: 0.2.0
 ---
 
 ## Changelog
+
+### 0.2.0 - 2026-05-23
+- 新增 Template Compliance 審查面向（行數使用率、可補章節、缺檔偵測、新鮮度、失效引用）
+- Step 2 選單擴充為四選項，加入「只檢查 Template Compliance」
+- Rule Quality 移除「過長」「放錯檔案」兩類（改歸 Template Compliance，有客觀依據）
 
 ### 0.1.0 - 2026-05-23
 - 建立 rules 覆蓋缺口與 rules 品質審查 skill
@@ -14,7 +19,7 @@ version: 0.1.0
 
 ## 目的
 
-審查 `.agents/rules/` 是否足以描述專案中穩定反覆出現的程式碼模式，並檢查 rules 檔本身是否清楚、可驗證、無重疊或衝突。
+審查 `.agents/rules/` 是否足以描述專案中穩定反覆出現的程式碼模式，並檢查 rules 檔本身是否清楚、可驗證、無重疊或衝突（Rule Quality），以及是否符合各 write skill 定義的範本規格（Template Compliance）。
 
 此 skill 只產出審查報告與維護建議；不直接修改 rules。若要檢查程式碼是否違反既有 rules，改用 `check-rules` skill。
 
@@ -38,12 +43,13 @@ version: 0.1.0
 ```
 請選擇 audit-rules 的審查範圍：
 
-1. Coverage Gap + Rule Quality（預設）
+1. 全部（Coverage Gap + Rule Quality + Template Compliance）（預設）
 2. 只檢查 Coverage Gap
 3. 只檢查 Rule Quality
+4. 只檢查 Template Compliance
 ```
 
-若使用者未指定，使用 Coverage Gap + Rule Quality。
+若使用者未指定，執行全部三個面向。
 
 ## Step 3：Coverage Gap 審查
 
@@ -67,23 +73,52 @@ Coverage Gap 必須同時符合：
 
 Rule Quality 審查只讀 `.agents/rules/` 檔本身，不掃程式碼。
 
-審查 rules 檔本身，記錄具體問題：
+審查 rules 檔本身的**語意品質**，記錄具體問題：
 
 - 模糊：規則無法指導實作，例如「保持乾淨」但沒有可觀察標準
 - 不可驗證：無法從程式碼、設定或流程檢查是否遵守
 - 重疊：多個 rules 檔描述同一規範，且可能造成維護分歧
 - 衝突：不同 rules 對同一行為提出互斥要求
-- 過長：內容超出該 rule skill 的大小上限或混入太多背景敘述
-- 放錯檔案：內容應屬於另一個 rules 主題，例如 API response 格式放在 `architecture.md`
 
 Rule Quality finding 必須引用具體 rules 檔路徑與行號；不需要引用程式碼位置。
 
-## Step 5：輸出報告
+> 「過長」與「放錯檔案」有客觀範本依據（write skill 的「大小上限」與「禁止放入」清單），改由 Step 5 Template Compliance 審查。
+
+## Step 5：Template Compliance 審查
+
+Template Compliance 以**客觀範本與 git 對照**為主，補足 Rule Quality 語意審查的不足。
+
+### 5.1 前置（自動執行，不問使用者）
+
+- 並行讀取每個現有 rules 檔對應的 write skill（`skills/{rule-name}/SKILL.md`），提取「大小上限」「必要內容」「禁止放入」三段
+- 讀取 `skills/init-project/SKILL.md` 取得專案類型 × rule 對照表
+- 依 `init-project` Step 3 線索自動偵測專案類型：
+  - frontend：`package.json` + 前端框架且無後端框架
+  - backend：`*.csproj` / `pom.xml` / `go.mod` / `requirements.txt` / `Gemfile` 等且無前端 entry
+  - fullstack：同時有前端與後端框架，或 server/client 雙資料夾
+  - mobile：`build.gradle` + `AndroidManifest.xml`、`*.xcodeproj`、`pubspec.yaml`、Expo / React Native
+  - 無法判斷 → 跳過缺檔比對，並在報告中標示「類型未明」
+- 詢問使用者一個問題：「本次是否也要做失效引用檢查？（需 grep 全專案，成本較高，預設否）」
+
+### 5.2 分項檢查
+
+- **行數使用率**：取 rules 檔的實際行數，除以對應 write skill 的「大小上限」；≥90% 標 🟠、>100% 標 🔴、其餘 🟢
+- **冗餘片段**：以「禁止放入」清單的關鍵字搜尋 rules 檔內容，記錄命中區段與行號，建議移到正確 rule 檔
+- **可補章節**：對照「必要內容」清單，若 rules 檔內找不到對應的 `##` 標題，列為缺漏
+- **新鮮度（相對 git 活躍度，避免絕對日期失真）**：
+  - 取 rules 檔的最後 commit 日期 `R`（`git log -1 --format=%cI -- <file>`）
+  - 取**同主題程式碼目錄**從 `R` 之後的 commit 數 `C`（白名單對應：`architecture.md` → `src/`；`tech-stack.md` → `package.json` / `go.mod` / `requirements.txt`；`data-model.md` → migration 目錄等；無明確對應者跳過）
+  - `C ≥ 30` 標 🟠、`C ≥ 100` 標 🔴；`C = 0`（repo 本身沒動）不誤報
+- **缺檔偵測**：依自動偵測的專案類型，比對 `init-project` 表格找出尚未建立的 rule 檔；**只列出缺失，不執行建檔**，建議使用者執行 `init-project` 或對應 write skill
+- **失效引用**（可選，需使用者確認才執行）：對 rules 中出現的相對路徑、檔名做 `git ls-files` 比對，列出已不存在的引用
+
+## Step 6：輸出報告
 
 ```
 ## audit-rules 報告
-審查範圍：{Coverage Gap + Rule Quality / Coverage Gap / Rule Quality}
+審查範圍：{Coverage Gap + Rule Quality + Template Compliance / …}
 Rules 檔：{實際讀取的 rules 檔清單}
+偵測專案類型：{frontend / backend / fullstack / mobile / 類型未明}
 
 ### Coverage Gaps
 
@@ -99,11 +134,38 @@ Rules 檔：{實際讀取的 rules 檔清單}
 
 - {品質問題標題}
   Evidence: `.agents/rules/{file}.md:{line}`
-  類型：{模糊 / 不可驗證 / 重疊 / 衝突 / 過長 / 放錯檔案}
+  類型：{模糊 / 不可驗證 / 重疊 / 衝突}
   現況：{rule 目前怎麼寫}
   建議：{應如何調整，並指向對應 write skill}
 
 （若無，標示「無」）
+
+### Template Compliance
+
+| 檔案 | 行數 / 上限 | 使用率 | 新鮮度（C 值） | 狀態 |
+|---|---|---|---|---|
+| {file}.md | {n} / {max} | {n/max}% | {同步 C=0 / 🟠 C=N / 🔴 C=N} | {🟢/🟠/🔴} |
+
+**冗餘片段**（命中「禁止放入」清單）
+- `.agents/rules/{file}.md:{line}` — 命中「{item}」，建議移到 `{target-rule}.md`
+
+（若無，標示「無」）
+
+**可補章節**（缺少「必要內容」中的章節）
+- `.agents/rules/{file}.md` — 缺章節「{section}」（來自 `{write-skill}` skill 的必要內容）
+
+（若無，標示「無」）
+
+**缺檔建議**
+- 依偵測到的專案類型（{type}），尚可考慮補：`{file}.md`
+  建議：執行 `init-project` 或 `{write-skill}` skill
+
+（若類型未明或無缺檔，標示「無」）
+
+**失效引用**（若有執行）
+- `.agents/rules/{file}.md:{line}` 引用 `{path}` 已不存在於 `git ls-files`
+
+（若無或未執行，標示「未執行」或「無」）
 
 ### 建議後續
 
@@ -112,7 +174,7 @@ Rules 檔：{實際讀取的 rules 檔清單}
 
 ### 摘要
 
-發現 {gap_count} 個 coverage gap、{quality_count} 個 rule quality finding。
+發現 {gap_count} 個 coverage gap、{quality_count} 個 rule quality finding；Template Compliance：{🔴 N 個 / 🟠 N 個 / 🟢 全數通過}。
 ```
 
 ## 行為限制
@@ -120,6 +182,9 @@ Rules 檔：{實際讀取的 rules 檔清單}
 - 只讀取、審查、報告；不直接修改 rules
 - 不檢查程式碼是否違反既有 rules；這是 `check-rules` 的職責
 - Coverage Gap 必須有至少 3 個檔案的反覆模式作為證據
-- Rule Quality finding 必須引用具體 rules 檔路徑與行號
+- Rule Quality finding 必須引用具體 rules 檔路徑與行號；類型限於：模糊、不可驗證、重疊、衝突
+- Template Compliance finding 必須引用具體行數、章節名或 git commit 數作為客觀依據；不憑語意判斷
+- 缺檔建議只列出缺失並引導至對應 write skill，**不執行建檔**
+- 失效引用檢查為可選項，預設不執行
 - 若建議更新 rules，指向對應 write skill，例如 `architecture`、`tech-stack`、`design-guide`
 - project-local rules 與一般 best practices 衝突時，優先尊重 project-local rules
