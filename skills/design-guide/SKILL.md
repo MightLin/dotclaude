@@ -1,8 +1,8 @@
 ---
 name: design-guide
 description: Write or update UI design rules. Use when initializing or maintaining `.agents/rules/design-guide.md` for UI libraries, design systems, layout, spacing, responsive behavior, components, forms, accessibility, mobile navigation, gestures, and platform design conventions.
-updated: 2026-05-16
-version: 0.2.0
+updated: 2026-05-23
+version: 0.2.1
 ---
 
 # Skill：撰寫 design-guide.md
@@ -79,6 +79,7 @@ version: 0.2.0
 
 ## 大小上限
 產出檔案不超過 80 行。超出細節（每頁結構樹、跨頁元件清單）一律拆到 `.agents/design/<slug>/`。
+其他情境超出時請使用 rules-overflow skill 與使用者協作決定壓縮或分離。
 
 ## 範例
 
