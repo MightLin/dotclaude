@@ -1,11 +1,14 @@
 ---
 name: entrypoint-writing
 description: Write concise agent entrypoint files for projects. Use when creating or updating Claude `CLAUDE.md` or Codex `AGENTS.md` files that point to `.agents/rules/`, include core working principles, and avoid duplicating detailed architecture, tech stack, TODO, or business docs.
-updated: 2026-05-22
-version: 0.2.0
+updated: 2026-05-23
+version: 0.3.0
 ---
 
 ## Changelog
+
+### 0.3.0 - 2026-05-23
+- 第 4 條核心原則：rules 缺口入口改為指向 `audit-rules`
 
 ### 0.2.0 - 2026-05-22
 - 核心原則新增第 4 條：完成修改後主動提示 `/check-rules` 或更新 rules
@@ -40,7 +43,7 @@ version: 0.2.0
 1. 接到任務前，view `.agents/rules/` 下相關檔案以理解專案現況
 2. 開新功能前，先讀 `todo-and-plans.md` 確認與計畫無衝突
 3. 開始實作前，列出預計異動的檔案範圍給使用者確認
-4. 完成一段功能或大量修改後，主動建議使用者執行 `/check-rules`；若程式碼出現 `.agents/rules/` 未涵蓋的反覆模式，建議跑對應 write skill 更新規則
+4. 完成一段功能或大量修改後，主動建議使用者執行 `/check-rules`；若程式碼出現 `.agents/rules/` 未涵蓋的反覆模式，建議執行 `audit-rules` 審查
 
 ## 文件索引規則
 - 只列實際存在的 rules 檔（依專案類型而定）
@@ -76,7 +79,7 @@ version: 0.2.0
 1. 接到任務前，view 相關 rules 檔
 2. 開新功能前，先讀 todo-and-plans.md
 3. 開始實作前，列出預計異動的檔案範圍
-4. 完成修改後主動建議跑 /check-rules；發現 rules 未涵蓋的反覆模式時建議更新對應 rules
+4. 完成修改後主動建議跑 /check-rules；發現 rules 未涵蓋的反覆模式時建議執行 audit-rules
 5. 修改前先 view 相關檔案，不整份重寫
 6. {專案特有規則}
 
@@ -104,7 +107,7 @@ version: 0.2.0
 1. 接到任務前，view 相關 rules 檔
 2. 開新功能前，先讀 todo-and-plans.md
 3. 開始實作前，列出預計異動的檔案範圍
-4. 完成修改後主動建議跑 /check-rules；發現 rules 未涵蓋的反覆模式時建議更新對應 rules
+4. 完成修改後主動建議跑 /check-rules；發現 rules 未涵蓋的反覆模式時建議執行 audit-rules
 5. {專案特有規則}
 
 ## 禁止
@@ -132,7 +135,7 @@ version: 0.2.0
 1. 接到任務前，view 相關 rules 檔
 2. 開新功能前，先讀 todo-and-plans.md
 3. 開始實作前，列出預計異動的檔案範圍
-4. 完成修改後主動建議跑 /check-rules；發現 rules 未涵蓋的反覆模式時建議更新對應 rules
+4. 完成修改後主動建議跑 /check-rules；發現 rules 未涵蓋的反覆模式時建議執行 audit-rules
 5. {專案特有規則}
 
 ## 禁止
@@ -160,7 +163,7 @@ version: 0.2.0
 1. 接到任務前，view 相關 rules 檔
 2. 開新功能前，先讀 todo-and-plans.md
 3. 開始實作前，列出預計異動的檔案範圍
-4. 完成修改後主動建議跑 /check-rules；發現 rules 未涵蓋的反覆模式時建議更新對應 rules
+4. 完成修改後主動建議跑 /check-rules；發現 rules 未涵蓋的反覆模式時建議執行 audit-rules
 5. {專案特有規則}
 
 ## 禁止

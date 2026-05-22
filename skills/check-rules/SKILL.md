@@ -8,7 +8,7 @@ version: 0.5.0
 ## Changelog
 
 ### 0.5.0 - 2026-05-23
-- 將 Rules Gap 與 rules 品質審查拆出至 `audit-rules` skill
+- 重構：將 Rules Gap 移交至 `audit-rules` skill 統一管理，check-rules 恢復單一職責（程式碼合規稽核）
 - 保留原本 diff 意圖優先的掃描範圍流程
 
 ### 0.4.0 - 2026-05-22

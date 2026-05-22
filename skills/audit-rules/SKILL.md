@@ -23,6 +23,7 @@ version: 0.1.0
 - 必要：專案已有 `.agents/rules/` 目錄（否則建議先執行 `init-project`）
 - 適合：定期 rules 維護、專案導入後校準、發現 rules 與實作脫節時
 - 不適合：PR 合規檢查、單純找程式碼違規
+- 掃描範圍：永遠對整個專案全域掃描，不支援 diff 模式。若要在 diff 範圍內做合規檢查，改用 `check-rules`。
 
 ## Step 1：讀取 rules 現況
 
@@ -47,6 +48,8 @@ version: 0.1.0
 ## Step 3：Coverage Gap 審查
 
 掃描專案程式碼，找出反覆出現但 `.agents/rules/` 未涵蓋的模式。
+
+Coverage Gap 審查永遠以整個專案為範圍（非 diff 範圍），因為需要跨 ≥3 個檔案確認反覆模式是否形成專案級共識。
 
 掃描整個專案時，自動排除：
 - `node_modules/`, `vendor/`, `.git/`, `dist/`, `build/`, `.next/`, `.nuxt/`
