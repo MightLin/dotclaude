@@ -1,11 +1,14 @@
 ---
 name: architecture
 description: Write or update concise project architecture rules. Use when initializing or maintaining `.agents/rules/architecture.md` with system overview, module responsibilities, data flow, and dependency boundary guidance for frontend, backend, fullstack, or mobile projects.
-updated: 2026-05-10
-version: 0.1.0
+updated: 2026-05-23
+version: 0.1.1
 ---
 
 ## Changelog
+
+### 0.1.1 - 2026-05-23
+- 大小上限段新增超出時使用 rules-overflow skill 的提示。
 
 ### 0.1.0 - 2026-05-10
 - 建立初始 skill 規範。
@@ -46,6 +49,7 @@ version: 0.1.0
 
 ## 大小上限
 產出檔案不超過 60 行。
+超出時請使用 rules-overflow skill 與使用者協作決定壓縮或分離。
 
 ## 範例
 ```markdown
