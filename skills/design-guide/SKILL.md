@@ -1,8 +1,8 @@
 ---
 name: design-guide
 description: Write or update UI design rules. Use when initializing or maintaining `.agents/rules/design-guide.md` for UI libraries, design systems, layout, spacing, responsive behavior, components, forms, accessibility, mobile navigation, gestures, and platform design conventions.
-updated: 2026-05-16
-version: 0.2.0
+updated: 2026-05-23
+version: 0.2.1
 ---
 
 # Skill：撰寫 design-guide.md

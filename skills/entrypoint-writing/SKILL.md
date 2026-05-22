@@ -1,11 +1,14 @@
 ---
 name: entrypoint-writing
 description: Write concise agent entrypoint files for projects. Use when creating or updating Claude `CLAUDE.md` or Codex `AGENTS.md` files that point to `.agents/rules/`, include core working principles, and avoid duplicating detailed architecture, tech stack, TODO, or business docs.
-updated: 2026-05-22
-version: 0.2.0
+updated: 2026-05-23
+version: 0.2.1
 ---
 
 ## Changelog
+
+### 0.2.1 - 2026-05-23
+- 新增獨立的「大小上限」段，並加入超出時使用 rules-overflow skill 的提示。
 
 ### 0.2.0 - 2026-05-22
 - 核心原則新增第 4 條：完成修改後主動提示 `/check-rules` 或更新 rules

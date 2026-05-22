@@ -1,11 +1,14 @@
 ---
 name: api-conventions
 description: Write or update project API convention rules for server or client code. Use when initializing or maintaining `.agents/rules/api-conventions.md`, defining REST/GraphQL/RPC naming, request/response, error, auth, pagination, retry, timeout, token, or API consumption conventions.
-updated: 2026-05-10
-version: 0.1.0
+updated: 2026-05-23
+version: 0.1.1
 ---
 
 ## Changelog
+
+### 0.1.1 - 2026-05-23
+- 大小上限段新增超出時使用 rules-overflow skill 的提示。
 
 ### 0.1.0 - 2026-05-10
 - 建立初始 skill 規範。
