@@ -1,11 +1,15 @@
 ---
 name: check-rules
-description: Check if code conforms to project rules. Use when validating manually written code against `.agents/rules/`, finding rule violations, or getting correction suggestions for specific files, directories, or a PR/diff.
-updated: 2026-05-22
-version: 0.4.0
+description: Check whether a specified code scope violates existing project rules in `.agents/rules/`. Use for code compliance review against current rules only; do not audit rule coverage, rule completeness, or rule quality.
+updated: 2026-05-23
+version: 0.5.0
 ---
 
 ## Changelog
+
+### 0.5.0 - 2026-05-23
+- 將 Rules Gap 與 rules 品質審查拆出至 `audit-rules` skill
+- 保留原本 diff 意圖優先的掃描範圍流程
 
 ### 0.4.0 - 2026-05-22
 - 加入 Rules Gap 區塊，偵測程式碼反覆模式但 rules 未涵蓋的情況
@@ -29,7 +33,9 @@ version: 0.4.0
 ## 目的
 
 對照 `.agents/rules/` 的規範，掃描使用者指定的程式碼範圍，找出違規之處並提出具體修正建議。
-適合手動撰寫的程式碼初稿、PR 送審前、或定期規範健康檢查。
+適合手動撰寫的程式碼初稿、PR 送審前、或指定範圍的規則合規檢查。
+
+此 skill 只檢查程式碼是否違反既有 rules；不判斷 rules 是否完整、不審查 rules 品質、不建議補 rules。若要檢查 rules 覆蓋缺口或 rules 檔品質，改用 `audit-rules` skill。
 
 ## 適用範圍
 
@@ -135,33 +141,16 @@ version: 0.4.0
 - {無法從現有檔案驗證的 rule，並說明原因}
 （若全數可驗證，此區塊標示「無」）
 
-### Rules Gap
-
-- {觀察到的反覆模式}（出現於 N 個檔案、共 M 處）
-  建議：執行 `{對應 write skill 名稱}` skill 更新 `.agents/rules/{file}.md`
-（若無，標示「無」）
-
 ### 摘要
 
 掃描 {n} 個檔案，發現 {high} High / {medium} Medium / {low} Low 共 {total} 個 finding，整體裁定：{RED/YELLOW/GREEN}。
 {若無 finding：「符合所有選定規範，整體裁定：🟢 GREEN。」}
 ```
 
-## 反向提示：rules 過時偵測
-
-若掃描過程發現程式碼存在反覆出現、但 `.agents/rules/` 完全未涵蓋的模式，在報告末尾的 `### Rules Gap` 區塊列出該模式，並建議使用者執行對應的 write skill 更新 rules。
-
-**判定標準（三條皆需成立）**：
-
-1. 同類模式出現在 **≥3 個檔案**
-2. `.agents/rules/` **完全未提及**（是空白，非違反現有規則）
-3. 屬於可成文主題：能對應到 Step 1 列出的 rules 檔主題的反覆模式。判斷方式為自問「這個模式若要寫成規則，會寫進哪一個 rules 檔？」答得出來才列為 Gap，答不出來（例如純演算法寫法）就略過。
-
-此區塊不影響整體裁定（GREEN/YELLOW/RED 只看違規），單純作為改善建議。
-
 ## 行為限制
 
 - 只讀取、比對、報告；不直接修改程式碼（除非使用者後續明確要求）
 - 只引用能以具體檔案路徑與行號佐證的違規；推斷或假設不列為 finding
 - project-local rules 與一般 best practices 衝突時，優先遵守 project-local rules
+- 不審查 rules 覆蓋率或品質；若使用者想檢查 rules 缺口或品質，建議執行 `audit-rules`
 - 不重新生成 rules 檔；若使用者想更新 rules，建議執行對應的 write skill
