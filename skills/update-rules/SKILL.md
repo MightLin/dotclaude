@@ -2,10 +2,15 @@
 name: update-rules
 description: Apply targeted fixes to existing `.agents/rules/` files based on audit-rules findings. Use after running audit-rules to resolve Rule Quality issues (ambiguous, unverifiable, overlapping, or conflicting rules) and Template Compliance violations — without rewriting entire rule files. Coverage Gaps are out of scope; this skill redirects those to the appropriate write skill.
 updated: 2026-05-23
-version: 0.1.0
+version: 0.1.1
 ---
 
 ## Changelog
+
+### 0.1.1 - 2026-05-23
+- Step 1 補充「剛才跑過了」與「貼上」的差異處理說明
+- Step 2 新鮮度改為半轉介（提示執行 write skill 或使用者手動提供內容）
+- Step 3 新增新鮮度類型的提案格式，明確說明無法自動產生修補建議
 
 ### 0.1.0 - 2026-05-23
 - 建立初始 skill 規範。
@@ -31,10 +36,12 @@ Coverage Gap（程式碼有模式但 rules 未涵蓋）**不在本 skill 範疇*
 ```
 請問 audit-rules 報告從哪裡取得？
 
-1. 剛才在對話中已產出（請貼上或說「剛才跑過了」）
+1. 剛才在對話中已產出（說「剛才跑過了」即可，或直接貼上報告文字）
 2. 請你現在執行 audit-rules（我會先中止，讓你跑完再回來）
 ```
 
+- 若使用者說「剛才跑過了」：從本次對話 context 中擷取最近一次 `audit-rules` 的輸出，作為報告來源，不再要求使用者貼上。
+- 若使用者貼上報告文字：直接解析貼上的內容。
 - 若使用者回答 2：說明「請先執行 `/audit-rules`，完成後再執行 `/update-rules`」，然後結束本 skill。
 - 若報告中**無任何 finding**（Coverage Gap / Rule Quality / Template Compliance 均為空）：回覆「audit-rules 未發現需修補的問題，無需執行 update-rules。」並結束。
 
@@ -47,7 +54,8 @@ Coverage Gap（程式碼有模式但 rules 未涵蓋）**不在本 skill 範疇*
 | **Coverage Gap** | 轉介：提示執行對應 write skill，本 skill 不處理 |
 | **Rule Quality**（模糊 / 不可驗證 / 重疊 / 衝突） | ✅ 主要處理對象 |
 | **Template Compliance — 行數超限**（🔴 >100%） | 轉介：提示執行 `rules-overflow` skill |
-| **Template Compliance — 其他**（冗餘片段 / 可補章節 / 新鮮度 / 失效引用） | ✅ 處理 |
+| **Template Compliance — 新鮮度**（🟠/🔴） | 半轉介：提示使用者手動更新 rules 內容，或執行對應 write skill |
+| **Template Compliance — 其他**（冗餘片段 / 可補章節 / 失效引用） | ✅ 處理 |
 
 整理後輸出本次的工作清單：
 
@@ -62,6 +70,7 @@ Coverage Gap（程式碼有模式但 rules 未涵蓋）**不在本 skill 範疇*
 轉介（{m} 個，不處理）：
 - [Gap] {找到的 Coverage Gap 標題}  → 建議執行 `{write-skill}` skill
 - [Overflow] `.agents/rules/{file}.md` 行數超限 → 建議執行 `rules-overflow` skill
+- [Freshness] `.agents/rules/{file}.md` 新鮮度 {🟠/🔴} → 需手動更新或執行 `{write-skill}` skill
 ```
 
 詢問使用者確認後才進入 Step 3。若使用者要跳過某些 finding，標記為「略過」並從工作清單移除。
@@ -90,6 +99,24 @@ Coverage Gap（程式碼有模式但 rules 未涵蓋）**不在本 skill 範疇*
 
 執行 / 跳過 / 自訂修改？
 ```
+
+**新鮮度類型的提案例外**：新鮮度 finding 表示 rules 內容可能與程式碼脫節，無法從 audit 報告自動產生修補建議。遇到此類型時，改以下格式呈現：
+
+```
+── Finding {序號}/{總數} ──────────────────────────
+類型：Template Compliance — 新鮮度 {🟠/🔴}
+位置：`.agents/rules/{file}.md`
+現況：rules 最後更新後，對應程式碼目錄有 {C} 個新 commit，內容可能已脫節。
+
+此 finding 需比對最新程式碼才能確認修補範圍，超出本 skill 的手術式修補能力。
+建議：
+  a. 執行 `{對應 write-skill}` skill 重新產生此 rules 檔的相關段落
+  b. 或自行提供更新後的規則文字，本 skill 協助套用
+
+選擇 a / b / 跳過？
+```
+
+若使用者選擇 b，進入 Step 3.2 的「自訂修改」流程，由使用者提供新文字。
 
 ### 3.2 處理使用者回應
 
@@ -124,6 +151,7 @@ Coverage Gap（程式碼有模式但 rules 未涵蓋）**不在本 skill 範疇*
 轉介（未在本 skill 處理）：
 - Coverage Gap ×{gap_n} → 建議執行對應 write skill（見 audit-rules 報告「建議後續」）
 - 行數超限 ×{overflow_n} → 建議執行 `rules-overflow` skill
+- 新鮮度 ×{freshness_n} → 建議執行對應 write skill 或手動更新
 ```
 
 若所有 finding 均被略過或轉介，摘要仍需列出轉介清單，不可只說「無修改」。
