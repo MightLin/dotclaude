@@ -1,9 +1,18 @@
 {
+  "name": "dotclaude",
+  "description": "Self-hosted marketplace for the dotclaude plugin — project knowledge initialization and rule management skills for Claude Code.",
+  "owner": {
+    "name": "MightLin",
+    "email": "might0215@gmail.com"
+  },
   "plugins": [
     {
       "name": "dotclaude",
       "description": "Project knowledge initialization and rule management skills for Claude Code. Helps teams define and maintain shared conventions (architecture, API, data model, testing, deployment, etc.) across projects.",
-      "source": ".",
+      "source": {
+        "source": "github",
+        "repo": "MightLin/dotclaude"
+      },
       "version": "1.2.1",
       "category": "Development",
       "tags": ["rules", "architecture", "conventions", "init", "agents"]
