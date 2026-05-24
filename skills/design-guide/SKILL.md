@@ -1,8 +1,8 @@
 ---
 name: design-guide
-description: Write or update UI design rules. Use when initializing or maintaining `.agents/rules/design-guide.md` for UI libraries, design systems, layout, spacing, responsive behavior, components, forms, accessibility, mobile navigation, gestures, and platform design conventions.
-updated: 2026-05-23
-version: 0.2.1
+description: Write or update UI design rules. Use when initializing or maintaining `.agents/rules/design-guide.md` for UI libraries, design systems, layout, spacing, responsive behavior, components, forms, accessibility, mobile navigation, gestures, and platform design conventions. Do NOT use when the user wants a one-off design prompt for tools like Stitch / v0 — use `design-brief` instead.
+updated: 2026-05-25
+version: 0.2.2
 ---
 
 # Skill：撰寫 design-guide.md
@@ -153,6 +153,9 @@ breakpoints: { sm: 640, md: 768, lg: 1024 }
 ```
 
 ## Changelog
+
+### 0.2.2 - 2026-05-25
+- description 加入 `design-brief` SKIP 子句，避免與一次性設計 prompt 混淆
 
 ### 0.2.0 — 2026-05-16
 - 加入 Step 0：自動讀取專案檔案、不足才問使用者

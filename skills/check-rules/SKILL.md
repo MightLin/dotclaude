@@ -1,11 +1,14 @@
 ---
 name: check-rules
-description: Check whether a specified code scope violates existing project rules in `.agents/rules/`. Use for code compliance review against current rules only; do not audit rule coverage, rule completeness, or rule quality.
-updated: 2026-05-23
-version: 0.5.0
+description: Check whether a specified code scope violates existing project rules in `.agents/rules/`. Use after editing code in a project with `.agents/rules/`, or before opening a PR, to verify compliance. To audit the rule files themselves (coverage gaps, quality, or template compliance), use `audit-rules` instead.
+updated: 2026-05-25
+version: 0.5.1
 ---
 
 ## Changelog
+
+### 0.5.1 - 2026-05-25
+- description 補充「何時主動呼叫」場景（程式碼修改後 / PR 前）與 `audit-rules` cross-reference
 
 ### 0.5.0 - 2026-05-23
 - 重構：將 Rules Gap 移交至 `audit-rules` skill 統一管理，check-rules 恢復單一職責（程式碼合規稽核）

@@ -60,21 +60,27 @@ repo root
 版本資訊不作為自動同步邏輯；使用 `sync-config` 前先閱讀日期、版本與 changelog，再決定是否覆蓋到全域設定。
 同步時只覆蓋 repo `skills/` 提供的同名內容，不清空全域 `skills/` 目錄，避免刪除其他來源安裝的 skills。
 
-| Skill | 對應 rule 檔 | 適用 |
-|---|---|---|
-| architecture | architecture.md | 所有類型 |
-| tech-stack | tech-stack.md | 所有類型（含 frontend/backend/mobile 條件分支） |
-| business-logic | business-logic.md | 有領域邏輯的專案 |
-| todo-and-plans | todo-and-plans.md | 未用 issue tracker 的專案 |
-| testing-strategy | testing-strategy.md | 所有類型 |
-| deployment | deployment.md | 所有類型（含手機 store 上架） |
-| api-conventions | api-conventions.md | 後端 / 全端必要；前端 / 手機條件 |
-| design-guide | design-guide.md | 前端 / 全端 / 手機（含 web/mobile 條件分支） |
-| data-model | data-model.md | 後端 / 全端必要；手機有 local DB 才建 |
-| init-project | （導入流程） | 新專案首次建立 `.agents/rules/` 與入口檔 |
-| sync-config | （同步流程） | **Codex 專用**，手動同步 repo 到全域設定；Claude Code plugin 使用者不需要 |
-| migrate-rules | （遷移流程） | 已用舊版 `.claude/rules/` 的專案 |
-| entrypoint-writing | CLAUDE.md / AGENTS.md | `init-project` skill 內部使用 |
+| Skill | 對應 rule 檔 | 適用 | 呼叫方式 |
+|---|---|---|---|
+| architecture | architecture.md | 所有類型 | 使用者 |
+| tech-stack | tech-stack.md | 所有類型（含 frontend/backend/mobile 條件分支） | 使用者 |
+| business-logic | business-logic.md | 有領域邏輯的專案 | 使用者 |
+| todo-and-plans | todo-and-plans.md | 未用 issue tracker 的專案 | 使用者 |
+| testing-strategy | testing-strategy.md | 所有類型 | 使用者 |
+| deployment | deployment.md | 所有類型（含手機 store 上架） | 使用者 |
+| api-conventions | api-conventions.md | 後端 / 全端必要；前端 / 手機條件 | 使用者 |
+| design-guide | design-guide.md | 前端 / 全端 / 手機（含 web/mobile 條件分支） | 使用者 |
+| data-model | data-model.md | 後端 / 全端必要；手機有 local DB 才建 | 使用者 |
+| mcp-conventions | mcp-conventions.md | MCP server 設計的專案 | 使用者 |
+| design-brief | （設計 brief） | 有新 UI 設計需求時；呼叫 AI 設計工具前 | 使用者 |
+| check-rules | （程式碼合規） | 程式碼修改後 / PR 前 | 使用者 |
+| audit-rules | （rules 品質審查） | 定期：release 前、大功能後、新成員 onboarding | 使用者 |
+| update-rules | （rules 修補） | 跑完 `audit-rules` 後，或已有 audit findings 要套用時 | 使用者 |
+| init-project | （導入流程） | 新專案首次建立 `.agents/rules/` 與入口檔 | 使用者 |
+| migrate-rules | （遷移流程） | 已用舊版 `.claude/rules/` 的專案 | 使用者 |
+| sync-config | （同步流程） | **Codex 專用**，手動同步 repo 到全域設定；Claude Code plugin 使用者不需要 | 使用者 |
+| entrypoint-writing | CLAUDE.md / AGENTS.md | 由 `init-project` / `migrate-rules` 呼叫 | **內部** |
+| rules-overflow | （行數超出處理） | 由 rules write skills 自動呼叫 | **內部** |
 
 ## 安裝
 

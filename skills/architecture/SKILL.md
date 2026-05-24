@@ -1,11 +1,14 @@
 ---
 name: architecture
-description: Write or update concise project architecture rules. Use when initializing or maintaining `.agents/rules/architecture.md` with system overview, module responsibilities, data flow, and dependency boundary guidance for frontend, backend, fullstack, or mobile projects.
-updated: 2026-05-23
-version: 0.1.1
+description: Write or update concise project architecture rules. Use when initializing or maintaining `.agents/rules/architecture.md` with system overview, module responsibilities, data flow, and dependency boundary guidance for frontend, backend, fullstack, or mobile projects. For pure tech choices (libraries, versions) use `tech-stack`; for API contract details use `api-conventions`; for visual/component rules use `design-guide`; for domain logic use `business-logic`.
+updated: 2026-05-25
+version: 0.1.2
 ---
 
 ## Changelog
+
+### 0.1.2 - 2026-05-25
+- description 加入跨 rules skill 分流提示（tech-stack / api-conventions / design-guide / business-logic 的邊界）
 
 ### 0.1.1 - 2026-05-23
 - 大小上限段新增超出時使用 rules-overflow skill 的提示。
