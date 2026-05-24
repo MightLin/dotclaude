@@ -1,11 +1,14 @@
 ---
 name: entrypoint-writing
-description: Write concise agent entrypoint files for projects. Use when creating or updating Claude `CLAUDE.md` or Codex `AGENTS.md` files that point to `.agents/rules/`, include core working principles, and avoid duplicating detailed architecture, tech stack, TODO, or business docs.
-updated: 2026-05-23
-version: 0.3.0
+description: Internal sub-skill used by `init-project` and `migrate-rules` to write Claude `CLAUDE.md` / Codex `AGENTS.md` entrypoint files. Use directly only when an entrypoint already exists and needs a standalone rewrite — otherwise route through `init-project` (new projects) or `migrate-rules` (existing projects).
+updated: 2026-05-25
+version: 0.3.1
 ---
 
 ## Changelog
+
+### 0.3.1 - 2026-05-25
+- description 改為明示「Internal sub-skill of init-project / migrate-rules」，避免使用者繞過完整流程直接呼叫
 
 ### 0.3.0 - 2026-05-23
 - 第 4 條核心原則：rules 缺口入口改為指向 `audit-rules`

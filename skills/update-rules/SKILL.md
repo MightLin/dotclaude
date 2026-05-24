@@ -1,11 +1,14 @@
 ---
 name: update-rules
-description: Apply targeted fixes to existing `.agents/rules/` files based on audit-rules findings. Use after running audit-rules to resolve Rule Quality issues (ambiguous, unverifiable, overlapping, or conflicting rules) and Template Compliance violations — without rewriting entire rule files. Coverage Gaps are out of scope; this skill redirects those to the appropriate write skill.
-updated: 2026-05-23
-version: 0.1.1
+description: Apply targeted fixes to existing `.agents/rules/` files based on audit-rules findings. Use after running `audit-rules`, or when given existing audit findings to apply, to resolve Rule Quality issues (ambiguous, unverifiable, overlapping, or conflicting rules) and Template Compliance violations — without rewriting entire rule files. Coverage Gaps are out of scope; this skill redirects those to the appropriate write skill.
+updated: 2026-05-25
+version: 0.1.2
 ---
 
 ## Changelog
+
+### 0.1.2 - 2026-05-25
+- description 補充「已有 audit findings 直接貼上」為合法觸發場景
 
 ### 0.1.1 - 2026-05-23
 - Step 1 補充「剛才跑過了」與「貼上」的差異處理說明

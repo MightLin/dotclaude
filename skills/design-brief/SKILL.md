@@ -1,8 +1,8 @@
 ---
 name: design-brief
-description: 收集 UI 設計需求、判定 mode、產出 tool-agnostic 設計 brief。可單獨執行，輸出可用於 Stitch、Claude Design、v0 或任何 AI 設計工具。
-updated: 2026-05-16
-version: 0.3.0
+description: 在呼叫 AI 設計工具（Stitch、Claude Design、v0）之前先執行，收集 UI 設計需求、判定 mode，產出結構化 brief，比直接下 ad-hoc prompt 能得到明顯更好的設計品質。輸出 tool-agnostic，可接任何 AI 設計工具。若需求是建立或維護 `.agents/rules/design-guide.md`，改用 `design-guide` skill。
+updated: 2026-05-25
+version: 0.3.1
 ---
 
 # Skill：Design Brief 收集
@@ -266,6 +266,9 @@ Mode：feature-extension
 - **brief.md 已存在**：詢問使用者覆蓋或另存為 `brief-{YYYY-MM-DD}.md`。
 
 ## Changelog
+
+### 0.3.1 — 2026-05-25
+- description 補充「呼叫 AI 設計工具前先執行」觸發時機，與 `design-guide` SKIP 子句
 
 ### 0.3.0 — 2026-05-16
 - mode 判定不確定時改用 `AskUserQuestion` 按鈕，禁止使用者手 key

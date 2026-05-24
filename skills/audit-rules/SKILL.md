@@ -1,11 +1,14 @@
 ---
 name: audit-rules
-description: Audit `.agents/rules/` for coverage gaps, rule quality issues, and template compliance. Use when rules may be stale, incomplete, redundant, or violating write-skill specs. Suggestions only — never modifies rules.
-updated: 2026-05-23
-version: 0.3.0
+description: Audit `.agents/rules/` for coverage gaps, rule quality issues, and template compliance. Use periodically — before a release, after significant feature work, or when onboarding a new team member — or whenever rules may be stale, incomplete, redundant, or violating write-skill specs. Suggestions only — never modifies rules. To check whether code violates current rules, use `check-rules` instead.
+updated: 2026-05-25
+version: 0.3.1
 ---
 
 ## Changelog
+
+### 0.3.1 - 2026-05-25
+- description 補充「定期使用」場景（release 前 / 大功能後 / onboarding 時）與 `check-rules` cross-reference
 
 ### 0.3.0 - 2026-05-23
 - 失效引用詢問移至 Step 2，僅在審查範圍含 Template Compliance 時才詢問

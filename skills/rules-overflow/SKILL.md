@@ -1,11 +1,14 @@
 ---
 name: rules-overflow
-description: Handle rules file line limit overflow. Use when a rules update would exceed the line limit defined in the corresponding rules skill — offer the user a choice between compressing or splitting the file, with Claude-recommended options and reasons.
-updated: 2026-05-23
-version: 0.1.0
+description: Internal sub-skill invoked by rules write skills (e.g. `architecture`, `business-logic`) when a planned write would exceed the file's line limit — offer the user a choice between compressing or splitting the file, with Claude-recommended options and reasons. Not intended for direct user invocation.
+updated: 2026-05-25
+version: 0.1.1
 ---
 
 ## Changelog
+
+### 0.1.1 - 2026-05-25
+- description 改為明示「Internal sub-skill，不適合使用者直接呼叫」
 
 ### 0.1.0 - 2026-05-23
 - 建立初始 skill 規範。
