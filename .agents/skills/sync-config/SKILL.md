@@ -1,8 +1,8 @@
 ---
 name: sync-config
 description: Sync this dotclaude repository into local Claude and Codex configuration locations. Use only inside the dotclaude repo when the user asks to sync, install, update, copy shared skills, update global Claude/Codex config, or replace old dotclaude sync workflows.
-updated: 2026-05-16
-version: 0.3.0
+updated: 2026-05-26
+version: 0.4.0
 ---
 
 # Skill：同步全域設定
@@ -11,34 +11,17 @@ version: 0.3.0
 
 ## Changelog
 
-### 0.3.0 - 2026-05-16
-- Step 1 同時列出來源與目標（Claude / Codex）版本，方便比對。
+### 0.4.0 - 2026-05-26
+- 精簡確認步驟：從 3 次停頓改為最多 1 次（無差異時零停頓）。
+- 合併版本對照表與 hash diff 至同一步驟。
 
-## Step 1：檢查版本資訊
+## Step 1：掃描差異（自動執行，不停頓）
 
-同步前先閱讀 root `skills/*/SKILL.md` 的 front matter 與 `## Changelog`：
+同時輸出版本對照表與檔案 hash diff，不詢問使用者。
 
-- `updated`：UTC `YYYY-MM-DD`，表示 skill 最近修訂日期
-- `version`：skill 版本，重大流程變更時調整
-- `Changelog`：只保留最新一版，提供同步前判斷依據
+**版本對照表**：對每個 repo 管理的 skill 輸出，欄位 `skill` / `source`（附 `updated`）/ `claude` / `codex` / `status`（`new` / `same` / `upgrade` / `downgrade` / `mixed`）。`CLAUDE.md` / `AGENTS.md` 無 front matter，版本欄留空，差異由 hash diff 呈現。
 
-同步前必須同時呈現「來源」與「目標」版本，逐一讀取以下三處的 front matter：
-
-- 來源：`skills\<name>\SKILL.md`
-- Claude 目標：`$HOME\.claude\skills\<name>\SKILL.md`
-- Codex 目標：`$HOME\.codex\skills\<name>\SKILL.md`
-
-對每個 repo 管理的 skill 輸出表格，欄位：
-
-- `skill`：skill 名稱
-- `source`：repo 的 `version`（附 `updated`）
-- `claude`：Claude 目標端的 `version`；檔案不存在則填 `missing`
-- `codex`：Codex 目標端的 `version`；檔案不存在則填 `missing`
-- `status`：`new`（任一端 missing）/ `same`（兩端與來源都相同）/ `upgrade`（來源較新）/ `downgrade`（來源較舊）/ `mixed`（Claude 與 Codex 版本不一致）
-
-`CLAUDE.md` / `AGENTS.md` 入口檔目前沒有 front matter，版本欄位略過，差異留給 Step 2 的 hash diff 呈現。
-
-PowerShell 範例腳本（用 regex 抓 front matter，不引入 YAML 套件）：
+**hash diff**：比較範圍 `CLAUDE.md`、`AGENTS.md`、`skills/**/*`，逐一與 Claude / Codex 目標端比對，輸出 `missing` / `changed` / `same` 摘要。只比對 repo 管理的檔案，目標端多餘的 skills 不列入。
 
 ```powershell
 function Get-SkillVersion {
@@ -50,18 +33,28 @@ function Get-SkillVersion {
   [pscustomobject]@{ Version = $version; Updated = $updated }
 }
 
-function Get-Status {
+function Get-SkillStatus {
   param($src, $claude, $codex)
   if (-not $claude -or -not $codex) { return "new" }
   if ($claude.Version -ne $codex.Version) { return "mixed" }
   if ($claude.Version -eq $src.Version)   { return "same" }
-  # 簡單字串比較，必要時可改用 [version] 解析
   if ([version]$src.Version -gt [version]$claude.Version) { return "upgrade" }
   return "downgrade"
 }
 
+function Compare-ManagedFile {
+  param([string]$Source, [string]$Target, [string]$Label)
+  if (-not (Test-Path $Target)) {
+    return [pscustomobject]@{ Label = $Label; Status = "missing"; Target = $Target }
+  }
+  $sh = (Get-FileHash $Source -Algorithm SHA256).Hash
+  $th = (Get-FileHash $Target -Algorithm SHA256).Hash
+  [pscustomobject]@{ Label = $Label; Status = if ($sh -eq $th) { "same" } else { "changed" }; Target = $Target }
+}
+
+# 版本對照表
 Get-ChildItem skills -Directory | ForEach-Object {
-  $name   = $_.Name
+  $name = $_.Name
   $src    = Get-SkillVersion "skills\$name\SKILL.md"
   $claude = Get-SkillVersion "$HOME\.claude\skills\$name\SKILL.md"
   $codex  = Get-SkillVersion "$HOME\.codex\skills\$name\SKILL.md"
@@ -70,106 +63,60 @@ Get-ChildItem skills -Directory | ForEach-Object {
     source = "$($src.Version) ($($src.Updated))"
     claude = if ($claude) { $claude.Version } else { "missing" }
     codex  = if ($codex)  { $codex.Version }  else { "missing" }
-    status = Get-Status $src $claude $codex
+    status = Get-SkillStatus $src $claude $codex
   }
 } | Format-Table -AutoSize
-```
 
-腳本是人工判斷依據，不是自動同步邏輯。輸出對照表後，詢問使用者是否繼續。
-
-## Step 2：列出同步差異
-
-同步前先比較 repo 來源與全域目標端，列出 `missing` / `changed` / `same` 摘要，並只針對 repo 管理的檔案比較；目標端額外存在的其他 skills 不列為刪除或差異。
-
-比較範圍：
-
-- Claude：`CLAUDE.md` → `$HOME\.claude\CLAUDE.md`
-- Claude skills：`skills\**\*` → `$HOME\.claude\skills\**\*`
-- Codex：`AGENTS.md` → `$HOME\.codex\AGENTS.md`
-- Codex skills：`skills\**\*` → `$HOME\.codex\skills\**\*`
-
-建議使用檔案 hash 比較，避免只看時間戳：
-
-```powershell
-function Compare-ManagedFile {
-  param(
-    [string]$Source,
-    [string]$Target,
-    [string]$Label
-  )
-
-  if (-not (Test-Path $Target)) {
-    [pscustomobject]@{ Label = $Label; Status = "missing"; Source = $Source; Target = $Target }
-    return
-  }
-
-  $sourceHash = (Get-FileHash $Source -Algorithm SHA256).Hash
-  $targetHash = (Get-FileHash $Target -Algorithm SHA256).Hash
-  $status = if ($sourceHash -eq $targetHash) { "same" } else { "changed" }
-  [pscustomobject]@{ Label = $Label; Status = $status; Source = $Source; Target = $Target }
-}
-
+# hash diff
 $diffs = @()
 $diffs += Compare-ManagedFile "CLAUDE.md" "$HOME\.claude\CLAUDE.md" "Claude entry"
-$diffs += Compare-ManagedFile "AGENTS.md" "$HOME\.codex\AGENTS.md" "Codex entry"
-
+$diffs += Compare-ManagedFile "AGENTS.md" "$HOME\.codex\AGENTS.md"  "Codex entry"
 Get-ChildItem "skills" -File -Recurse | ForEach-Object {
-  $relative = Resolve-Path $_.FullName -Relative
-  $relative = $relative -replace '^\.[\\/]', ''
-  $diffs += Compare-ManagedFile $_.FullName (Join-Path "$HOME\.claude" $relative) "Claude skill"
-  $diffs += Compare-ManagedFile $_.FullName (Join-Path "$HOME\.codex" $relative) "Codex skill"
+  $rel = (Resolve-Path $_.FullName -Relative) -replace '^\.[\\/]', ''
+  $diffs += Compare-ManagedFile $_.FullName (Join-Path "$HOME\.claude" $rel) "Claude skill"
+  $diffs += Compare-ManagedFile $_.FullName (Join-Path "$HOME\.codex"  $rel) "Codex skill"
 }
-
 $diffs | Group-Object Status | Select-Object Name, Count
-$diffs | Where-Object Status -ne "same" | Format-Table Label, Status, Source, Target -AutoSize
+$diffs | Where-Object Status -ne "same" | Format-Table Label, Status, Target -AutoSize
 ```
 
-若所有項目都是 `same`，回覆使用者「前後無差異，建議不執行同步」，並停止在確認前；只有使用者明確要求強制同步時才繼續。
+**若全部 `same`**：直接回報「目標端已是最新，無需同步」，結束。不詢問。
 
-若有 `missing` 或 `changed`，摘要列出差異數量與主要檔案，再進入確認步驟。
+**若有差異**：顯示摘要（N 個 missing / changed），進入 Step 2。
 
-## Step 3：確認同步意圖
+## Step 2：確認（唯一停頓點）
 
-同步會覆蓋全域入口檔與 repo 內同名 skills。執行前先摘要將同步的目標，並詢問使用者是否繼續。
+一句話摘要將同步的內容，詢問使用者是否繼續：
 
-- Claude：同步 `CLAUDE.md` 與 root `skills/`
-- Codex：同步 `AGENTS.md` 與 root `skills/`
+> 將同步 N 個檔案至 `~\.claude` 和 `~\.codex`，繼續嗎？
 
-## Step 4：同步 Claude
+使用者確認後執行 Step 3；否則中止。
 
-覆蓋 root `skills/` 內同名檔案，但不清空 `~/.claude\skills`，避免刪除其他全域 skills。
+## Step 3：同步 Claude + Codex
 
 ```powershell
-# CLAUDE.md
+# Claude
 Copy-Item "CLAUDE.md" "$HOME\.claude\CLAUDE.md" -Force
-
-# skills（全域來源）
 New-Item "$HOME\.claude\skills" -ItemType Directory -Force | Out-Null
 Copy-Item "skills\*" "$HOME\.claude\skills\" -Recurse -Force
-```
 
-## Step 5：同步 Codex
-
-同步 `AGENTS.md` 與 root `skills/`。同步時不清空 `~/.codex\skills`，並保留 `.system` 與其他全域 skills。
-
-```powershell
-# AGENTS.md
+# Codex
 Copy-Item "AGENTS.md" "$HOME\.codex\AGENTS.md" -Force
-
-# skills（覆蓋同名檔案；不刪除其他 skills）
 New-Item "$HOME\.codex\skills" -ItemType Directory -Force | Out-Null
 Copy-Item "skills\*" "$HOME\.codex\skills\" -Recurse -Force
 ```
+
+不清空目標端 skills 目錄，避免刪除其他全域 skills。
+
+## Step 4：完成報告
+
+列出本次已同步的檔案清單。
 
 ## 不同步
 
 - `.claude/settings.local.json`
 - `README.md`
 - `.gitignore`
-- `.claude/agents/`（目前是 repo 內 Stitch 工作流用，尚未定義跨工具同步格式）
+- `.claude/agents/`（repo 內 Stitch 工作流用，尚未定義跨工具同步格式）
 - `.agents/skills/sync-config/`（Codex repo-local skill，只在此 repo 內使用）
 - `.claude/skills/sync-config/`（Claude Code repo-local wrapper，只在此 repo 內使用）
-
-## Step 6：確認
-
-列出本次已同步的檔案清單。
