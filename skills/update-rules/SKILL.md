@@ -24,7 +24,7 @@ version: 0.1.2
 
 承接 `audit-rules` 產出的報告，對 `.agents/rules/` 中的 Rule Quality 問題與 Template Compliance 違規執行逐一確認的手術式修補，避免整份 rules 重寫帶來的資訊流失。
 
-Coverage Gap（程式碼有模式但 rules 未涵蓋）**不在本 skill 範疇**；這類問題應交給對應的 write skill（如 `architecture`、`tech-stack`）。
+Coverage Gap（程式碼有模式但 rules 未涵蓋）**不在本 skill 範疇**；這類問題應交給對應的 write skill（如 `write-architecture-rules`、`write-tech-stack-rules`）。
 
 ## 適用場景
 

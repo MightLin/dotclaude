@@ -1,11 +1,14 @@
 ---
-name: todo-and-plans
+name: write-todo-and-plans-rules
 description: Write or update project TODO and planning rules. Use when initializing or maintaining `.agents/rules/todo-and-plans.md` for in-progress work, planned items, considering items, known issues, or when deciding whether an issue tracker replaces local planning rules.
-updated: 2026-05-23
-version: 0.1.1
+updated: 2026-05-27
+version: 0.2.0
 ---
 
 ## Changelog
+
+### 0.2.0 - 2026-05-27
+- skill 改名為 `write-todo-and-plans-rules`，讓 skill 名稱描述撰寫/維護 rules 的動作，並保留產出檔名不變。
 
 ### 0.1.1 - 2026-05-23
 - 大小上限段新增超出時使用 rules-overflow skill 的提示。
@@ -13,7 +16,7 @@ version: 0.1.1
 ### 0.1.0 - 2026-05-10
 - 建立初始 skill 規範。
 
-# Skill：撰寫 todo-and-plans.md
+# Skill：撰寫 TODO 與計畫 rules
 
 ## 目的
 讓 Claude 知道哪些功能已規劃但未實作，避免重複設計或與計畫衝突。

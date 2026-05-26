@@ -19,7 +19,7 @@
 **理由**：隨 `stitch-design` 整體刪除。有需要時重新規劃。
 
 ### design-guide 整合 Google design.md — ✅ 評估後不整合（2026-05-21）
-**結論**：維持純 Markdown 格式。Google `design.md` 仍是 alpha、工具鏈對目前規模不必要、定位與我們的「簡潔可讀規則」衝突。改以 yaml code fence 加入關鍵 token（primary / danger / spacing / breakpoints），兼顧人讀與 AI parse，無需外部工具鏈。已更新 `design-guide` skill 範本。
+**結論**：維持純 Markdown 格式。Google `design.md` 仍是 alpha、工具鏈對目前規模不必要、定位與我們的「簡潔可讀規則」衝突。改以 yaml code fence 加入關鍵 token（primary / danger / spacing / breakpoints），兼顧人讀與 AI parse，無需外部工具鏈。已更新 `write-design-guide-rules` skill 範本。
 
 ---
 

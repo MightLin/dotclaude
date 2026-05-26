@@ -1,6 +1,6 @@
 ---
 name: rules-overflow
-description: Internal sub-skill invoked by rules write skills (e.g. `architecture`, `business-logic`) when a planned write would exceed the file's line limit — offer the user a choice between compressing or splitting the file, with Claude-recommended options and reasons. Not intended for direct user invocation.
+description: Internal sub-skill invoked by rules write skills (e.g. `write-architecture-rules`, `write-business-logic-rules`) when a planned write would exceed the file's line limit — offer the user a choice between compressing or splitting the file, with Claude-recommended options and reasons. Not intended for direct user invocation.
 updated: 2026-05-25
 version: 0.1.1
 ---

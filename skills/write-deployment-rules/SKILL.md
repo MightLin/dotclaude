@@ -1,11 +1,14 @@
 ---
-name: deployment
+name: write-deployment-rules
 description: Write or update deployment rules. Use when initializing or maintaining `.agents/rules/deployment.md` for environments, secrets sources, CI/CD triggers, deployment targets, rollback, migrations, mobile store release flows, monitoring, logging, and alerting.
-updated: 2026-05-23
-version: 0.1.1
+updated: 2026-05-27
+version: 0.2.0
 ---
 
 ## Changelog
+
+### 0.2.0 - 2026-05-27
+- skill 改名為 `write-deployment-rules`，讓 skill 名稱描述撰寫/維護 rules 的動作，並保留產出檔名不變。
 
 ### 0.1.1 - 2026-05-23
 - 大小上限段新增超出時使用 rules-overflow skill 的提示。
@@ -13,7 +16,7 @@ version: 0.1.1
 ### 0.1.0 - 2026-05-10
 - 建立初始 skill 規範。
 
-# Skill：撰寫 deployment.md
+# Skill：撰寫部署 rules
 
 ## 目的
 讓 Claude 知道部署目標、環境設定來源、發布流程，避免把開發 / 測試環境的設定寫進程式或 PR。

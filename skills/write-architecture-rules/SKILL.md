@@ -1,14 +1,17 @@
 ---
-name: architecture
-description: Write or update concise project architecture rules. Use when initializing or maintaining `.agents/rules/architecture.md` with system overview, module responsibilities, data flow, and dependency boundary guidance for frontend, backend, fullstack, or mobile projects. For pure tech choices (libraries, versions) use `tech-stack`; for API contract details use `api-conventions`; for visual/component rules use `design-guide`; for domain logic use `business-logic`.
-updated: 2026-05-25
-version: 0.1.2
+name: write-architecture-rules
+description: Write or update concise project architecture rules. Use when initializing or maintaining `.agents/rules/architecture.md` with system overview, module responsibilities, data flow, and dependency boundary guidance for frontend, backend, fullstack, or mobile projects. For pure tech choices (libraries, versions) use `write-tech-stack-rules`; for API contract details use `write-api-conventions-rules`; for visual/component rules use `write-design-guide-rules`; for domain logic use `write-business-logic-rules`.
+updated: 2026-05-27
+version: 0.2.0
 ---
 
 ## Changelog
 
+### 0.2.0 - 2026-05-27
+- skill 改名為 `write-architecture-rules`，讓 skill 名稱描述撰寫/維護 rules 的動作，並保留產出檔名不變。
+
 ### 0.1.2 - 2026-05-25
-- description 加入跨 rules skill 分流提示（tech-stack / api-conventions / design-guide / business-logic 的邊界）
+- description 加入跨 rules skill 分流提示（write-tech-stack-rules / write-api-conventions-rules / write-design-guide-rules / write-business-logic-rules 的邊界）
 
 ### 0.1.1 - 2026-05-23
 - 大小上限段新增超出時使用 rules-overflow skill 的提示。
@@ -16,7 +19,7 @@ version: 0.1.2
 ### 0.1.0 - 2026-05-10
 - 建立初始 skill 規範。
 
-# Skill：撰寫 architecture.md
+# Skill：撰寫架構 rules
 
 ## 目的
 讓 Claude 快速理解系統的組成、各模組的職責邊界、資料流向。

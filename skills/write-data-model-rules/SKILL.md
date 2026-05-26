@@ -1,11 +1,14 @@
 ---
-name: data-model
+name: write-data-model-rules
 description: Write or update data model rules. Use when initializing or maintaining `.agents/rules/data-model.md` for database type, naming conventions, primary keys, timestamps, soft delete, indexes, migrations, sensitive fields, or local mobile database rules.
-updated: 2026-05-23
-version: 0.1.1
+updated: 2026-05-27
+version: 0.2.0
 ---
 
 ## Changelog
+
+### 0.2.0 - 2026-05-27
+- skill 改名為 `write-data-model-rules`，讓 skill 名稱描述撰寫/維護 rules 的動作，並保留產出檔名不變。
 
 ### 0.1.1 - 2026-05-23
 - 大小上限段新增超出時使用 rules-overflow skill 的提示。
@@ -13,7 +16,7 @@ version: 0.1.1
 ### 0.1.0 - 2026-05-10
 - 建立初始 skill 規範。
 
-# Skill：撰寫 data-model.md
+# Skill：撰寫資料模型 rules
 
 ## 目的
 讓 Claude 修改資料層時遵循專案既有慣例（命名、主鍵、軟刪除、migration 流程），避免破壞 schema 一致性。

@@ -1,11 +1,14 @@
 ---
-name: business-logic
+name: write-business-logic-rules
 description: Write or update business/domain logic rules. Use when initializing or maintaining `.agents/rules/business-logic.md` for domain terminology, state flows, business constraints, permissions, workflows, billing, calculations, or other non-obvious product rules.
-updated: 2026-05-23
-version: 0.1.1
+updated: 2026-05-27
+version: 0.2.0
 ---
 
 ## Changelog
+
+### 0.2.0 - 2026-05-27
+- skill 改名為 `write-business-logic-rules`，讓 skill 名稱描述撰寫/維護 rules 的動作，並保留產出檔名不變。
 
 ### 0.1.1 - 2026-05-23
 - 大小上限段新增超出時使用 rules-overflow skill 的提示。
@@ -13,7 +16,7 @@ version: 0.1.1
 ### 0.1.0 - 2026-05-10
 - 建立初始 skill 規範。
 
-# Skill：撰寫 business-logic.md
+# Skill：撰寫業務邏輯 rules
 
 ## 目的
 讓 Claude 理解專案的業務領域知識，避免產出技術上正確但業務上錯誤的程式碼。
