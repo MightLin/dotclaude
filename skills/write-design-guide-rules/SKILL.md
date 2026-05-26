@@ -2,7 +2,7 @@
 name: write-design-guide-rules
 description: Write or update UI design rules. Use when initializing or maintaining `.agents/rules/design-guide.md` for UI libraries, design systems, layout, spacing, responsive behavior, components, forms, accessibility, mobile navigation, gestures, and platform design conventions. Do NOT use when the user wants a one-off design prompt for tools like Stitch / v0 — use `design-brief` instead.
 updated: 2026-05-27
-version: 0.2.0
+version: 0.3.0
 ---
 
 # Skill：撰寫設計規範 rules
@@ -154,7 +154,7 @@ breakpoints: { sm: 640, md: 768, lg: 1024 }
 
 ## Changelog
 
-### 0.2.0 - 2026-05-27
+### 0.3.0 - 2026-05-27
 - skill 改名為 `write-design-guide-rules`，讓 skill 名稱描述撰寫/維護 rules 的動作，並保留產出檔名不變。
 
 ### 0.2.2 - 2026-05-25
