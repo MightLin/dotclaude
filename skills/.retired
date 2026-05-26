@@ -1,0 +1,15 @@
+# 本 repo 曾管理、現已退役（刪除或改名）的 skill 目錄名稱
+# sync-config 只對照此清單清理目標端，使用者自建的 skill 不受影響
+# 格式：每行一個目錄名，# 開頭為註解
+
+# v0.2.0 — 2026-05-27：rule-writing skills 改名為 write-*-rules
+architecture
+tech-stack
+business-logic
+todo-and-plans
+testing-strategy
+deployment
+api-conventions
+design-guide
+data-model
+mcp-conventions

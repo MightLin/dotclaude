@@ -1,8 +1,8 @@
 ---
 name: sync-config
 description: Sync this dotclaude repository into local Claude and Codex configuration locations. Use only inside the dotclaude repo when the user asks to sync, install, update, copy shared skills, update global Claude/Codex config, or replace old dotclaude sync workflows.
-updated: 2026-05-26
-version: 0.4.0
+updated: 2026-05-27
+version: 0.5.0
 ---
 
 # Skill：同步全域設定
@@ -10,6 +10,9 @@ version: 0.4.0
 將此 repo 同步到 Claude / Codex 全域設定位置。repo 是此處全域 skills 的來源，但同步時不刪除目標端其他 skills。
 
 ## Changelog
+
+### 0.5.0 - 2026-05-27
+- 新增退役 skill 偵測：讀取 `skills/.retired` 清單，在 Step 1 列出目標端仍存在的退役目錄，Step 2 一併確認，Step 3 執行刪除。
 
 ### 0.4.0 - 2026-05-26
 - 精簡確認步驟：從 3 次停頓改為最多 1 次（無差異時零停頓）。
@@ -78,19 +81,36 @@ Get-ChildItem "skills" -File -Recurse | ForEach-Object {
 }
 $diffs | Group-Object Status | Select-Object Name, Count
 $diffs | Where-Object Status -ne "same" | Format-Table Label, Status, Target -AutoSize
+
+# 退役 skill 偵測
+$retiredNames = Get-Content "skills\.retired" -Encoding utf8 |
+  Where-Object { $_ -notmatch '^\s*#' -and $_.Trim() -ne '' } |
+  ForEach-Object { $_.Trim() }
+
+$orphans = @()
+foreach ($name in $retiredNames) {
+  $claudePath = "$HOME\.claude\skills\$name"
+  $codexPath  = "$HOME\.codex\skills\$name"
+  if (Test-Path $claudePath) { $orphans += [pscustomobject]@{ Target = $claudePath } }
+  if (Test-Path $codexPath)  { $orphans += [pscustomobject]@{ Target = $codexPath } }
+}
+if ($orphans.Count -gt 0) {
+  Write-Host "`n退役 skill（仍存在於目標端，將在確認後刪除）："
+  $orphans | Format-Table Target -AutoSize
+}
 ```
 
-**若全部 `same`**：直接回報「目標端已是最新，無需同步」，結束。不詢問。
+**若全部 `same` 且無退役 skill**：直接回報「目標端已是最新，無需同步」，結束。不詢問。
 
-**若有差異**：顯示摘要（N 個 missing / changed），進入 Step 2。
+**若有差異或有退役 skill**：顯示摘要，進入 Step 2。
 
 ## Step 2：確認（唯一停頓點）
 
 一句話摘要將同步的內容，詢問使用者是否繼續：
 
-> 將同步 N 個檔案至 `~\.claude` 和 `~\.codex`，繼續嗎？
+> 將同步 N 個檔案並移除 M 個退役 skill 至 `~\.claude` 和 `~\.codex`，繼續嗎？
 
-使用者確認後執行 Step 3；否則中止。
+（若無退役 skill，省略「移除」部分。）使用者確認後執行 Step 3；否則中止。
 
 ## Step 3：同步 Claude + Codex
 
@@ -98,15 +118,21 @@ $diffs | Where-Object Status -ne "same" | Format-Table Label, Status, Target -Au
 # Claude
 Copy-Item "CLAUDE.md" "$HOME\.claude\CLAUDE.md" -Force
 New-Item "$HOME\.claude\skills" -ItemType Directory -Force | Out-Null
-Copy-Item "skills\*" "$HOME\.claude\skills\" -Recurse -Force
+Get-ChildItem "skills" -Exclude ".retired" | Copy-Item -Destination "$HOME\.claude\skills\" -Recurse -Force
 
 # Codex
 Copy-Item "AGENTS.md" "$HOME\.codex\AGENTS.md" -Force
 New-Item "$HOME\.codex\skills" -ItemType Directory -Force | Out-Null
-Copy-Item "skills\*" "$HOME\.codex\skills\" -Recurse -Force
+Get-ChildItem "skills" -Exclude ".retired" | Copy-Item -Destination "$HOME\.codex\skills\" -Recurse -Force
+
+# 清除退役 skill
+foreach ($orphan in $orphans) {
+  Remove-Item $orphan.Target -Recurse -Force
+  Write-Host "已刪除：$($orphan.Target)"
+}
 ```
 
-不清空目標端 skills 目錄，避免刪除其他全域 skills。
+不清空目標端 skills 目錄，避免刪除使用者自建的全域 skills；只移除 `skills/.retired` 中明確列出的退役目錄。
 
 ## Step 4：完成報告
 
@@ -120,3 +146,4 @@ Copy-Item "skills\*" "$HOME\.codex\skills\" -Recurse -Force
 - `.claude/agents/`（repo 內 Stitch 工作流用，尚未定義跨工具同步格式）
 - `.agents/skills/sync-config/`（Codex repo-local skill，只在此 repo 內使用）
 - `.claude/skills/sync-config/`（Claude Code repo-local wrapper，只在此 repo 內使用）
+- `skills/.retired`（退役清單，僅供 sync-config 讀取，不複製至目標端）
