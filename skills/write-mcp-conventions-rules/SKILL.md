@@ -1,11 +1,14 @@
 ---
-name: mcp-conventions
+name: write-mcp-conventions-rules
 description: Write or update project MCP design rules. Use when initializing or maintaining `.agents/rules/mcp-conventions.md` for MCP server design, tool naming, tool description, input schema, Resource/Tool/Prompt selection, side-effect tiering, MCP host integration, or projects using @modelcontextprotocol/sdk / FastMCP.
-updated: 2026-05-23
-version: 0.1.1
+updated: 2026-05-27
+version: 0.2.0
 ---
 
 ## Changelog
+
+### 0.2.0 - 2026-05-27
+- skill 改名為 `write-mcp-conventions-rules`，讓 skill 名稱描述撰寫/維護 rules 的動作，並保留產出檔名不變。
 
 ### 0.1.1 - 2026-05-23
 - 大小上限段新增超出時使用 rules-overflow skill 的提示。
@@ -13,7 +16,7 @@ version: 0.1.1
 ### 0.1.0 - 2026-05-10
 - 建立初始 skill 規範。
 
-# Skill：撰寫 mcp-conventions.md
+# Skill：撰寫 MCP 規範 rules
 
 ## 目的
 讓 agent 修改 MCP server 或 host 整合程式碼時，遵循專案既有設計準則（tool 粒度、description 風格、schema、副作用分級），避免產出 LLM 難用或破壞性的工具介面。

@@ -1,11 +1,14 @@
 ---
-name: tech-stack
+name: write-tech-stack-rules
 description: Write or update technology stack rules. Use when initializing or maintaining `.agents/rules/tech-stack.md` for languages, versions, package managers, frameworks, UI libraries, state management, databases, infrastructure, external services, or banned alternatives.
-updated: 2026-05-23
-version: 0.1.1
+updated: 2026-05-27
+version: 0.2.0
 ---
 
 ## Changelog
+
+### 0.2.0 - 2026-05-27
+- skill 改名為 `write-tech-stack-rules`，讓 skill 名稱描述撰寫/維護 rules 的動作，並保留產出檔名不變。
 
 ### 0.1.1 - 2026-05-23
 - 大小上限段新增超出時使用 rules-overflow skill 的提示。
@@ -13,7 +16,7 @@ version: 0.1.1
 ### 0.1.0 - 2026-05-10
 - 建立初始 skill 規範。
 
-# Skill：撰寫 tech-stack.md
+# Skill：撰寫技術棧 rules
 
 ## 目的
 讓 Claude 知道用什麼技術、版本、慣用套件，避免給出不符合現況的建議。

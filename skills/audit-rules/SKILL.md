@@ -103,7 +103,7 @@ Template Compliance 以**客觀範本與 git 對照**為主，補足 Rule Qualit
 
 ### 5.1 前置（自動執行）
 
-- 並行讀取每個現有 rules 檔對應的 write skill（`skills/{rule-name}/SKILL.md`），提取「大小上限」「必要內容」「禁止放入」三段
+- 並行讀取每個現有 rules 檔對應的 write skill（rule 檔 basename 對應 `skills/write-{basename}-rules/SKILL.md`，例如 `architecture.md` → `skills/write-architecture-rules/SKILL.md`），提取「大小上限」「必要內容」「禁止放入」三段
   - 若某 rules 檔找不到對應的 write skill（自訂 rule 檔），**略過**行數使用率、冗餘片段、可補章節三項，在報告中標示「無範本基準，跳過」
 - 讀取 `skills/init-project/SKILL.md` 取得專案類型 × rule 對照表
 - 依 `init-project` Step 3 線索自動偵測專案類型：
@@ -196,7 +196,7 @@ Rules 檔：{實際讀取的 rules 檔清單}
 
 ### 建議後續
 
-- {依 findings 建議下一步，例如執行 architecture / tech-stack / design-guide skill}
+- {依 findings 建議下一步，例如執行 write-architecture-rules / write-tech-stack-rules / write-design-guide-rules skill}
 （若無，標示「無」）
 
 ### 摘要
@@ -213,5 +213,5 @@ Rules 檔：{實際讀取的 rules 檔清單}
 - Template Compliance finding 必須引用具體行數、章節名或 git commit 數作為客觀依據；不憑語意判斷
 - 缺檔建議只列出缺失並引導至對應 write skill，**不執行建檔**
 - 失效引用檢查為可選項，預設不執行
-- 若建議更新 rules，指向對應 write skill，例如 `architecture`、`tech-stack`、`design-guide`
+- 若建議更新 rules，指向對應 write skill，例如 `write-architecture-rules`、`write-tech-stack-rules`、`write-design-guide-rules`
 - project-local rules 與一般 best practices 衝突時，優先尊重 project-local rules

@@ -10,15 +10,16 @@ repo root
 ├── AGENTS.md                    # Codex 使用的 repo 入口規則
 ├── .mcp.json                    # MCP server 設定
 ├── skills/                      # 要同步到全域的 Claude / Codex skills 來源
-│   ├── architecture/            # architecture.md
-│   ├── tech-stack/              # tech-stack.md
-│   ├── api-conventions/         # api-conventions.md
-│   ├── design-guide/            # design-guide.md
-│   ├── business-logic/          # business-logic.md
-│   ├── data-model/              # data-model.md
-│   ├── testing-strategy/        # testing-strategy.md
-│   ├── deployment/              # deployment.md
-│   ├── todo-and-plans/          # todo-and-plans.md
+│   ├── write-architecture-rules/            # architecture.md
+│   ├── write-tech-stack-rules/              # tech-stack.md
+│   ├── write-api-conventions-rules/         # api-conventions.md
+│   ├── write-design-guide-rules/            # design-guide.md
+│   ├── write-business-logic-rules/          # business-logic.md
+│   ├── write-data-model-rules/              # data-model.md
+│   ├── write-testing-strategy-rules/        # testing-strategy.md
+│   ├── write-deployment-rules/              # deployment.md
+│   ├── write-todo-and-plans-rules/          # todo-and-plans.md
+│   ├── write-mcp-conventions-rules/         # mcp-conventions.md
 │   ├── init-project/            # 專案導入流程
 │   ├── migrate-rules/           # 舊專案 rules 遷移
 │   └── entrypoint-writing/      # 精簡 CLAUDE.md / AGENTS.md
@@ -62,16 +63,16 @@ repo root
 
 | Skill | 對應 rule 檔 | 適用 | 呼叫方式 |
 |---|---|---|---|
-| architecture | architecture.md | 所有類型 | 使用者 |
-| tech-stack | tech-stack.md | 所有類型（含 frontend/backend/mobile 條件分支） | 使用者 |
-| business-logic | business-logic.md | 有領域邏輯的專案 | 使用者 |
-| todo-and-plans | todo-and-plans.md | 未用 issue tracker 的專案 | 使用者 |
-| testing-strategy | testing-strategy.md | 所有類型 | 使用者 |
-| deployment | deployment.md | 所有類型（含手機 store 上架） | 使用者 |
-| api-conventions | api-conventions.md | 後端 / 全端必要；前端 / 手機條件 | 使用者 |
-| design-guide | design-guide.md | 前端 / 全端 / 手機（含 web/mobile 條件分支） | 使用者 |
-| data-model | data-model.md | 後端 / 全端必要；手機有 local DB 才建 | 使用者 |
-| mcp-conventions | mcp-conventions.md | MCP server 設計的專案 | 使用者 |
+| write-architecture-rules | architecture.md | 所有類型 | 使用者 |
+| write-tech-stack-rules | tech-stack.md | 所有類型（含 frontend/backend/mobile 條件分支） | 使用者 |
+| write-business-logic-rules | business-logic.md | 有領域邏輯的專案 | 使用者 |
+| write-todo-and-plans-rules | todo-and-plans.md | 未用 issue tracker 的專案 | 使用者 |
+| write-testing-strategy-rules | testing-strategy.md | 所有類型 | 使用者 |
+| write-deployment-rules | deployment.md | 所有類型（含手機 store 上架） | 使用者 |
+| write-api-conventions-rules | api-conventions.md | 後端 / 全端必要；前端 / 手機條件 | 使用者 |
+| write-design-guide-rules | design-guide.md | 前端 / 全端 / 手機（含 web/mobile 條件分支） | 使用者 |
+| write-data-model-rules | data-model.md | 後端 / 全端必要；手機有 local DB 才建 | 使用者 |
+| write-mcp-conventions-rules | mcp-conventions.md | MCP server 設計的專案 | 使用者 |
 | design-brief | （設計 brief） | 有新 UI 設計需求時；呼叫 AI 設計工具前 | 使用者 |
 | check-rules | （程式碼合規） | 程式碼修改後 / PR 前 | 使用者 |
 | audit-rules | （rules 品質審查） | 定期：release 前、大功能後、新成員 onboarding | 使用者 |

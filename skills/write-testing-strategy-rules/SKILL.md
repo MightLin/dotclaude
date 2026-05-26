@@ -1,11 +1,14 @@
 ---
-name: testing-strategy
+name: write-testing-strategy-rules
 description: Write or update testing strategy rules. Use when initializing or maintaining `.agents/rules/testing-strategy.md` for test frameworks, test pyramid, coverage, CI test execution, mock boundaries, integration tests, E2E tests, mobile UI tests, or visual regression.
-updated: 2026-05-23
-version: 0.1.1
+updated: 2026-05-27
+version: 0.2.0
 ---
 
 ## Changelog
+
+### 0.2.0 - 2026-05-27
+- skill 改名為 `write-testing-strategy-rules`，讓 skill 名稱描述撰寫/維護 rules 的動作，並保留產出檔名不變。
 
 ### 0.1.1 - 2026-05-23
 - 大小上限段新增超出時使用 rules-overflow skill 的提示。
@@ -13,7 +16,7 @@ version: 0.1.1
 ### 0.1.0 - 2026-05-10
 - 建立初始 skill 規範。
 
-# Skill：撰寫 testing-strategy.md
+# Skill：撰寫測試策略 rules
 
 ## 目的
 讓 Claude 知道專案怎麼測試、什麼該測、什麼不該 mock，避免寫出無效測試或破壞 CI。

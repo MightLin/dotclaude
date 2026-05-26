@@ -1,6 +1,6 @@
 ---
 name: design-brief
-description: 在呼叫 AI 設計工具（Stitch、Claude Design、v0）之前先執行，收集 UI 設計需求、判定 mode，產出結構化 brief，比直接下 ad-hoc prompt 能得到明顯更好的設計品質。輸出 tool-agnostic，可接任何 AI 設計工具。若需求是建立或維護 `.agents/rules/design-guide.md`，改用 `design-guide` skill。
+description: 在呼叫 AI 設計工具（Stitch、Claude Design、v0）之前先執行，收集 UI 設計需求、判定 mode，產出結構化 brief，比直接下 ad-hoc prompt 能得到明顯更好的設計品質。輸出 tool-agnostic，可接任何 AI 設計工具。若需求是建立或維護 `.agents/rules/design-guide.md`，改用 `write-design-guide-rules` skill。
 updated: 2026-05-25
 version: 0.3.1
 ---
@@ -18,7 +18,7 @@ version: 0.3.1
 - `greenfield`：完全沒有既有 UI，或明確要求從零建立產品 UI。
 - `feature-extension`：已有網站/app，要依目前風格新增功能、頁面或流程。
 
-若使用者需求是要建立或更新 `.agents/rules/design-guide.md`，請改用 `/design-guide` skill，不在本 skill 處理。
+若使用者需求是要建立或更新 `.agents/rules/design-guide.md`，請改用 `/write-design-guide-rules` skill，不在本 skill 處理。
 
 若需求同時符合多個 mode，選影響最大的，並在確認階段說明理由。
 
@@ -45,7 +45,7 @@ version: 0.3.1
 - **greenfield** — 從零建立全新產品 UI。適用：新 side project、新模組、明確說「全部重做」、沒有既有 design-guide。
 - **feature-extension** — 在現有 app/網站加新頁面或新功能。適用：既有 codebase 有 design-guide 或可觀察的既有頁面，新功能要融入既有視覺。
 
-若使用者實際是要刷新 design-guide 本身，請告知改用 `/design-guide` skill。
+若使用者實際是要刷新 design-guide 本身，請告知改用 `/write-design-guide-rules` skill。
 
 使用者透過按鈕選定 mode 後，再輸出 (a) 的 Mode 判定確認訊息。
 
@@ -255,7 +255,7 @@ Mode：feature-extension
 
 - design-brief 只負責收集與輸出，**不呼叫任何設計工具 MCP**。
 - Mode 判定不確定時**必須用 `AskUserQuestion`** 跳兩選項按鈕，禁止以散文要求使用者用文字補充 mode。
-- 若使用者實際需求是刷新 design-guide 本身，請改用 `/design-guide` skill，不在本 skill 處理。
+- 若使用者實際需求是刷新 design-guide 本身，請改用 `/write-design-guide-rules` skill，不在本 skill 處理。
 - 「資訊足夠性檢查」是對話階段工具，**不可寫進最終 brief.md**。
 - frontmatter 5 欄位皆必填，不可省略；`feature-extension` 多 `extends-design-guide`。
 - AI prompt 段**必須雙語並陳**，英文段需為自包含 fenced code block。
@@ -268,7 +268,7 @@ Mode：feature-extension
 ## Changelog
 
 ### 0.3.1 — 2026-05-25
-- description 補充「呼叫 AI 設計工具前先執行」觸發時機，與 `design-guide` SKIP 子句
+- description 補充「呼叫 AI 設計工具前先執行」觸發時機，與 `write-design-guide-rules` SKIP 子句
 
 ### 0.3.0 — 2026-05-16
 - mode 判定不確定時改用 `AskUserQuestion` 按鈕，禁止使用者手 key
@@ -280,7 +280,7 @@ Mode：feature-extension
 - AI prompt 段改雙語並陳（英文 fenced block + 中文版）
 
 ### 0.2.0 — 2026-05-16
-- 移除 `design-guide-refresh` mode，改由 `/design-guide` skill 自行釐清
+- 移除 `design-guide-refresh` mode，改由 `/write-design-guide-rules` skill 自行釐清
 
 ### 0.1.0 — 2026-05-11
 - 初始版本：design brief 收集、mode 判定、brief 輸出流程

@@ -71,16 +71,16 @@ rules 一律建立在 `.agents/rules/`。依專案類型決定建哪些：
 
 撰寫每個檔案時，view 對應 skill 取得格式與大小上限：
 
-- architecture
-- tech-stack
-- business-logic
-- todo-and-plans
-- testing-strategy
-- deployment
-- api-conventions
-- design-guide
-- data-model
-- mcp-conventions
+- write-architecture-rules
+- write-tech-stack-rules
+- write-business-logic-rules
+- write-todo-and-plans-rules
+- write-testing-strategy-rules
+- write-deployment-rules
+- write-api-conventions-rules
+- write-design-guide-rules
+- write-data-model-rules
+- write-mcp-conventions-rules
 
 ## Step 6：建立入口檔
 
