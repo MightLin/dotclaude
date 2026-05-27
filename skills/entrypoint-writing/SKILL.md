@@ -1,11 +1,14 @@
 ---
 name: entrypoint-writing
 description: Internal sub-skill used by `init-project` and `migrate-rules` to write Claude `CLAUDE.md` / Codex `AGENTS.md` entrypoint files. Use directly only when an entrypoint already exists and needs a standalone rewrite — otherwise route through `init-project` (new projects) or `migrate-rules` (existing projects).
-updated: 2026-05-25
-version: 0.3.1
+updated: 2026-05-28
+version: 0.3.2
 ---
 
 ## Changelog
+
+### 0.3.2 - 2026-05-28
+- 釐清入口檔語意：只有文件索引指向 `.agents/rules/`，核心原則與禁止事項屬入口檔本身。
 
 ### 0.3.1 - 2026-05-25
 - description 改為明示「Internal sub-skill of init-project / migrate-rules」，避免使用者繞過完整流程直接呼叫
@@ -56,6 +59,7 @@ version: 0.3.1
 - 不列尚未建立的檔案
 - 若建了 `mcp-conventions.md`，列入索引
 - Claude / Codex 入口檔內容可幾乎相同，只調整標題與工具名稱
+- 語意必須清楚：`.agents/rules/` 只修飾「文件索引」指向的 rule 檔；「核心原則」與「禁止事項」是入口檔自己的段落，不可寫成「`.agents/rules/` 文件索引、核心原則與禁止事項」
 
 ## 禁止放入入口檔
 - 完整的功能說明或流程描述（屬 architecture.md）

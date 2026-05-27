@@ -1,11 +1,14 @@
 ---
 name: migrate-rules
 description: Migrate existing projects from the old `.claude/rules/` layout to the shared `.agents/rules/` layout, or upgrade an existing entrypoint file (CLAUDE.md / AGENTS.md) to the current `entrypoint-writing` template (e.g. fill in missing core principles). Use when a project already has Claude rules, CLAUDE.md, or old dotclaude output and the user wants Codex compatibility, AGENTS.md creation, low-token migration instead of regenerating project rules, or just bringing an outdated entrypoint up to the current template without redoing init-project.
-updated: 2026-05-22
-version: 0.3.0
+updated: 2026-05-28
+version: 0.3.1
 ---
 
 ## Changelog
+
+### 0.3.1 - 2026-05-28
+- 釐清建立 `AGENTS.md` 時的入口檔語意，避免把核心原則與禁止事項誤寫成 `.agents/rules/` 的內容。
 
 ### 0.3.0 - 2026-05-22
 - 新增 Step 3.5：升級入口檔核心原則到當前 `entrypoint-writing` 範本
@@ -76,7 +79,7 @@ version: 0.3.0
 - 標題可保留專案名稱
 - 將「Claude」字樣改為「Codex」只限工具入口描述，不改業務規則
 - 文件索引指向 `.agents/rules/`
-- 保留核心原則與禁止事項
+- 保留入口檔內的核心原則與禁止事項；不要寫成 `.agents/rules/` 的核心原則或禁止事項
 
 若沒有 `CLAUDE.md`，建立最小 `AGENTS.md`：
 
