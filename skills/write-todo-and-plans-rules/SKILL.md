@@ -2,10 +2,13 @@
 name: write-todo-and-plans-rules
 description: Write or update project TODO and planning rules. Use when initializing or maintaining `.agents/rules/todo-and-plans.md` for in-progress work, planned items, considering items, known issues, or when deciding whether an issue tracker replaces local planning rules.
 updated: 2026-05-27
-version: 0.2.0
+version: 0.3.0
 ---
 
 ## Changelog
+
+### 0.3.0 - 2026-05-27
+- 新增 Source of Truth 原則，明確將大量完成歷史、release history 與長期 backlog 導向 tracker/changelog/docs。
 
 ### 0.2.0 - 2026-05-27
 - skill 改名為 `write-todo-and-plans-rules`，讓 skill 名稱描述撰寫/維護 rules 的動作，並保留產出檔名不變。
@@ -20,6 +23,12 @@ version: 0.2.0
 
 ## 目的
 讓 Claude 知道哪些功能已規劃但未實作，避免重複設計或與計畫衝突。
+
+## Source of Truth 原則
+
+- rules 只保存短期 local context：In Progress、近期 Planned、少量 Known Issues。
+- 大量已完成歷史、release history、PR 記錄或長期 backlog 應遷移到 issue tracker、`CHANGELOG.md`、`docs/history.md` 或 release notes。
+- 若專案已有 GitHub Issues / Linear / Jira / Trello / Notion 作為 tracker，本檔應改為 pointer 或不建立。
 
 ## 適用範圍
 - 必要：所有有持續開發的專案

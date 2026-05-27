@@ -2,13 +2,19 @@
 name: write-design-guide-rules
 description: Write or update UI design rules. Use when initializing or maintaining `.agents/rules/design-guide.md` for UI libraries, design systems, layout, spacing, responsive behavior, components, forms, accessibility, mobile navigation, gestures, and platform design conventions. Do NOT use when the user wants a one-off design prompt for tools like Stitch / v0 — use `design-brief` instead.
 updated: 2026-05-27
-version: 0.3.0
+version: 0.4.0
 ---
 
 # Skill：撰寫設計規範 rules
 
 ## 目的
 讓 Claude 產出的 UI 程式碼符合專案既有的視覺規範與元件使用慣例。
+
+## Source of Truth 原則
+
+- rules 保存 UI 套件、核心 token 摘要、元件慣例、互動狀態、黑名單與平台限制。
+- 完整色票表、頁面結構樹、截圖、prototype、component API 或設計稿細節應指向 `.agents/design/<slug>/`、tokens、prototype 或 source。
+- 開發中可暫時保留較厚視覺摘要；設計來源穩定後，design-guide 應收斂為摘要 + 設計來源 pointer。
 
 ## 流程
 
@@ -153,6 +159,9 @@ breakpoints: { sm: 640, md: 768, lg: 1024 }
 ```
 
 ## Changelog
+
+### 0.4.0 - 2026-05-27
+- 新增 Source of Truth 原則，讓 design-guide 可收斂為核心摘要並指向 `.agents/design/<slug>/`、tokens、prototype 或 source。
 
 ### 0.3.0 - 2026-05-27
 - skill 改名為 `write-design-guide-rules`，讓 skill 名稱描述撰寫/維護 rules 的動作，並保留產出檔名不變。

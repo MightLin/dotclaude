@@ -2,10 +2,13 @@
 name: write-tech-stack-rules
 description: Write or update technology stack rules. Use when initializing or maintaining `.agents/rules/tech-stack.md` for languages, versions, package managers, frameworks, UI libraries, state management, databases, infrastructure, external services, or banned alternatives.
 updated: 2026-05-27
-version: 0.2.0
+version: 0.3.0
 ---
 
 ## Changelog
+
+### 0.3.0 - 2026-05-27
+- 新增 Source of Truth 原則，讓 tech-stack rules 優先保存技術決策與禁用替代方案。
 
 ### 0.2.0 - 2026-05-27
 - skill 改名為 `write-tech-stack-rules`，讓 skill 名稱描述撰寫/維護 rules 的動作，並保留產出檔名不變。
@@ -20,6 +23,12 @@ version: 0.2.0
 
 ## 目的
 讓 Claude 知道用什麼技術、版本、慣用套件，避免給出不符合現況的建議。
+
+## Source of Truth 原則
+
+- rules 保存技術決策、禁止替代方案、跨層選型與不容易從 config 看出的原因。
+- 完整 dependency 清單、patch version、lockfile 內容或套件 API 用法應指向 package/config/lockfile，不複製進 rule。
+- 開發中專案可暫存過渡選型；穩定後只保留主要 runtime/framework 與禁用項。
 
 ## 適用範圍
 - 必要：所有專案類型

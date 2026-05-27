@@ -2,10 +2,13 @@
 name: write-data-model-rules
 description: Write or update data model rules. Use when initializing or maintaining `.agents/rules/data-model.md` for database type, naming conventions, primary keys, timestamps, soft delete, indexes, migrations, sensitive fields, or local mobile database rules.
 updated: 2026-05-27
-version: 0.2.0
+version: 0.3.0
 ---
 
 ## Changelog
+
+### 0.3.0 - 2026-05-27
+- 新增 Source of Truth 原則，要求完整 schema、model shape、索引與 migration 內容指向 source。
 
 ### 0.2.0 - 2026-05-27
 - skill 改名為 `write-data-model-rules`，讓 skill 名稱描述撰寫/維護 rules 的動作，並保留產出檔名不變。
@@ -20,6 +23,12 @@ version: 0.2.0
 
 ## 目的
 讓 Claude 修改資料層時遵循專案既有慣例（命名、主鍵、軟刪除、migration 流程），避免破壞 schema 一致性。
+
+## Source of Truth 原則
+
+- rules 只保存資料模型決策、命名慣例、權限/ownership、migration 策略與敏感資料處理原則。
+- 完整 schema、集合欄位清單、model class shape、索引 JSON 或 migration 內容應指向 source，不複製進 rule。
+- 開發中專案可暫存資料 shape 摘要；source 穩定後應收斂為 source pointer。
 
 ## 適用範圍
 - 必要：backend / fullstack

@@ -2,10 +2,13 @@
 name: write-api-conventions-rules
 description: Write or update project API convention rules for server or client code. Use when initializing or maintaining `.agents/rules/api-conventions.md`, defining REST/GraphQL/RPC naming, request/response, error, auth, pagination, retry, timeout, token, or API consumption conventions.
 updated: 2026-05-27
-version: 0.2.0
+version: 0.3.0
 ---
 
 ## Changelog
+
+### 0.3.0 - 2026-05-27
+- 新增 Source of Truth 原則，避免將完整 API 清單、payload 或 DTO/schema 複製進 rules。
 
 ### 0.2.0 - 2026-05-27
 - skill 改名為 `write-api-conventions-rules`，讓 skill 名稱描述撰寫/維護 rules 的動作，並保留產出檔名不變。
@@ -20,6 +23,12 @@ version: 0.2.0
 
 ## 目的
 讓 Claude 產出的 API 程式碼（提供端或消費端）符合專案規範。
+
+## Source of Truth 原則
+
+- rules 只保存 source 不容易快速推論的決策、邊界、禁忌與原因。
+- 完整 endpoint / callable 清單、完整 payload、完整 DTO/schema 應指向 routes、OpenAPI、SDK 或程式碼，不複製進 rule。
+- 開發中專案可暫時保留較厚契約摘要，但需標示 source 尚未穩定或未來可收斂。
 
 ## 適用範圍
 - 必要：backend / fullstack（提供 API），frontend / mobile（消費 API 且有自家規範）

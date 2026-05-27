@@ -2,10 +2,13 @@
 name: write-testing-strategy-rules
 description: Write or update testing strategy rules. Use when initializing or maintaining `.agents/rules/testing-strategy.md` for test frameworks, test pyramid, coverage, CI test execution, mock boundaries, integration tests, E2E tests, mobile UI tests, or visual regression.
 updated: 2026-05-27
-version: 0.2.0
+version: 0.3.0
 ---
 
 ## Changelog
+
+### 0.3.0 - 2026-05-27
+- 新增 Source of Truth 原則，避免把完整測試案例、fixture 或測試檔列表寫入 rules。
 
 ### 0.2.0 - 2026-05-27
 - skill 改名為 `write-testing-strategy-rules`，讓 skill 名稱描述撰寫/維護 rules 的動作，並保留產出檔名不變。
@@ -20,6 +23,12 @@ version: 0.2.0
 
 ## 目的
 讓 Claude 知道專案怎麼測試、什麼該測、什麼不該 mock，避免寫出無效測試或破壞 CI。
+
+## Source of Truth 原則
+
+- rules 保存測試層級、mock 邊界、CI 執行策略、coverage 目標與「不要測什麼」。
+- 完整測試案例清單、fixture 內容、測試檔列表或框架教學應指向 source / docs，不複製進 rule。
+- 開發中專案可暫時記錄測試現況；測試架構穩定後應收斂成策略與 source pointer。
 
 ## 適用範圍
 - 必要：所有專案類型

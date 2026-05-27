@@ -2,10 +2,13 @@
 name: write-mcp-conventions-rules
 description: Write or update project MCP design rules. Use when initializing or maintaining `.agents/rules/mcp-conventions.md` for MCP server design, tool naming, tool description, input schema, Resource/Tool/Prompt selection, side-effect tiering, MCP host integration, or projects using @modelcontextprotocol/sdk / FastMCP.
 updated: 2026-05-27
-version: 0.2.0
+version: 0.3.0
 ---
 
 ## Changelog
+
+### 0.3.0 - 2026-05-27
+- 新增 Source of Truth 原則，避免將完整 tool 清單、input schema 或 SDK boilerplate 複製進 rules。
 
 ### 0.2.0 - 2026-05-27
 - skill 改名為 `write-mcp-conventions-rules`，讓 skill 名稱描述撰寫/維護 rules 的動作，並保留產出檔名不變。
@@ -20,6 +23,12 @@ version: 0.2.0
 
 ## 目的
 讓 agent 修改 MCP server 或 host 整合程式碼時，遵循專案既有設計準則（tool 粒度、description 風格、schema、副作用分級），避免產出 LLM 難用或破壞性的工具介面。
+
+## Source of Truth 原則
+
+- rules 保存 MCP primitive 選擇、tool 粒度、description 風格、schema 設計原則、副作用分級與授權邊界。
+- 完整 tool 清單、完整 input schema、SDK boilerplate 或 server registry 應指向 source，不複製進 rule。
+- 開發中 MCP 專案可暫存介面摘要；server registry 穩定後應收斂為 source pointer。
 
 ## 適用範圍
 - 必要：build / 維護 MCP server 的專案

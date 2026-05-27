@@ -1,11 +1,14 @@
 ---
 name: rules-overflow
-description: Internal sub-skill invoked by rules write skills (e.g. `write-architecture-rules`, `write-business-logic-rules`) when a planned write would exceed the file's line limit — offer the user a choice between compressing or splitting the file, with Claude-recommended options and reasons. Not intended for direct user invocation.
-updated: 2026-05-25
-version: 0.1.1
+description: Internal sub-skill invoked by rules write skills when a planned `.agents/rules/` write would exceed the file's line limit. Only handles rule compression or rule splitting; if content should move back to source code, docs, a runbook, tracker, or changelog, redirect to `maintain-rules`. Not intended for direct user invocation.
+updated: 2026-05-27
+version: 0.2.0
 ---
 
 ## Changelog
+
+### 0.2.0 - 2026-05-27
+- 明確區分純行數超限與 source/docs/tracker readiness；後者轉交 `maintain-rules`。
 
 ### 0.1.1 - 2026-05-25
 - description 改為明示「Internal sub-skill，不適合使用者直接呼叫」
@@ -20,6 +23,8 @@ version: 0.1.1
 在寫入或更新任何 `.agents/rules/` 檔案**之前**，計算寫入後的預計行數。
 若超過該 rules skill 規定的上限，停止寫入並進入本流程。
 
+本 skill 只處理「內容仍屬 rules，但太長」的情況。若內容看起來應該回到 source code、正式 docs、runbook、issue tracker 或 changelog，停止本流程並改用 `maintain-rules` 承接 Source-of-Truth Readiness / Rule Weight finding。
+
 ## Step 1：先查專屬建議
 
 依目標 rules 檔判斷是否有領域特定的拆檔規則：
@@ -28,11 +33,13 @@ version: 0.1.1
 |---|---|
 | `business-logic.md` | 依子領域拆成多個檔 |
 | `design-guide.md` | 超出細節拆至 `.agents/design/<slug>/` |
-| `todo-and-plans.md` | backlog 過多，建議遷移至 issue tracker |
+| `todo-and-plans.md` | backlog 過多時先改交 `maintain-rules` 判斷 tracker / changelog / docs history；若仍屬 local planning 才壓縮或分離 |
 
 若符合上表，先呈現專屬建議並附理由，詢問使用者是否採用。
 例：「此檔超出上限通常代表領域過大，建議依子領域拆出 payment.md、subscription.md 等獨立檔。」
 使用者拒絕或目標檔不在上表，進入 Step 2。
+
+若專屬建議涉及 source/docs/tracker 遷移，不在本 skill 內執行；輸出「請改用 maintain-rules」並停止。
 
 ## Step 2：通用二選一（壓縮 / 分離）
 
@@ -83,5 +90,6 @@ version: 0.1.1
 ## 禁止行為
 
 - 不在使用者確認前自動執行壓縮或分離
+- 不處理 source/docs/tracker/changelog 遷移；這類問題交給 `maintain-rules`
 - 不分離被多個區塊共同引用的核心定義
 - 不以壓縮為由刪除安全、合規、或邊界相關規則

@@ -2,10 +2,13 @@
 name: write-architecture-rules
 description: Write or update concise project architecture rules. Use when initializing or maintaining `.agents/rules/architecture.md` with system overview, module responsibilities, data flow, and dependency boundary guidance for frontend, backend, fullstack, or mobile projects. For pure tech choices (libraries, versions) use `write-tech-stack-rules`; for API contract details use `write-api-conventions-rules`; for visual/component rules use `write-design-guide-rules`; for domain logic use `write-business-logic-rules`.
 updated: 2026-05-27
-version: 0.2.0
+version: 0.3.0
 ---
 
 ## Changelog
+
+### 0.3.0 - 2026-05-27
+- 新增 Source of Truth 原則，讓架構 rules 優先保存職責、資料流與邊界，而非完整檔案清單。
 
 ### 0.2.0 - 2026-05-27
 - skill 改名為 `write-architecture-rules`，讓 skill 名稱描述撰寫/維護 rules 的動作，並保留產出檔名不變。
@@ -23,6 +26,12 @@ version: 0.2.0
 
 ## 目的
 讓 Claude 快速理解系統的組成、各模組的職責邊界、資料流向。
+
+## Source of Truth 原則
+
+- rules 只保存 source 不容易快速推論的系統目的、模組職責、資料流與依賴邊界。
+- 完整目錄樹、完整檔案清單、已集中在 source 的常數表或 registry，應改寫成摘要 + source pointer。
+- 開發中專案可暫時記錄較厚的過渡架構，但需標示未來可收斂條件。
 
 ## 適用範圍
 - 必要：所有專案類型（frontend / backend / fullstack / mobile）

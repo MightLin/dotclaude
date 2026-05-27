@@ -1,11 +1,14 @@
 ---
 name: maintain-rules
-description: Orchestrate project rules maintenance after audit-rules findings or after feature work. Use as the primary user-facing entry point to apply audit fixes, move misplaced rules, fill coverage gaps, refresh stale rules, or decide which `.agents/rules/` files should be updated from a feature description or git diff. Reads the relevant write-*-rules skills as rule-file specs before editing.
+description: Orchestrate project rules maintenance after audit-rules findings or after feature work. Use as the primary user-facing entry point to apply audit fixes, move misplaced rules, fill coverage gaps, refresh stale rules, reduce overweight rules into source/docs/tracker pointers, or decide which `.agents/rules/` files should be updated from a feature description or git diff. Reads the relevant write-*-rules skills as rule-file specs before editing.
 updated: 2026-05-27
-version: 0.1.0
+version: 0.2.0
 ---
 
 ## Changelog
+
+### 0.2.0 - 2026-05-27
+- 承接 audit-rules 的 Source-of-Truth Readiness / Rule Weight findings，支援收斂 rule、保留暫時知識與輸出 source refactor plan 需求。
 
 ### 0.1.0 - 2026-05-27
 - 建立 rules 維護總管 skill，承接 audit 報告與新功能後的 rules 更新。
@@ -22,6 +25,7 @@ version: 0.1.0
 
 - 跑完 `audit-rules` 後，想直接套用修補
 - audit 找到 Coverage Gap、放錯檔案、失效引用、Rule Quality 或 Template Compliance 問題
+- audit 找到 Source-of-Truth Readiness / Rule Weight 問題，想把過肥 rule 收斂為 source/docs/tracker pointer
 - 新功能完成後，不確定應更新哪些 `.agents/rules/`
 - rules 可能因近期程式碼變更而過時，需要重新比對
 
@@ -49,6 +53,11 @@ version: 0.1.0
 | Template Compliance — 冗餘片段且應放到其他 rule | 語意搬移到目標 rule，再移除來源 |
 | Coverage Gap | 依目標 rule 的 `write-*-rules` 規格補入正確檔案 |
 | Freshness | 比對近期程式碼變更後決定是否刷新對應 rule |
+| Source pointer candidate | 將 rule 收斂為摘要 + source/docs pointer |
+| Missing source of truth | 保留 rule，輸出「需要 source refactor plan」 |
+| Temporary rule knowledge | 保留 rule，可加暫時知識與未來收斂條件 |
+| Backlog/history overweight | 建議遷移 tracker / changelog / docs history |
+| Overflow only | 轉入 `rules-overflow` 流程 |
 | 行數超限 | 轉入 `rules-overflow` 流程 |
 
 ### 語意搬移規則
@@ -62,6 +71,20 @@ version: 0.1.0
 5. 確認目標 rule 已保存語意後，才移除來源段落。
 
 只有原文已精準、簡短、完全符合目標 rule 寫法時，才可近似原文搬移；仍須通過目標 `write-*-rules` 檢查。
+
+### Rule Weight 處理規則
+
+處理 Source-of-Truth Readiness / Rule Weight findings 時，必須保留 audit 報告中的 Evidence 與 Confidence，不可自行升級為確定結論。
+
+| 類型 | 處理方式 |
+|---|---|
+| Source pointer candidate | 讀取 source/docs 確認 path 存在且內容集中；把 rule 的完整表格 / 清單收斂為 1–3 行摘要 + source pointer |
+| Missing source of truth | 不改 source；保留 rule 內容，輸出「需要 source refactor plan」與可能的候選 source 區域 |
+| Temporary rule knowledge | 保留內容；必要時標記「暫時知識」，並補一句未來收斂條件 |
+| Backlog/history overweight | 若偵測到 tracker evidence，建議遷移 tracker；否則建議遷移 `CHANGELOG.md` / `docs/history.md` / release notes |
+| Overflow only | 不做 source pointer 收斂，轉 `rules-overflow` 做壓縮或分離 |
+
+若 source pointer candidate 的 source 已不存在、與 rule 有 drift，或分散在多個檔案，降級為 Missing source of truth。
 
 ## Step 2B：新功能更新模式
 
@@ -90,6 +113,8 @@ version: 0.1.0
 - 目標 rule 檔
 - 來源 evidence（audit finding、檔案路徑、diff 片段或使用者描述）
 - 更新類型（新增、替換、語意搬移、刪除、補章節、建立缺檔）
+- Rule Weight 類型（若有）：source pointer candidate / missing source of truth / temporary rule knowledge / backlog/history overweight / overflow only
+- audit confidence 與需要保留的 evidence
 - 會讀取的 `write-*-rules` 規格
 - 可能的 overflow 風險
 
@@ -105,6 +130,7 @@ version: 0.1.0
 4. 計算寫入後行數；若超過上限，使用 `rules-overflow`。
 5. 若 front matter 有 `updated` 欄位，更新為今天日期（`YYYY-MM-DD`）。
 6. 對跨檔搬移，先寫入或合併目標，再刪除來源。
+7. 對 Rule Weight 收斂，先確認 source/docs/tracker pointer 可讀；不可把 rule 刪成只有不存在的連結。
 
 ## Step 5：驗證與輸出
 
@@ -122,6 +148,9 @@ version: 0.1.0
 略過：
 - {略過原因}
 
+需要 source refactor plan：
+- {rule finding 與原因}
+
 建議驗證：
 - {建議執行 check-rules / audit-rules 的範圍}
 ```
@@ -130,7 +159,9 @@ version: 0.1.0
 
 - 不整份重寫 rules；只做最小必要段落新增、替換、搬移或刪除
 - 不直接修改程式碼；只維護 `.agents/rules/`
+- 不設計或執行 source refactor；只輸出需要 refactor plan 的 finding
 - 不把 `write-*-rules` 合併進本 skill；它們永遠是目標檔規格來源
 - 不把 audit 報告中的文字盲目 copy 到目標檔
 - 不在目標 rule 保存語意前刪除來源段落
+- 不把 rule 收斂成不存在、不可讀或無法代表實際行為的 source pointer
 - project-local rules 與一般 best practices 衝突時，優先尊重 project-local rules
