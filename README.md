@@ -20,6 +20,7 @@ repo root
 │   ├── write-deployment-rules/              # deployment.md
 │   ├── write-todo-and-plans-rules/          # todo-and-plans.md
 │   ├── write-mcp-conventions-rules/         # mcp-conventions.md
+│   ├── maintain-rules/          # rules 維護總管
 │   ├── init-project/            # 專案導入流程
 │   ├── migrate-rules/           # 舊專案 rules 遷移
 │   └── entrypoint-writing/      # 精簡 CLAUDE.md / AGENTS.md
@@ -37,6 +38,7 @@ repo root
 | `init-project` skill | 首次導入新專案，建立 `.agents/rules/` 與入口檔 |
 | `sync-config` skill | **Codex 專用**：手動同步 repo 到 `~/.codex/skills/`（Claude Code plugin 使用者不需要） |
 | `migrate-rules` skill | 舊專案從 `.claude/rules/` 遷移到 `.agents/rules/` |
+| `maintain-rules` skill | `audit-rules` 後承接修補，或新功能後自動判斷需更新的 rules |
 
 過去的 `/understand`、`/new-feature` 已內化為入口檔的核心原則，每 session 自動生效，不再需要手動觸發。
 
@@ -63,20 +65,21 @@ repo root
 
 | Skill | 對應 rule 檔 | 適用 | 呼叫方式 |
 |---|---|---|---|
-| write-architecture-rules | architecture.md | 所有類型 | 使用者 |
-| write-tech-stack-rules | tech-stack.md | 所有類型（含 frontend/backend/mobile 條件分支） | 使用者 |
-| write-business-logic-rules | business-logic.md | 有領域邏輯的專案 | 使用者 |
-| write-todo-and-plans-rules | todo-and-plans.md | 未用 issue tracker 的專案 | 使用者 |
-| write-testing-strategy-rules | testing-strategy.md | 所有類型 | 使用者 |
-| write-deployment-rules | deployment.md | 所有類型（含手機 store 上架） | 使用者 |
-| write-api-conventions-rules | api-conventions.md | 後端 / 全端必要；前端 / 手機條件 | 使用者 |
-| write-design-guide-rules | design-guide.md | 前端 / 全端 / 手機（含 web/mobile 條件分支） | 使用者 |
-| write-data-model-rules | data-model.md | 後端 / 全端必要；手機有 local DB 才建 | 使用者 |
-| write-mcp-conventions-rules | mcp-conventions.md | MCP server 設計的專案 | 使用者 |
+| write-architecture-rules | architecture.md | 所有類型 | 進階 / 內部 |
+| write-tech-stack-rules | tech-stack.md | 所有類型（含 frontend/backend/mobile 條件分支） | 進階 / 內部 |
+| write-business-logic-rules | business-logic.md | 有領域邏輯的專案 | 進階 / 內部 |
+| write-todo-and-plans-rules | todo-and-plans.md | 未用 issue tracker 的專案 | 進階 / 內部 |
+| write-testing-strategy-rules | testing-strategy.md | 所有類型 | 進階 / 內部 |
+| write-deployment-rules | deployment.md | 所有類型（含手機 store 上架） | 進階 / 內部 |
+| write-api-conventions-rules | api-conventions.md | 後端 / 全端必要；前端 / 手機條件 | 進階 / 內部 |
+| write-design-guide-rules | design-guide.md | 前端 / 全端 / 手機（含 web/mobile 條件分支） | 進階 / 內部 |
+| write-data-model-rules | data-model.md | 後端 / 全端必要；手機有 local DB 才建 | 進階 / 內部 |
+| write-mcp-conventions-rules | mcp-conventions.md | MCP server 設計的專案 | 進階 / 內部 |
 | design-brief | （設計 brief） | 有新 UI 設計需求時；呼叫 AI 設計工具前 | 使用者 |
 | check-rules | （程式碼合規） | 程式碼修改後 / PR 前 | 使用者 |
 | audit-rules | （rules 品質審查） | 定期：release 前、大功能後、新成員 onboarding | 使用者 |
-| update-rules | （rules 修補） | 跑完 `audit-rules` 後，或已有 audit findings 要套用時 | 使用者 |
+| maintain-rules | （rules 維護總管） | 跑完 `audit-rules` 後套用修補，或新功能後自動判斷要更新哪些 rules | 使用者 |
+| update-rules | （低階 rules 微修） | 明確 audit findings 的手術式小修；一般情境優先用 `maintain-rules` | 進階 / 內部 |
 | init-project | （導入流程） | 新專案首次建立 `.agents/rules/` 與入口檔 | 使用者 |
 | migrate-rules | （遷移流程） | 已用舊版 `.claude/rules/` 的專案 | 使用者 |
 | sync-config | （同步流程） | **Codex 專用**，手動同步 repo 到全域設定；Claude Code plugin 使用者不需要 | 使用者 |
@@ -114,3 +117,4 @@ repo root
 2. 直接說「使用 `dotclaude:init-project` skill 初始化這個專案」
 3. 專案知識檔統一放在 `.agents/rules/`，由 `CLAUDE.md` 與 `AGENTS.md` 指向
 4. 已用舊版 `.claude/rules/` 的專案，使用 `dotclaude:migrate-rules` skill 遷移，不需重跑 init
+5. 定期或大功能後先用 `audit-rules` 診斷，再用 `maintain-rules` 承接修補；單純程式碼合規檢查用 `check-rules`

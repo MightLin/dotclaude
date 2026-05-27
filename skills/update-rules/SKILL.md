@@ -1,11 +1,14 @@
 ---
 name: update-rules
-description: Apply targeted fixes to existing `.agents/rules/` files based on audit-rules findings. Use after running `audit-rules`, or when given existing audit findings to apply, to resolve Rule Quality issues (ambiguous, unverifiable, overlapping, or conflicting rules) and Template Compliance violations — without rewriting entire rule files. Coverage Gaps are out of scope; this skill redirects those to the appropriate write skill.
-updated: 2026-05-25
-version: 0.1.2
+description: Low-level surgical repair workflow for existing `.agents/rules/` files. Primarily used by `maintain-rules` or advanced users with explicit audit-rules findings to fix Rule Quality issues and small Template Compliance violations without rewriting whole files. General audit follow-up, Coverage Gaps, cross-file moves, and feature-driven rules updates should use `maintain-rules`.
+updated: 2026-05-27
+version: 0.2.0
 ---
 
 ## Changelog
+
+### 0.2.0 - 2026-05-27
+- 定位降級為低階手術式修補流程；一般 audit 後修補改由 `maintain-rules` 承接。
 
 ### 0.1.2 - 2026-05-25
 - description 補充「已有 audit findings 直接貼上」為合法觸發場景
@@ -18,19 +21,22 @@ version: 0.1.2
 ### 0.1.0 - 2026-05-23
 - 建立初始 skill 規範。
 
-# Skill：update-rules — 針對 audit-rules 報告的手術式修補
+# Skill：update-rules — 低階手術式 rules 修補
 
 ## 目的
 
-承接 `audit-rules` 產出的報告，對 `.agents/rules/` 中的 Rule Quality 問題與 Template Compliance 違規執行逐一確認的手術式修補，避免整份 rules 重寫帶來的資訊流失。
+承接明確的 `audit-rules` findings，對 `.agents/rules/` 中的 Rule Quality 問題與小型 Template Compliance 違規執行逐一確認的手術式修補，避免整份 rules 重寫帶來的資訊流失。
 
-Coverage Gap（程式碼有模式但 rules 未涵蓋）**不在本 skill 範疇**；這類問題應交給對應的 write skill（如 `write-architecture-rules`、`write-tech-stack-rules`）。
+一般 audit 後修補請優先使用 `maintain-rules`。本 skill 是低階流程，主要供 `maintain-rules` 參考，或進階使用者在已明確知道要修哪個 finding 時直接使用。
+
+Coverage Gap（程式碼有模式但 rules 未涵蓋）、跨檔搬移、新功能後自動判斷 rules、缺檔建立與新鮮度刷新**不在本 skill 範疇**；這類問題交給 `maintain-rules`。
 
 ## 適用場景
 
-- 剛跑完 `audit-rules`，想立刻修補 findings
+- 剛跑完 `audit-rules`，且 findings 只包含小範圍 Rule Quality / Template Compliance 微修
 - 已有舊版 audit 報告，想補做修補工作
 - 不需要整份重寫，只要針對具體問題做最小範圍修正
+- 一般情境請優先使用 `maintain-rules`
 
 ## Step 1：取得 audit-rules 報告
 
@@ -54,10 +60,10 @@ Coverage Gap（程式碼有模式但 rules 未涵蓋）**不在本 skill 範疇*
 
 | 類型 | 本 skill 的處理方式 |
 |---|---|
-| **Coverage Gap** | 轉介：提示執行對應 write skill，本 skill 不處理 |
+| **Coverage Gap** | 轉介：提示執行 `maintain-rules`，本 skill 不處理 |
 | **Rule Quality**（模糊 / 不可驗證 / 重疊 / 衝突） | ✅ 主要處理對象 |
 | **Template Compliance — 行數超限**（🔴 >100%） | 轉介：提示執行 `rules-overflow` skill |
-| **Template Compliance — 新鮮度**（🟠/🔴） | 半轉介：提示使用者手動更新 rules 內容，或執行對應 write skill |
+| **Template Compliance — 新鮮度**（🟠/🔴） | 轉介：提示執行 `maintain-rules` 比對最新程式碼 |
 | **Template Compliance — 其他**（冗餘片段 / 可補章節 / 失效引用） | ✅ 處理 |
 
 整理後輸出本次的工作清單：
@@ -71,9 +77,9 @@ Coverage Gap（程式碼有模式但 rules 未涵蓋）**不在本 skill 範疇*
 ...
 
 轉介（{m} 個，不處理）：
-- [Gap] {找到的 Coverage Gap 標題}  → 建議執行 `{write-skill}` skill
+- [Gap] {找到的 Coverage Gap 標題}  → 建議執行 `maintain-rules`
 - [Overflow] `.agents/rules/{file}.md` 行數超限 → 建議執行 `rules-overflow` skill
-- [Freshness] `.agents/rules/{file}.md` 新鮮度 {🟠/🔴} → 需手動更新或執行 `{write-skill}` skill
+- [Freshness] `.agents/rules/{file}.md` 新鮮度 {🟠/🔴} → 建議執行 `maintain-rules`
 ```
 
 詢問使用者確認後才進入 Step 3。若使用者要跳過某些 finding，標記為「略過」並從工作清單移除。
@@ -113,7 +119,7 @@ Coverage Gap（程式碼有模式但 rules 未涵蓋）**不在本 skill 範疇*
 
 此 finding 需比對最新程式碼才能確認修補範圍，超出本 skill 的手術式修補能力。
 建議：
-  a. 執行 `{對應 write-skill}` skill 重新產生此 rules 檔的相關段落
+  a. 執行 `maintain-rules` 重新比對最新程式碼並讀取對應 write skill 規格
   b. 或自行提供更新後的規則文字，本 skill 協助套用
 
 選擇 a / b / 跳過？
@@ -152,9 +158,9 @@ Coverage Gap（程式碼有模式但 rules 未涵蓋）**不在本 skill 範疇*
 略過：{k} 個（使用者選擇略過）
 
 轉介（未在本 skill 處理）：
-- Coverage Gap ×{gap_n} → 建議執行對應 write skill（見 audit-rules 報告「建議後續」）
+- Coverage Gap ×{gap_n} → 建議執行 `maintain-rules`
 - 行數超限 ×{overflow_n} → 建議執行 `rules-overflow` skill
-- 新鮮度 ×{freshness_n} → 建議執行對應 write skill 或手動更新
+- 新鮮度 ×{freshness_n} → 建議執行 `maintain-rules`
 ```
 
 若所有 finding 均被略過或轉介，摘要仍需列出轉介清單，不可只說「無修改」。
@@ -164,7 +170,7 @@ Coverage Gap（程式碼有模式但 rules 未涵蓋）**不在本 skill 範疇*
 - 不在使用者逐一確認前修改任何 rules 檔
 - 不刪除整個 rules 檔
 - 不整份重寫 rules 檔；每次修改只動 finding 相關段落
-- 不處理 Coverage Gap（交給 write skills）
+- 不處理 Coverage Gap、跨檔搬移、缺檔建立或新功能 rules 判斷（交給 `maintain-rules`）
 - 不自動執行 `rules-overflow`；只提示轉介
 - 修改 front matter 只更新 `updated` 欄位，不動其他欄位
 - 不修改 `.agents/rules/` 以外的檔案

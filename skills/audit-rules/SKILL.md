@@ -1,11 +1,14 @@
 ---
 name: audit-rules
-description: Audit `.agents/rules/` for coverage gaps, rule quality issues, and template compliance. Use periodically — before a release, after significant feature work, or when onboarding a new team member — or whenever rules may be stale, incomplete, redundant, or violating write-skill specs. Suggestions only — never modifies rules. To check whether code violates current rules, use `check-rules` instead.
-updated: 2026-05-25
-version: 0.3.1
+description: Audit `.agents/rules/` for coverage gaps, rule quality issues, and template compliance. Use periodically — before a release, after significant feature work, or when onboarding a new team member — or whenever rules may be stale, incomplete, redundant, or violating write-skill specs. Suggestions only — never modifies rules; use `maintain-rules` to apply findings. To check whether code violates current rules, use `check-rules` instead.
+updated: 2026-05-27
+version: 0.4.0
 ---
 
 ## Changelog
+
+### 0.4.0 - 2026-05-27
+- 建議後續改為優先導向 `maintain-rules`，避免使用者自行串接多個 write skills。
 
 ### 0.3.1 - 2026-05-25
 - description 補充「定期使用」場景（release 前 / 大功能後 / onboarding 時）與 `check-rules` cross-reference
@@ -136,7 +139,7 @@ Template Compliance 以**客觀範本與 git 對照**為主，補足 Rule Qualit
     | `todo-and-plans.md` | （無對應程式碼目錄，跳過新鮮度檢查） |
   - 若對應目錄不存在於 repo，跳過該檔的新鮮度檢查
   - `C ≥ 30` 標 🟠、`C ≥ 100` 標 🔴；`C = 0`（repo 本身沒動）不誤報
-- **缺檔偵測**：依自動偵測的專案類型，比對 `init-project` 表格找出尚未建立的 rule 檔；**只列出缺失，不執行建檔**，建議使用者執行 `init-project` 或對應 write skill
+- **缺檔偵測**：依自動偵測的專案類型，比對 `init-project` 表格找出尚未建立的 rule 檔；**只列出缺失，不執行建檔**，建議使用者執行 `maintain-rules` 判斷是否建立
 - **失效引用**（可選，需使用者確認才執行）：對 rules 中出現的相對路徑、檔名做 `git ls-files` 比對，列出已不存在的引用
 
 ## Step 6：輸出報告
@@ -153,7 +156,7 @@ Rules 檔：{實際讀取的 rules 檔清單}
   Evidence: `{path1}`、`{path2}`、`{path3}`（至少 3 個檔案）
   現況：{程式碼中反覆出現的模式}
   缺口：`.agents/rules/` 未涵蓋 {主題}
-  建議：執行 `{對應 write skill 名稱}` skill 更新 `.agents/rules/{file}.md`
+  建議：執行 `maintain-rules` 承接本 finding；它會讀取 `{對應 write skill 名稱}` 作為目標檔規格
 
 （若無，標示「無」）
 
@@ -163,7 +166,7 @@ Rules 檔：{實際讀取的 rules 檔清單}
   Evidence: `.agents/rules/{file}.md:{line}`
   類型：{模糊 / 不可驗證 / 重疊 / 衝突}
   現況：{rule 目前怎麼寫}
-  建議：{應如何調整，並指向對應 write skill}
+  建議：{應如何調整，並指向 `maintain-rules`；必要時註明目標 write skill 規格}
 
 （若無，標示「無」）
 
@@ -185,7 +188,7 @@ Rules 檔：{實際讀取的 rules 檔清單}
 
 **缺檔建議**
 - 依偵測到的專案類型（{type}），尚可考慮補：`{file}.md`
-  建議：執行 `init-project` 或 `{write-skill}` skill
+  建議：執行 `maintain-rules` 判斷是否建立，並讀取 `{write-skill}` 作為目標檔規格
 
 （若類型未明或無缺檔，標示「無」）
 
@@ -196,7 +199,9 @@ Rules 檔：{實際讀取的 rules 檔清單}
 
 ### 建議後續
 
-- {依 findings 建議下一步，例如執行 write-architecture-rules / write-tech-stack-rules / write-design-guide-rules skill}
+- 若有 Coverage Gap、跨檔搬移、缺檔、新鮮度或多類型 findings：執行 `maintain-rules`，它會承接本次 audit 報告並自動分類處理
+- 若只有 Rule Quality / 失效引用等小範圍微修：仍建議使用 `maintain-rules`；進階使用者可直接使用 `update-rules`
+- 若無 findings：無需修補
 （若無，標示「無」）
 
 ### 摘要
@@ -211,7 +216,7 @@ Rules 檔：{實際讀取的 rules 檔清單}
 - Coverage Gap 必須有至少 3 個檔案的反覆模式作為證據
 - Rule Quality finding 必須引用具體 rules 檔路徑與行號；類型限於：模糊、不可驗證、重疊、衝突
 - Template Compliance finding 必須引用具體行數、章節名或 git commit 數作為客觀依據；不憑語意判斷
-- 缺檔建議只列出缺失並引導至對應 write skill，**不執行建檔**
+- 缺檔建議只列出缺失並引導至 `maintain-rules`，**不執行建檔**
 - 失效引用檢查為可選項，預設不執行
-- 若建議更新 rules，指向對應 write skill，例如 `write-architecture-rules`、`write-tech-stack-rules`、`write-design-guide-rules`
+- 若建議更新 rules，優先指向 `maintain-rules`；只有需要說明目標檔規格時才提及對應 write skill
 - project-local rules 與一般 best practices 衝突時，優先尊重 project-local rules
