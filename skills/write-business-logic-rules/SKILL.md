@@ -2,10 +2,13 @@
 name: write-business-logic-rules
 description: Write or update business/domain logic rules. Use when initializing or maintaining `.agents/rules/business-logic.md` for domain terminology, state flows, business constraints, permissions, workflows, billing, calculations, or other non-obvious product rules.
 updated: 2026-05-27
-version: 0.2.0
+version: 0.3.0
 ---
 
 ## Changelog
+
+### 0.3.0 - 2026-05-27
+- 新增 Source of Truth 原則，區分長期業務語意與可由 source 承載的完整常數表/欄位清單。
 
 ### 0.2.0 - 2026-05-27
 - skill 改名為 `write-business-logic-rules`，讓 skill 名稱描述撰寫/維護 rules 的動作，並保留產出檔名不變。
@@ -20,6 +23,12 @@ version: 0.2.0
 
 ## 目的
 讓 Claude 理解專案的業務領域知識，避免產出技術上正確但業務上錯誤的程式碼。
+
+## Source of Truth 原則
+
+- rules 優先保存 source code 難以推論的業務語意、原因、例外、限制與狀態流。
+- 完整常數表、商品表、欄位清單或演算法實作若已有穩定 source，應改為摘要 + source pointer。
+- 若業務規則尚未集中在 source，開發中可暫時保留較厚內容，並標示需要 source refactor plan 或未來收斂條件。
 
 ## 適用範圍
 - 必要：有領域邏輯的專案（B2B、ERP、流程系統、計費、權限等）

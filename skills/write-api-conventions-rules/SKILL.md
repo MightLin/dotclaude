@@ -1,11 +1,17 @@
 ---
 name: write-api-conventions-rules
 description: Write or update project API convention rules for server or client code. Use when initializing or maintaining `.agents/rules/api-conventions.md`, defining REST/GraphQL/RPC naming, request/response, error, auth, pagination, retry, timeout, token, or API consumption conventions.
-updated: 2026-05-27
-version: 0.2.0
+updated: 2026-05-29
+version: 0.3.1
 ---
 
 ## Changelog
+
+### 0.3.1 - 2026-05-29
+- 釐清 API allowlist、symbol mapping、accepted enum values 應指向 validator/source，不複製進 rules。
+
+### 0.3.0 - 2026-05-27
+- 新增 Source of Truth 原則，避免將完整 API 清單、payload 或 DTO/schema 複製進 rules。
 
 ### 0.2.0 - 2026-05-27
 - skill 改名為 `write-api-conventions-rules`，讓 skill 名稱描述撰寫/維護 rules 的動作，並保留產出檔名不變。
@@ -20,6 +26,14 @@ version: 0.2.0
 
 ## 目的
 讓 Claude 產出的 API 程式碼（提供端或消費端）符合專案規範。
+
+## Source of Truth 原則
+
+- rules 只保存 source 不容易快速推論的決策、邊界、禁忌與原因。
+- 完整 endpoint / callable 清單、完整 payload、完整 DTO/schema 應指向 routes、OpenAPI、SDK 或程式碼，不複製進 rule。
+- 完整 allowlist、symbol mapping、interval/range enum、accepted value enum、validator constraints 應指向 validator、route schema、SDK、client helper 或 source code，不在 rule 重列。
+- rules 應保留 client/server 邊界、auth/error/retry/timeout/region policy、資料轉換責任與禁止事項；這些通常無法只靠 enum source 快速推論。
+- 開發中專案可暫時保留較厚契約摘要，但需標示 source 尚未穩定或未來可收斂。
 
 ## 適用範圍
 - 必要：backend / fullstack（提供 API），frontend / mobile（消費 API 且有自家規範）
@@ -56,16 +70,19 @@ version: 0.2.0
 - 認證方式（JWT / OAuth / API Key / Session）
 - Rate limit / Idempotency
 - 錯誤處理位置（global middleware vs handler 內）
+- allowlist / accepted values 的 source pointer（只指路徑或 validator，不重列完整 enum）
 
 ### 客戶端段（消費 API）
 - HTTP 客戶端封裝慣例（Service 層 / Repository 層）
 - 錯誤處理（哪一層攔截、如何呈現給 UI）
 - 重試 / 逾時 / 取消策略
 - 認證 token 儲存與更新
+- base URL / region / callable 名稱 source pointer，以及 client ↔ server 轉換責任
 - 離線快取策略（手機尤其重要）
 
 ## 禁止放入
 - 完整 endpoint 清單（屬 OpenAPI / 程式碼）
+- 完整 allowlist、symbol mapping、interval/range enum 或 accepted value enum（屬 validator / source）
 - DTO 欄位規範（屬資料模型 / schema）
 - 範例 payload（屬 API 文件）
 

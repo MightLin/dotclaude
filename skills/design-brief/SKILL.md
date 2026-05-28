@@ -1,8 +1,8 @@
 ---
 name: design-brief
 description: 在呼叫 AI 設計工具（Stitch、Claude Design、v0）之前先執行，收集 UI 設計需求、判定 mode，產出結構化 brief，比直接下 ad-hoc prompt 能得到明顯更好的設計品質。輸出 tool-agnostic，可接任何 AI 設計工具。若需求是建立或維護 `.agents/rules/design-guide.md`，改用 `write-design-guide-rules` skill。
-updated: 2026-05-25
-version: 0.3.1
+updated: 2026-05-27
+version: 0.4.0
 ---
 
 # Skill：Design Brief 收集
@@ -60,6 +60,14 @@ version: 0.3.1
 
 四個讀取請求同時發起，全部返回後再進入 Step 3。
 
+若 `.agents/rules/design-guide.md` 指向設計來源，必須在 Step 3 前追蹤讀取摘要：
+
+- `設計來源：.agents/design/<slug>/index.md`
+- `.agents/design/<slug>/index.md` 內列出的 prototype、tokens、screenshots、頁面索引
+- design-guide 指向的現有頁面、component path、theme/tokens 檔
+
+只讀必要摘要；不要把大型 prototype 或完整 component 原始碼整份塞進 brief。目標是取得既有 hex / spacing / component convention / 黑名單。
+
 ### Step 3 — 補充必要資訊
 
 依 mode 檢查必要資訊是否齊全。**優先從 Step 2 讀到的文件取值，缺必要資訊才問使用者**，不可用大量假設填充。
@@ -82,7 +90,7 @@ version: 0.3.1
 - 影響的頁面、流程或元件
 - 主要使用者操作流程（≥ 3 步驟：觸發 → 操作 → 結果）
 - **既有風格來源**（design-guide、現有頁面、截圖、可跑的 localhost 或程式碼）← **硬性必要**
-- **既有 design-guide token 摘要**（必須從 `.agents/rules/design-guide.md` 讀出 hex 與尺寸；讀不到才問使用者，禁止另外發明 hex）
+- **既有 design token / 元件慣例摘要**（優先從 `.agents/rules/design-guide.md` 取得；若 design-guide 指向 `.agents/design/<slug>/index.md`、prototype、tokens 或現有頁面，必須追蹤來源讀取；仍讀不到才問使用者，禁止另外發明 hex）
 - 新功能畫面與既有導航/IA 的銜接點
 - 新增元件 vs 沿用元件清單
 - 互動狀態需求（loading / empty / error 是否需要設計）
@@ -204,12 +212,12 @@ extends-design-guide: true | false
 Mode：feature-extension
 
 ## 既有設計脈絡
-- **既有 design-guide 摘要（從 `.agents/rules/design-guide.md` 摘出）:**
+- **既有 design-guide 摘要（從 `.agents/rules/design-guide.md` 與其設計來源摘出）:**
   - 主色系: `#XXXXXX` / ...
   - 字型: ...
   - Spacing 單位: ...
   - 既有核心元件: ...
-- **既有頁面 / 截圖 / 程式碼觀察:** (若有 localhost 或既有頁面，需明確指認)
+- **設計來源:** (`.agents/design/<slug>/index.md` / prototype / tokens / 現有頁面 / 截圖 / 程式碼；需明確指認)
 - **architecture / business-logic / tech-stack 摘要:**
 
 ## 新功能範圍
@@ -259,13 +267,16 @@ Mode：feature-extension
 - 「資訊足夠性檢查」是對話階段工具，**不可寫進最終 brief.md**。
 - frontmatter 5 欄位皆必填，不可省略；`feature-extension` 多 `extends-design-guide`。
 - AI prompt 段**必須雙語並陳**，英文段需為自包含 fenced code block。
-- `feature-extension` 若缺既有風格來源，足夠性標記 NO，不可假設風格；色票必須從 `.agents/rules/design-guide.md` 摘出，禁止另外發明 hex。
+- `feature-extension` 若缺既有風格來源，足夠性標記 NO，不可假設風格；色票可從 `.agents/rules/design-guide.md` 或其指向的設計來源摘出，禁止另外發明 hex。
 - 色彩系統若使用者無偏好，由 AI 依調性提案完整 hex 表後讓使用者確認，不可只寫「無偏好」帶過。
 - slug 由使用者提供或從功能描述自動產生（kebab-case，英文或拼音）。
 - **brief.md 不存在**（含目錄不存在）：直接寫入。
 - **brief.md 已存在**：詢問使用者覆蓋或另存為 `brief-{YYYY-MM-DD}.md`。
 
 ## Changelog
+
+### 0.4.0 — 2026-05-27
+- feature-extension 可追蹤 design-guide 指向的 `.agents/design/<slug>/index.md`、prototype、tokens 或現有頁面，不再要求所有 token 必須直接寫在 design-guide。
 
 ### 0.3.1 — 2026-05-25
 - description 補充「呼叫 AI 設計工具前先執行」觸發時機，與 `write-design-guide-rules` SKIP 子句

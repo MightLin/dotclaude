@@ -1,11 +1,17 @@
 ---
 name: write-deployment-rules
 description: Write or update deployment rules. Use when initializing or maintaining `.agents/rules/deployment.md` for environments, secrets sources, CI/CD triggers, deployment targets, rollback, migrations, mobile store release flows, monitoring, logging, and alerting.
-updated: 2026-05-27
-version: 0.2.0
+updated: 2026-05-29
+version: 0.3.1
 ---
 
 ## Changelog
+
+### 0.3.1 - 2026-05-29
+- 釐清 deployment rules 應保留 production 風險、preview/prod 差異、rollback 限制與 secret policy。
+
+### 0.3.0 - 2026-05-27
+- 新增 Source of Truth 原則，區分部署風險規則與應移至 workflow/runbook/changelog 的完整操作內容。
 
 ### 0.2.0 - 2026-05-27
 - skill 改名為 `write-deployment-rules`，讓 skill 名稱描述撰寫/維護 rules 的動作，並保留產出檔名不變。
@@ -20,6 +26,13 @@ version: 0.2.0
 
 ## 目的
 讓 Claude 知道部署目標、環境設定來源、發布流程，避免把開發 / 測試環境的設定寫進程式或 PR。
+
+## Source of Truth 原則
+
+- rules 保存部署風險、環境差異、secret 管理、migration/rollback 原則與高風險提醒。
+- 完整 CI yaml、完整 function 清單、完整部署命令或一次性操作歷史應指向 workflow、runbook、README 或 changelog。
+- 即使已有 workflow / runbook pointer，仍必須保留 production 風險、preview/prod 差異、rollback 限制、secret policy 與會影響使用者的 release constraint。
+- 開發中專案可暫時把部署 runbook 放在 rule；流程穩定後應遷移至 docs/runbook，rule 只保留摘要與 pointer。
 
 ## 適用範圍
 - 必要：所有專案類型
@@ -59,6 +72,7 @@ version: 0.2.0
 ## 禁止放入
 - 任何實際 secret 值
 - 完整 CI yaml（屬程式碼）
+- 完整 function 清單或逐步部署命令（改指 workflow / runbook）
 - 部署過的歷史紀錄（屬 release notes）
 
 ## 大小上限
@@ -82,6 +96,7 @@ version: 0.2.0
 ## CI/CD
 - 工具：{GitHub Actions}
 - 觸發：push main → stage；tag v* → prod
+- Source：{workflow / runbook path}
 - Migration：deploy 前先跑
 
 ## 部署目標
