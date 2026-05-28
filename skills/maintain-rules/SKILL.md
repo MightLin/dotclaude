@@ -1,11 +1,15 @@
 ---
 name: maintain-rules
 description: Orchestrate project rules maintenance after audit-rules findings or after feature work. Use as the primary user-facing entry point to apply audit fixes, move misplaced rules, fill coverage gaps, refresh stale rules, reduce overweight rules into source/docs/tracker pointers, or decide which `.agents/rules/` files should be updated from a feature description or git diff. Reads the relevant write-*-rules skills as rule-file specs before editing.
-updated: 2026-05-27
-version: 0.2.0
+updated: 2026-05-29
+version: 0.2.1
 ---
 
 ## Changelog
+
+### 0.2.1 - 2026-05-29
+- 補強 tech-stack version findings 的收斂規則，避免把 manifest 精確版本搬回 rules。
+- 補充 data-model、deployment、todo 收斂白名單，避免過度刪除必要摘要。
 
 ### 0.2.0 - 2026-05-27
 - 承接 audit-rules 的 Source-of-Truth Readiness / Rule Weight findings，支援收斂 rule、保留暫時知識與輸出 source refactor plan 需求。
@@ -85,6 +89,15 @@ version: 0.2.0
 | Overflow only | 不做 source pointer 收斂，轉 `rules-overflow` 做壓縮或分離 |
 
 若 source pointer candidate 的 source 已不存在、與 rule 有 drift，或分散在多個檔案，降級為 Missing source of truth。
+
+處理 `tech-stack.md` version findings 時，不把 manifest / lockfile 的精確 dependency version 完整搬回 rule；改成摘要 + manifest pointer，並保留 runtime / tooling decision、package manager、禁用替代方案與跨工具相容性原因。
+
+收斂 source pointer candidate 時，預設移除完整 enum、allowlist、config table、function list 或 dependency version list；最多保留 1 個短例子。必須保留原因、禁忌、跨檔同步流程、風險與例外，例如「client 不直打外部行情 API」或「新增商品要同步 app registry + Functions allowlist」。
+
+收斂白名單：
+- `data-model.md`：保留 collection/table ownership summary、讀寫邊界、敏感資料處理與 migration 原則；field-level shape 指向 model/schema/source。
+- `deployment.md`：保留 high-risk release constraints、preview/prod 差異、rollback 限制、secret policy 與 production 影響提醒；完整 workflow、function list、逐步命令改為 pointer。
+- `todo-and-plans.md`：刪除大量完成歷史、PR/date history、release history；保留當前 In Progress、近期 Planned、Considering、Known Issues、Open Questions。
 
 ## Step 2B：新功能更新模式
 

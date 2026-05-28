@@ -1,11 +1,15 @@
 ---
 name: audit-rules
 description: Audit `.agents/rules/` for coverage gaps, rule quality issues, template compliance, and source-of-truth readiness. Use periodically — before a release, after significant feature work, or when onboarding a new team member — or whenever rules may be stale, overweight, incomplete, redundant, or violating write-skill specs. Suggestions only — never modifies rules or source; use `maintain-rules` to apply findings. To check whether code violates current rules, use `check-rules` instead.
-updated: 2026-05-27
-version: 0.5.0
+updated: 2026-05-29
+version: 0.5.1
 ---
 
 ## Changelog
+
+### 0.5.1 - 2026-05-29
+- 新增 tech-stack version drift 判斷，區分 dependency 精確版本與可保留的 runtime / tooling 決策。
+- 補充 data-model、deployment、todo 類 rules 的 anti-overreport guard，避免把必要摘要誤判為 overweight。
 
 ### 0.5.0 - 2026-05-27
 - 新增 Source-of-Truth Readiness / Rule Weight 審查，判斷 rules 是否應收斂為 source/docs/tracker pointer。
@@ -153,6 +157,11 @@ Template Compliance 以**客觀範本與 git 對照**為主，補足 Rule Qualit
 ### 6.1 Source pointer candidate
 
 當 rule 內的完整常數表、API/function 清單、schema/shape、部署項目或規則表已能由穩定 source 取得時，列為候選。
+若 rule 已明確指向 source-of-truth，但仍複製完整 enum、allowlist、config table、function list、dependency version list 或 package version table，也列為候選；這代表已經有 pointer 但尚未完成收斂。
+
+Anti-overreport：
+- `data-model.md` 的 collection/table responsibility summary 若只描述用途、ownership、讀寫邊界，且 field-level shape 已指向 model/schema/source，不報 overweight。
+- `deployment.md` 的 preview/prod 差異、production risk、rollback 限制、secret policy 即使已有 workflow/runbook pointer 也應保留，不因可指 source 就建議刪除。
 
 可用 evidence：
 - rule 提到的 path 存在，且該檔含集中 enum / registry / const / config / model / exported function
@@ -162,7 +171,20 @@ Template Compliance 以**客觀範本與 git 對照**為主，補足 Rule Qualit
 
 Recommendation：建議用 `maintain-rules` 將 rule 收斂為摘要 + source pointer。
 
-### 6.2 Missing source of truth
+### 6.2 Tech-stack version drift
+
+只針對 `tech-stack.md` 中已寫入的精確 dependency version、patch/minor version，或可由 manifest / workflow 驗證的 runtime version 做 evidence-based 檢查。
+
+檢查規則：
+- 若 `tech-stack.md` 已明確指向 manifest / lockfile，且沒有複製精確 dependency version，不報 drift。
+- 若 rule 寫了 `package ^1.2.3`、`package 1.2.3`、完整 dependency version 清單，讀取可用 manifest（如 `pubspec.yaml`、`package.json`、`functions/package.json`、`go.mod`、lockfile）比對；不要求完整 semver resolver，只比對可直接證明的名稱與版本字串。
+- 若 manifest 可讀且版本不一致，列為 Source pointer candidate 或 Rule Quality finding，Evidence 必須同時引用 `tech-stack.md` 行號與 manifest path。
+- 若 manifest 不存在或無法可靠比對，不猜測 drift；建議改成 manifest / lockfile pointer。
+- Node.js 22、ESM / `nodenext`、Flutter stable channel、package manager、部署 runtime 這類 runtime / tooling decision 可保留；audit 只檢查是否和 manifest、workflow 或 deploy config 明顯衝突。
+
+Recommendation：建議用 `maintain-rules` 將精確 dependency version 收斂為 manifest pointer，並保留 runtime 決策與禁用替代方案。
+
+### 6.3 Missing source of truth
 
 當 rule 描述完整規則，但找不到單一穩定 source，或同一規則散落多檔時，列為缺 source of truth。
 
@@ -174,13 +196,13 @@ Recommendation：建議用 `maintain-rules` 將 rule 收斂為摘要 + source po
 
 Recommendation：保留 rule，並輸出「需要 source refactor plan」；不要在 audit 內設計重構。
 
-### 6.3 Temporary rule knowledge
+### 6.4 Temporary rule knowledge
 
 開發中專案允許 rules 較厚。若內容明顯是過渡知識，但 source 還未穩定，列為暫時知識，不視為錯誤。
 
 Recommendation：保留，並建議標記未來可收斂條件（例如 source 穩定、docs 補齊、tracker 建立）。
 
-### 6.4 Backlog/history overweight
+### 6.5 Backlog/history overweight
 
 針對 `todo-and-plans.md` 或 planning 類 rule，檢查是否包含大量已完成項目、PR 編號、日期、release history 或長期 backlog。
 
@@ -191,7 +213,9 @@ Tracker detection：
 
 Recommendation：若有 tracker evidence，建議遷移至 tracker；否則建議遷移 completed/history 至 `CHANGELOG.md`、`docs/history.md` 或 release notes。
 
-### 6.5 Overflow only
+若 `todo-and-plans.md` 只保留少量 In Progress、近期 Planned、Known Issues 或 Open Questions，不列為 backlog/history overweight；只有大量完成歷史、日期/PR 記錄、release history 或長期 backlog 才列 finding。
+
+### 6.6 Overflow only
 
 若內容仍屬 source 不容易快速推論的決策、邊界、禁忌、業務原因，且沒有明確 source/docs/tracker 可承接，只是篇幅過長，列為 Overflow only。
 
