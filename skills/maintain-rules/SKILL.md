@@ -2,10 +2,13 @@
 name: maintain-rules
 description: Orchestrate project rules maintenance after audit-rules findings or after feature work. Use as the primary user-facing entry point to apply audit fixes, move misplaced rules, fill coverage gaps, refresh stale rules, reduce overweight rules into source/docs/tracker pointers, or decide which `.agents/rules/` files should be updated from a feature description or git diff. Reads the relevant write-*-rules skills as rule-file specs before editing.
 updated: 2026-05-29
-version: 0.2.1
+version: 0.2.2
 ---
 
 ## Changelog
+
+### 0.2.2 - 2026-05-29
+- 補強 API allowlist / accepted enum 收斂規則，保留 API 邊界與轉換責任但移除完整清單。
 
 ### 0.2.1 - 2026-05-29
 - 補強 tech-stack version findings 的收斂規則，避免把 manifest 精確版本搬回 rules。
@@ -92,9 +95,10 @@ version: 0.2.1
 
 處理 `tech-stack.md` version findings 時，不把 manifest / lockfile 的精確 dependency version 完整搬回 rule；改成摘要 + manifest pointer，並保留 runtime / tooling decision、package manager、禁用替代方案與跨工具相容性原因。
 
-收斂 source pointer candidate 時，預設移除完整 enum、allowlist、config table、function list 或 dependency version list；最多保留 1 個短例子。必須保留原因、禁忌、跨檔同步流程、風險與例外，例如「client 不直打外部行情 API」或「新增商品要同步 app registry + Functions allowlist」。
+收斂 source pointer candidate 時，預設移除完整 enum、allowlist、symbol mapping、interval/range enum、accepted value list、config table、function list 或 dependency version list；最多保留 1 個短例子。必須保留原因、禁忌、跨檔同步流程、風險與例外，例如「client 不直打外部行情 API」或「新增商品要同步 app registry + Functions allowlist」。
 
 收斂白名單：
+- `api-conventions.md`：保留 client/server 邊界、資料轉換責任、auth/error/retry/timeout/region policy、source pointer 與禁止事項；完整 allowlist、symbol mapping、interval/range enum 或 accepted values 改指 validator/source，不在 rule 重列。
 - `data-model.md`：保留 collection/table ownership summary、讀寫邊界、敏感資料處理與 migration 原則；field-level shape 指向 model/schema/source。
 - `deployment.md`：保留 high-risk release constraints、preview/prod 差異、rollback 限制、secret policy 與 production 影響提醒；完整 workflow、function list、逐步命令改為 pointer。
 - `todo-and-plans.md`：刪除大量完成歷史、PR/date history、release history；保留當前 In Progress、近期 Planned、Considering、Known Issues、Open Questions。

@@ -2,10 +2,13 @@
 name: audit-rules
 description: Audit `.agents/rules/` for coverage gaps, rule quality issues, template compliance, and source-of-truth readiness. Use periodically — before a release, after significant feature work, or when onboarding a new team member — or whenever rules may be stale, overweight, incomplete, redundant, or violating write-skill specs. Suggestions only — never modifies rules or source; use `maintain-rules` to apply findings. To check whether code violates current rules, use `check-rules` instead.
 updated: 2026-05-29
-version: 0.5.1
+version: 0.5.2
 ---
 
 ## Changelog
+
+### 0.5.2 - 2026-05-29
+- 補強 API allowlist / accepted enum 的 source pointer candidate 判斷，避免 pointer + 完整清單半收斂。
 
 ### 0.5.1 - 2026-05-29
 - 新增 tech-stack version drift 判斷，區分 dependency 精確版本與可保留的 runtime / tooling 決策。
@@ -157,14 +160,16 @@ Template Compliance 以**客觀範本與 git 對照**為主，補足 Rule Qualit
 ### 6.1 Source pointer candidate
 
 當 rule 內的完整常數表、API/function 清單、schema/shape、部署項目或規則表已能由穩定 source 取得時，列為候選。
-若 rule 已明確指向 source-of-truth，但仍複製完整 enum、allowlist、config table、function list、dependency version list 或 package version table，也列為候選；這代表已經有 pointer 但尚未完成收斂。
+若 rule 已明確指向 source-of-truth，但仍複製完整 enum、allowlist、API symbol mapping、interval/range enum、accepted value list、config table、function list、dependency version list 或 package version table，也列為候選；這代表已經有 pointer 但尚未完成收斂。
 
 Anti-overreport：
+- `api-conventions.md` 的 client/server 邊界、轉換責任、auth/error/retry/timeout/region policy 與禁止事項應保留；只有完整 allowlist / accepted enum / mapping 清單要收斂為 source pointer。
 - `data-model.md` 的 collection/table responsibility summary 若只描述用途、ownership、讀寫邊界，且 field-level shape 已指向 model/schema/source，不報 overweight。
 - `deployment.md` 的 preview/prod 差異、production risk、rollback 限制、secret policy 即使已有 workflow/runbook pointer 也應保留，不因可指 source 就建議刪除。
 
 可用 evidence：
 - rule 提到的 path 存在，且該檔含集中 enum / registry / const / config / model / exported function
+- API rule 已指向 validator、route schema、SDK、client helper 或 source code，但仍重列完整 allowlist、symbol mapping、interval/range 或 accepted values
 - 多處程式碼引用同一 source
 - rule 已明確指向該 source
 - 相關 source 近期 churn 低，或已有測試保護
