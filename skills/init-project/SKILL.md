@@ -1,11 +1,14 @@
 ---
 name: init-project
 description: Initialize a project for shared Claude/Codex agent guidance. Use when onboarding a new project without existing `.agents/rules/`, generating rule files, creating `CLAUDE.md` or `AGENTS.md`, detecting frontend/backend/fullstack/mobile project type, or replacing old dotclaude initialization workflows.
-updated: 2026-05-14
-version: 0.1.1
+updated: 2026-05-29
+version: 0.1.2
 ---
 
 ## Changelog
+
+### 0.1.2 - 2026-05-29
+- 修正初始化完成後的驗證建議：`init-project` 自行確認入口檔索引與 rules 建立結果；`check-rules` 改為後續程式碼修改後 / PR 前使用。
 
 ### 0.1.1 - 2026-05-14
 - 建立入口檔前需詢問使用者要建立 `CLAUDE.md`、`AGENTS.md` 或兩者。
@@ -91,6 +94,19 @@ rules 一律建立在 `.agents/rules/`。依專案類型決定建哪些：
 - 文件索引段只列實際建出來的 rules
 - 必含 3 條核心原則（dotclaude 流程特有，取代過去的 /understand、/new-feature 行為；這些原則不在全域設定，只在有導入此流程的專案入口）
 
-## Step 7：確認
+## Step 7：自行確認與完成報告
 
-列出已建立檔案，詢問是否需補充或修正。
+初始化完成後先自行確認，不要求使用者立即執行 `check-rules`：
+
+- `CLAUDE.md` / `AGENTS.md` 的文件索引只列實際存在的 `.agents/rules/` 檔案
+- 建立的 rules 檔符合 Step 3 偵測出的專案類型與 Step 5 條件式建立表
+- 不存在的 rule 檔若被略過，完成報告需列出略過原因（例如純前端不建 `data-model.md`、已有 tracker 不建厚 `todo-and-plans.md`）
+
+完成報告需列出：
+
+- 已建立或更新的入口檔
+- 已建立或更新的 rules 檔
+- 明確略過的 rules 與原因
+- 後續建議：後續修改程式碼後或 PR 前再執行 `check-rules`；若懷疑 rules 覆蓋不足、過時或過肥，執行 `audit-rules`，再用 `maintain-rules` 承接修補
+
+不要在剛初始化完成時要求使用者立刻跑 `check-rules` 來確認 rules 落差；rules 本身的覆蓋與品質問題屬 `audit-rules` 職責。
