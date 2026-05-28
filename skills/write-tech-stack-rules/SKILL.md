@@ -2,10 +2,13 @@
 name: write-tech-stack-rules
 description: Write or update technology stack rules. Use when initializing or maintaining `.agents/rules/tech-stack.md` for languages, versions, package managers, frameworks, UI libraries, state management, databases, infrastructure, external services, or banned alternatives.
 updated: 2026-05-29
-version: 0.3.1
+version: 0.3.2
 ---
 
 ## Changelog
+
+### 0.3.2 - 2026-05-29
+- 補強 tech-stack 邊界：不保存 API allowlist、symbol mapping、accepted values、interval/range enum 或完整 function list；改指 API rule 或 validator/source。
 
 ### 0.3.1 - 2026-05-29
 - 釐清 dependency version 的 source of truth：精確版本以 manifest / lockfile 為準，rules 只保存選型與 runtime 決策。
@@ -31,6 +34,7 @@ version: 0.3.1
 
 - rules 保存技術選型、主要 runtime 約束、package manager、禁止替代方案、跨工具相容性決策，以及不容易從 config 看出的原因。
 - 精確 dependency version、patch/minor version、lockfile 狀態或套件 API 用法應指向 `package.json`、`pubspec.yaml`、`go.mod`、`requirements.txt`、lockfile 等 source，不複製進 rule。
+- API allowlist、supported symbols、symbol mapping、accepted values、interval/range enum、完整 function/export list 屬 API rule、validator、registry 或 source code；tech-stack 只保留外部服務選型、client/server 邊界與禁止替代方案，必要時指向 `api-conventions.md` 或 source。
 - 可以保留「Node.js 22 runtime」「Flutter stable」「ESM / nodenext」這類 runtime / tooling decision；若只是套件版本，寫「以 manifest / lockfile 為準」。
 - 開發中專案可暫存過渡選型；穩定後只保留主要 runtime/framework、package manager 與禁用項。
 
@@ -72,10 +76,12 @@ version: 0.3.1
 - CI/CD 工具
 - 監控 / Logging
 - 重要外部服務（金流、Email、儲存）
+- 外部服務選型的責任邊界（例如 client 不直連外部 API、後端 proxy、region / runtime decision）；完整 allowlist 或 accepted values 指向 API rule / validator
 
 ## 禁止放入
 - 完整的 dependency 清單（看 lockfile 即可）
 - 精確 dependency version 或 patch/minor 版本清單（看 manifest / lockfile 即可）
+- API allowlist、supported symbols、symbol mapping、accepted values、interval/range enum、完整 function/export list（看 API rule、validator、registry 或 source 即可）
 - 套件用法 / API 範例（屬使用文件，非規範）
 - 已淘汰的舊套件（除非為了警告 Claude 不要用）
 
