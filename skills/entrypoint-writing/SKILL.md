@@ -2,10 +2,13 @@
 name: entrypoint-writing
 description: Internal sub-skill used by `init-project` and `migrate-rules` to write Claude `CLAUDE.md` / Codex `AGENTS.md` entrypoint files. Use directly only when an entrypoint already exists and needs a standalone rewrite — otherwise route through `init-project` (new projects) or `migrate-rules` (existing projects).
 updated: 2026-06-01
-version: 0.4.0
+version: 0.4.1
 ---
 
 ## Changelog
+
+### 0.4.1 - 2026-06-01
+- 強化 `AGENTS.md` 核心原則：優先用 `.agents/rules/` 判斷需要讀取的 source 範圍，避免不必要的全專案掃描。
 
 ### 0.4.0 - 2026-06-01
 - 將 `AGENTS.md` 定為專案入口 source of truth；`CLAUDE.md` 改為指向 `AGENTS.md` 的薄轉址檔，避免兩份入口內容分歧。
@@ -64,7 +67,7 @@ version: 0.4.0
 
 以下 4 條取代過去 `/understand`、`/new-feature` command 的功能，是 dotclaude 流程特有的，必須寫進每個導入此流程的專案 `AGENTS.md`（全域 CLAUDE.md / AGENTS.md 不含這些）：
 
-1. 接到任務前，view `.agents/rules/` 下相關檔案以理解專案現況
+1. 接到任務前，view `.agents/rules/` 下相關檔案；優先用 rules 判斷需要讀取的 source 範圍，除非 rules 不足或任務需要，不要全專案掃描
 2. 開新功能前，先讀 `todo-and-plans.md` 確認與計畫無衝突
 3. 開始實作前，列出預計異動的檔案範圍給使用者確認
 4. 完成程式碼修改後或 PR 前，主動建議使用者執行 `/check-rules`；若程式碼出現 `.agents/rules/` 未涵蓋的反覆模式，建議執行 `audit-rules` 審查
@@ -116,7 +119,7 @@ version: 0.4.0
 - TODO：.agents/rules/todo-and-plans.md
 
 ## 核心原則
-1. 接到任務前，view 相關 rules 檔
+1. 接到任務前，view 相關 rules 檔；優先用 rules 判斷 source 範圍，不要全專案掃描
 2. 開新功能前，先讀 todo-and-plans.md
 3. 開始實作前，列出預計異動的檔案範圍
 4. 完成程式碼修改後或 PR 前建議跑 /check-rules；發現 rules 未涵蓋的反覆模式時建議執行 audit-rules
@@ -144,7 +147,7 @@ version: 0.4.0
 - TODO：.agents/rules/todo-and-plans.md
 
 ## 核心原則
-1. 接到任務前，view 相關 rules 檔
+1. 接到任務前，view 相關 rules 檔；優先用 rules 判斷 source 範圍，不要全專案掃描
 2. 開新功能前，先讀 todo-and-plans.md
 3. 開始實作前，列出預計異動的檔案範圍
 4. 完成程式碼修改後或 PR 前建議跑 /check-rules；發現 rules 未涵蓋的反覆模式時建議執行 audit-rules
@@ -172,7 +175,7 @@ version: 0.4.0
 - TODO：.agents/rules/todo-and-plans.md
 
 ## 核心原則
-1. 接到任務前，view 相關 rules 檔
+1. 接到任務前，view 相關 rules 檔；優先用 rules 判斷 source 範圍，不要全專案掃描
 2. 開新功能前，先讀 todo-and-plans.md
 3. 開始實作前，列出預計異動的檔案範圍
 4. 完成程式碼修改後或 PR 前建議跑 /check-rules；發現 rules 未涵蓋的反覆模式時建議執行 audit-rules
@@ -200,7 +203,7 @@ version: 0.4.0
 - TODO：.agents/rules/todo-and-plans.md
 
 ## 核心原則
-1. 接到任務前，view 相關 rules 檔
+1. 接到任務前，view 相關 rules 檔；優先用 rules 判斷 source 範圍，不要全專案掃描
 2. 開新功能前，先讀 todo-and-plans.md
 3. 開始實作前，列出預計異動的檔案範圍
 4. 完成程式碼修改後或 PR 前建議跑 /check-rules；發現 rules 未涵蓋的反覆模式時建議執行 audit-rules
