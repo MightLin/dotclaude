@@ -1,11 +1,17 @@
 ---
 name: init-project
-description: Initialize a project for shared Claude/Codex agent guidance. Use when onboarding a new project without existing `.agents/rules/`, generating rule files, creating `CLAUDE.md` or `AGENTS.md`, detecting frontend/backend/fullstack/mobile project type, or replacing old dotclaude initialization workflows.
-updated: 2026-05-29
-version: 0.1.2
+description: Initialize a project for shared Claude/Codex agent guidance. Use when onboarding a new project without existing `.agents/rules/`, generating rule files, creating `CLAUDE.md` and `AGENTS.md`, detecting frontend/backend/fullstack/mobile project type, or replacing old dotclaude initialization workflows.
+updated: 2026-06-01
+version: 0.2.1
 ---
 
 ## Changelog
+
+### 0.2.1 - 2026-06-01
+- `init-project` 不再詢問要建立哪個入口檔，固定建立 `AGENTS.md` 與薄轉址 `CLAUDE.md`。
+
+### 0.2.0 - 2026-06-01
+- 建立 Claude 入口時改以 `AGENTS.md` 為主檔；`CLAUDE.md` 只指向 `AGENTS.md` 並提醒入口內容都應寫到 `AGENTS.md`。
 
 ### 0.1.2 - 2026-05-29
 - 修正初始化完成後的驗證建議：`init-project` 自行確認入口檔索引與 rules 建立結果；`check-rules` 改為後續程式碼修改後 / PR 前使用。
@@ -89,16 +95,17 @@ rules 一律建立在 `.agents/rules/`。依專案類型決定建哪些：
 
 依 entrypoint-writing skill 規範建立精簡入口檔。
 
-- 建立前先詢問使用者要建立 `CLAUDE.md`、`AGENTS.md` 或兩者
-- 若使用者未指定，依本次對話使用的工具給預設建議，但仍需等使用者確認
+- 固定建立 `AGENTS.md` 與 `CLAUDE.md`，不詢問使用者要建立哪一個
+- `AGENTS.md` 是主入口；`CLAUDE.md` 只指向 `AGENTS.md`
 - 文件索引段只列實際建出來的 rules
-- 必含 3 條核心原則（dotclaude 流程特有，取代過去的 /understand、/new-feature 行為；這些原則不在全域設定，只在有導入此流程的專案入口）
+- 必含 4 條核心原則（dotclaude 流程特有，取代過去的 /understand、/new-feature 行為；這些原則不在全域設定，只寫在專案 `AGENTS.md`）
 
 ## Step 7：自行確認與完成報告
 
 初始化完成後先自行確認，不要求使用者立即執行 `check-rules`：
 
-- `CLAUDE.md` / `AGENTS.md` 的文件索引只列實際存在的 `.agents/rules/` 檔案
+- `AGENTS.md` 的文件索引只列實際存在的 `.agents/rules/` 檔案
+- `CLAUDE.md` 只指向 `AGENTS.md`，且註明入口內容應寫到 `AGENTS.md`
 - 建立的 rules 檔符合 Step 3 偵測出的專案類型與 Step 5 條件式建立表
 - 不存在的 rule 檔若被略過，完成報告需列出略過原因（例如純前端不建 `data-model.md`、已有 tracker 不建厚 `todo-and-plans.md`）
 

@@ -1,11 +1,14 @@
 ---
 name: entrypoint-writing
 description: Internal sub-skill used by `init-project` and `migrate-rules` to write Claude `CLAUDE.md` / Codex `AGENTS.md` entrypoint files. Use directly only when an entrypoint already exists and needs a standalone rewrite — otherwise route through `init-project` (new projects) or `migrate-rules` (existing projects).
-updated: 2026-05-29
-version: 0.3.3
+updated: 2026-06-01
+version: 0.4.0
 ---
 
 ## Changelog
+
+### 0.4.0 - 2026-06-01
+- 將 `AGENTS.md` 定為專案入口 source of truth；`CLAUDE.md` 改為指向 `AGENTS.md` 的薄轉址檔，避免兩份入口內容分歧。
 
 ### 0.3.3 - 2026-05-29
 - 釐清 `/check-rules` 使用時機：只在程式碼修改後或 PR 前建議執行；初始化、入口檔重建或 rules 維護後不因此要求使用者立刻執行。
@@ -33,24 +36,33 @@ version: 0.3.3
 ## 目的
 建立讓 coding agent 每次 session 都會讀到的專案入口規則。
 
-- Claude Code 使用 `CLAUDE.md`
-- Codex 使用 `AGENTS.md`
-- 兩者應指向同一份 `.agents/rules/` 專案知識檔
+- Codex 使用 `AGENTS.md`，且 `AGENTS.md` 是專案入口 source of truth
+- Claude Code 使用 `CLAUDE.md`；若建立 `CLAUDE.md`，內容只指向同專案的 `AGENTS.md`
+- 所有原本想寫進 `CLAUDE.md` 的入口內容，都應改寫進 `AGENTS.md`
+- `AGENTS.md` 指向 `.agents/rules/` 專案知識檔
 
 ## 核心原則
 入口檔每次 session 都會被讀入，直接消耗 context。
 應「小而精準」，只放每次都需要的資訊。
 
-## 必要內容（不超過 40 行）
+## `AGENTS.md` 必要內容（不超過 40 行）
 
 ### 1. 專案一句話說明
 ### 2. 文件索引（指向實際存在的 `.agents/rules/` 檔案）
 ### 3. 核心原則（必含 4 條 + 專案特有規則合計 6 條以內，每次作業必遵守）
 ### 4. 禁止事項（容易犯錯的地方）
 
+## `CLAUDE.md` 必要內容（薄轉址，不超過 8 行）
+
+`CLAUDE.md` 不複製 `AGENTS.md` 的文件索引、核心原則或禁止事項，只保留下列語意：
+
+- 本專案入口規則以 `AGENTS.md` 為主
+- Claude Code 開始作業前應先讀 `AGENTS.md`
+- 任何要加入 `CLAUDE.md` 的內容，都應改寫到 `AGENTS.md`
+
 ## 必含的 4 條核心原則
 
-以下 4 條取代過去 `/understand`、`/new-feature` command 的功能，是 dotclaude 流程特有的，必須寫進每個導入此流程的專案入口檔（全域 CLAUDE.md / AGENTS.md 不含這些）：
+以下 4 條取代過去 `/understand`、`/new-feature` command 的功能，是 dotclaude 流程特有的，必須寫進每個導入此流程的專案 `AGENTS.md`（全域 CLAUDE.md / AGENTS.md 不含這些）：
 
 1. 接到任務前，view `.agents/rules/` 下相關檔案以理解專案現況
 2. 開新功能前，先讀 `todo-and-plans.md` 確認與計畫無衝突
@@ -63,7 +75,6 @@ version: 0.3.3
 - 只列實際存在的 rules 檔（依專案類型而定）
 - 不列尚未建立的檔案
 - 若建了 `mcp-conventions.md`，列入索引
-- Claude / Codex 入口檔內容可幾乎相同，只調整標題與工具名稱
 - 語意必須清楚：`.agents/rules/` 只修飾「文件索引」指向的 rule 檔；「核心原則」與「禁止事項」是入口檔自己的段落，不可寫成「`.agents/rules/` 文件索引、核心原則與禁止事項」
 
 ## 禁止放入入口檔
@@ -73,8 +84,18 @@ version: 0.3.3
 - 任何超過 2 行的說明
 
 ## 大小上限
-入口檔不超過 40 行。
+`AGENTS.md` 不超過 40 行；`CLAUDE.md` 不超過 8 行。
 超出時請使用 rules-overflow skill 與使用者協作決定壓縮或分離。
+
+## `CLAUDE.md` 範例
+
+```markdown
+# {ProjectName}
+
+本專案入口規則以 `AGENTS.md` 為主；Claude Code 開始作業前請先讀 `AGENTS.md`。
+
+所有原本要寫進 `CLAUDE.md` 的內容，都應改寫到 `AGENTS.md`，避免兩份入口規則分歧。
+```
 
 ## 範例（依專案類型）
 

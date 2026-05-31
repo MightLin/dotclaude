@@ -115,6 +115,6 @@ repo root
 
 1. 進入任意專案目錄，用 Claude Code 或 Codex 開啟
 2. 直接說「使用 `dotclaude:init-project` skill 初始化這個專案」
-3. 專案知識檔統一放在 `.agents/rules/`，由 `CLAUDE.md` 與 `AGENTS.md` 指向
+3. 專案知識檔統一放在 `.agents/rules/`，由 `AGENTS.md` 指向；`CLAUDE.md` 只轉向 `AGENTS.md`
 4. 已用舊版 `.claude/rules/` 的專案，使用 `dotclaude:migrate-rules` skill 遷移，不需重跑 init
 5. 定期或大功能後先用 `audit-rules` 診斷，再用 `maintain-rules` 承接修補；單純程式碼合規檢查用 `check-rules`
